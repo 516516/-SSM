@@ -34,7 +34,6 @@
 	        showMeridian:1
 	    });
 	    
-		
 	});	
 	
 	function addproject(){
@@ -48,9 +47,7 @@
 				"projectname":$("#projectname").val(),
 				"projectamount":$("#projectamount").val(),
 				"projectrate":$("#projectrate").val(),
-				"projectfirstdate":$("#projectfirstdate").val(),
-				"projectenddate":$("#projectenddate").val(),
-				"projectdateline":$("#projectdateline").val(),
+				"dateline":$("#dateline").val(),
 				"projectintroduct":$("#projectintroduct").val(),
 				"userId":itemvalue
 				
@@ -111,6 +108,14 @@
     				<input type="text" class="form-control" id="projectamount">
     			</div>
     		</div>
+    		
+    		<div class="form-group">
+    			<label class="control-label col-sm-3" for="projectamount">项目期限：</label>
+    			<div class="col-sm-4">
+    				<input type="text" class="form-control" id="dateline">
+    			</div>
+    		</div>
+    		
     		<div class="form-group">
     			<label class="control-label col-sm-3" for="projectrate">项目利率：</label>
     			<div class="col-sm-4">
@@ -119,30 +124,15 @@
     		</div>
 
     		  		
-            <div class="form-group">
+<!--             <div class="form-group">
                 <label for="dtp_input1" class="col-md-3 control-label">项目开始集资时间：</label>
                 <div class="input-group date form_datetime col-md-3" data-date="1979-09-16">
                     <input class="form-control" size="10" type="text" value="" readonly id="projectfirstdate">
 					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                 </div>
             </div>
-            
-            <div class="form-group">
-                <label for="dtp_input1" class="col-md-3 control-label">预计结束集资时间：</label>
-                <div class="input-group date form_datetime col-md-3" data-date="1979-09-16">
-                    <input class="form-control" size="10" type="text" value="" readonly id="projectenddate">
-					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="dtp_input1" class="col-md-3 control-label">项目结束时间：</label>
-                <div class="input-group date form_datetime col-md-3" data-date="1979-09-16">
-                    <input class="form-control" size="10" type="text" value="" readonly id="projectdateline">
-					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                </div>
-            </div>
-    		
+             -->
+             
     		<div class="form-group">
     			<label class="control-label col-sm-3" for="projectintroduct">项目简介：</label>
     			<div class="col-sm-4">

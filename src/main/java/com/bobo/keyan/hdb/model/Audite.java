@@ -9,7 +9,7 @@ public class Audite {
 
     private Long aAmount;
 
-    private Date aDateline;
+    private Integer aDateline;
 
     private Long aInterest;
 
@@ -41,11 +41,11 @@ public class Audite {
         this.aAmount = aAmount;
     }
 
-    public Date getaDateline() {
+    public Integer getaDateline() {
         return aDateline;
     }
 
-    public void setaDateline(Date aDateline) {
+    public void setaDateline(Integer aDateline) {
         this.aDateline = aDateline;
     }
 

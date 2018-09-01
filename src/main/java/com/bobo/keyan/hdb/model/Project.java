@@ -16,13 +16,7 @@ public class Project {
 
     private String pIntroduction;
 
-    private Date pDateInvestfirst;
-
     private String pState;
-
-    private Date pDateInvestend;
-
-    private Date pDateline;
 
     private Integer pBorrowerId;
 
@@ -39,6 +33,8 @@ public class Project {
     private Date pExamineDate;
 
     private Date pAddtime;
+
+    private Integer pDateline;
 
     public Integer getpId() {
         return pId;
@@ -88,36 +84,12 @@ public class Project {
         this.pIntroduction = pIntroduction == null ? null : pIntroduction.trim();
     }
 
-    public Date getpDateInvestfirst() {
-        return pDateInvestfirst;
-    }
-
-    public void setpDateInvestfirst(Date pDateInvestfirst) {
-        this.pDateInvestfirst = pDateInvestfirst;
-    }
-
     public String getpState() {
         return pState;
     }
 
     public void setpState(String pState) {
         this.pState = pState == null ? null : pState.trim();
-    }
-
-    public Date getpDateInvestend() {
-        return pDateInvestend;
-    }
-
-    public void setpDateInvestend(Date pDateInvestend) {
-        this.pDateInvestend = pDateInvestend;
-    }
-
-    public Date getpDateline() {
-        return pDateline;
-    }
-
-    public void setpDateline(Date pDateline) {
-        this.pDateline = pDateline;
     }
 
     public Integer getpBorrowerId() {
@@ -182,5 +154,13 @@ public class Project {
 
     public void setpAddtime(Date pAddtime) {
         this.pAddtime = pAddtime;
+    }
+
+    public Integer getpDateline() {
+        return pDateline;
+    }
+
+    public void setpDateline(Integer pDateline) {
+        this.pDateline = pDateline;
     }
 }

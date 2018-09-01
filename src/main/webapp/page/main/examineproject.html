@@ -40,11 +40,9 @@
 					td+="<tr>"+
 					    "<td>"+(index+1)+"</td>"+
 					    "<td>"+item.pName+"</td>"+
+					    "<td>"+item.pDateline+"</td>"+
 					    "<td>"+item.pCreatorId+"</td>"+
 					    "<td>"+getFormatDate(item.pAddtime)+"</td>"+
-					     "<td>"+getFormatDate(item.pDateInvestfirst)+"</td>"+ 
-					     "<td>"+getFormatDate(item.pDateInvestend)+"</td>"+ 
-					     "<td>"+getFormatDate(item.pDateline)+"</td>"+ 
 					    "<td>"+item.pRate+"</td>";
 					    /* "<td>"+item.pState+"</td>"+ */
 					    if(item.pState=="0"){
@@ -63,7 +61,6 @@
 					    	td+="<td>"+" "+"</td>";
 					    }
 					    var exam="<a href='javascript:void(0)'  onclick=\"exam('"+item.pId+"')\">【风险审核】</a>";
-					    
 					    td+="<td>"+exam+"</td>"; 
 					td+="</tr>";
 				})
@@ -188,11 +185,9 @@
 			<tr>
 				<td>序号</td>
 				<td>项目名称</td>
+				<td>项目期限</td>
 				<td>项目创建人ID</td>
 				<td>项目创建时间</td>
-				<td>融资开始时间</td>
-				<td>融资结束时间</td>
-				<td>项目结束时间</td>
 				<td>利率</td>
 				<td>状态</td>
 				<td>操作</td>

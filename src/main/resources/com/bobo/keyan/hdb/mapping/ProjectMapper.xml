@@ -8,10 +8,7 @@
     <result column="p_amount" property="pAmount" jdbcType="DECIMAL" />
     <result column="p_invest_amount" property="pInvestAmount" jdbcType="DECIMAL" />
     <result column="p_introduction" property="pIntroduction" jdbcType="VARCHAR" />
-    <result column="p_date_investfirst" property="pDateInvestfirst" jdbcType="TIMESTAMP" />
     <result column="p_state" property="pState" jdbcType="CHAR" />
-    <result column="p_date_investend" property="pDateInvestend" jdbcType="TIMESTAMP" />
-    <result column="p_dateline" property="pDateline" jdbcType="TIMESTAMP" />
     <result column="p_borrower_id" property="pBorrowerId" jdbcType="INTEGER" />
     <result column="p_rate" property="pRate" jdbcType="VARCHAR" />
     <result column="p_auditor_id" property="pAuditorId" jdbcType="INTEGER" />
@@ -20,6 +17,7 @@
     <result column="p_content" property="pContent" jdbcType="VARCHAR" />
     <result column="p_examine_date" property="pExamineDate" jdbcType="TIMESTAMP" />
     <result column="p_addtime" property="pAddtime" jdbcType="TIMESTAMP" />
+    <result column="p_dateline" property="pDateline" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -80,9 +78,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    p_id, p_name, p_type, p_amount, p_invest_amount, p_introduction, p_date_investfirst, 
-    p_state, p_date_investend, p_dateline, p_borrower_id, p_rate, p_auditor_id, p_creator_id, 
-    p_examine_content, p_content, p_examine_date, p_addtime
+    p_id, p_name, p_type, p_amount, p_invest_amount, p_introduction, p_state, p_borrower_id, 
+    p_rate, p_auditor_id, p_creator_id, p_examine_content, p_content, p_examine_date, 
+    p_addtime, p_dateline
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bobo.keyan.hdb.model.ProjectExample" >
     select
@@ -117,18 +115,16 @@
   <insert id="insert" parameterType="com.bobo.keyan.hdb.model.Project" >
     insert into project (p_id, p_name, p_type, 
       p_amount, p_invest_amount, p_introduction, 
-      p_date_investfirst, p_state, p_date_investend, 
-      p_dateline, p_borrower_id, p_rate, 
+      p_state, p_borrower_id, p_rate, 
       p_auditor_id, p_creator_id, p_examine_content, 
-      p_content, p_examine_date, p_addtime
-      )
+      p_content, p_examine_date, p_addtime, 
+      p_dateline)
     values (#{pId,jdbcType=INTEGER}, #{pName,jdbcType=VARCHAR}, #{pType,jdbcType=CHAR}, 
       #{pAmount,jdbcType=DECIMAL}, #{pInvestAmount,jdbcType=DECIMAL}, #{pIntroduction,jdbcType=VARCHAR}, 
-      #{pDateInvestfirst,jdbcType=TIMESTAMP}, #{pState,jdbcType=CHAR}, #{pDateInvestend,jdbcType=TIMESTAMP}, 
-      #{pDateline,jdbcType=TIMESTAMP}, #{pBorrowerId,jdbcType=INTEGER}, #{pRate,jdbcType=VARCHAR}, 
+      #{pState,jdbcType=CHAR}, #{pBorrowerId,jdbcType=INTEGER}, #{pRate,jdbcType=VARCHAR}, 
       #{pAuditorId,jdbcType=INTEGER}, #{pCreatorId,jdbcType=INTEGER}, #{pExamineContent,jdbcType=VARCHAR}, 
-      #{pContent,jdbcType=VARCHAR}, #{pExamineDate,jdbcType=TIMESTAMP}, #{pAddtime,jdbcType=TIMESTAMP}
-      )
+      #{pContent,jdbcType=VARCHAR}, #{pExamineDate,jdbcType=TIMESTAMP}, #{pAddtime,jdbcType=TIMESTAMP}, 
+      #{pDateline,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.bobo.keyan.hdb.model.Project" >
     insert into project
@@ -151,17 +147,8 @@
       <if test="pIntroduction != null" >
         p_introduction,
       </if>
-      <if test="pDateInvestfirst != null" >
-        p_date_investfirst,
-      </if>
       <if test="pState != null" >
         p_state,
-      </if>
-      <if test="pDateInvestend != null" >
-        p_date_investend,
-      </if>
-      <if test="pDateline != null" >
-        p_dateline,
       </if>
       <if test="pBorrowerId != null" >
         p_borrower_id,
@@ -187,6 +174,9 @@
       <if test="pAddtime != null" >
         p_addtime,
       </if>
+      <if test="pDateline != null" >
+        p_dateline,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="pId != null" >
@@ -207,17 +197,8 @@
       <if test="pIntroduction != null" >
         #{pIntroduction,jdbcType=VARCHAR},
       </if>
-      <if test="pDateInvestfirst != null" >
-        #{pDateInvestfirst,jdbcType=TIMESTAMP},
-      </if>
       <if test="pState != null" >
         #{pState,jdbcType=CHAR},
-      </if>
-      <if test="pDateInvestend != null" >
-        #{pDateInvestend,jdbcType=TIMESTAMP},
-      </if>
-      <if test="pDateline != null" >
-        #{pDateline,jdbcType=TIMESTAMP},
       </if>
       <if test="pBorrowerId != null" >
         #{pBorrowerId,jdbcType=INTEGER},
@@ -242,6 +223,9 @@
       </if>
       <if test="pAddtime != null" >
         #{pAddtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pDateline != null" >
+        #{pDateline,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -272,17 +256,8 @@
       <if test="record.pIntroduction != null" >
         p_introduction = #{record.pIntroduction,jdbcType=VARCHAR},
       </if>
-      <if test="record.pDateInvestfirst != null" >
-        p_date_investfirst = #{record.pDateInvestfirst,jdbcType=TIMESTAMP},
-      </if>
       <if test="record.pState != null" >
         p_state = #{record.pState,jdbcType=CHAR},
-      </if>
-      <if test="record.pDateInvestend != null" >
-        p_date_investend = #{record.pDateInvestend,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.pDateline != null" >
-        p_dateline = #{record.pDateline,jdbcType=TIMESTAMP},
       </if>
       <if test="record.pBorrowerId != null" >
         p_borrower_id = #{record.pBorrowerId,jdbcType=INTEGER},
@@ -308,6 +283,9 @@
       <if test="record.pAddtime != null" >
         p_addtime = #{record.pAddtime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.pDateline != null" >
+        p_dateline = #{record.pDateline,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -321,10 +299,7 @@
       p_amount = #{record.pAmount,jdbcType=DECIMAL},
       p_invest_amount = #{record.pInvestAmount,jdbcType=DECIMAL},
       p_introduction = #{record.pIntroduction,jdbcType=VARCHAR},
-      p_date_investfirst = #{record.pDateInvestfirst,jdbcType=TIMESTAMP},
       p_state = #{record.pState,jdbcType=CHAR},
-      p_date_investend = #{record.pDateInvestend,jdbcType=TIMESTAMP},
-      p_dateline = #{record.pDateline,jdbcType=TIMESTAMP},
       p_borrower_id = #{record.pBorrowerId,jdbcType=INTEGER},
       p_rate = #{record.pRate,jdbcType=VARCHAR},
       p_auditor_id = #{record.pAuditorId,jdbcType=INTEGER},
@@ -332,7 +307,8 @@
       p_examine_content = #{record.pExamineContent,jdbcType=VARCHAR},
       p_content = #{record.pContent,jdbcType=VARCHAR},
       p_examine_date = #{record.pExamineDate,jdbcType=TIMESTAMP},
-      p_addtime = #{record.pAddtime,jdbcType=TIMESTAMP}
+      p_addtime = #{record.pAddtime,jdbcType=TIMESTAMP},
+      p_dateline = #{record.pDateline,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -355,17 +331,8 @@
       <if test="pIntroduction != null" >
         p_introduction = #{pIntroduction,jdbcType=VARCHAR},
       </if>
-      <if test="pDateInvestfirst != null" >
-        p_date_investfirst = #{pDateInvestfirst,jdbcType=TIMESTAMP},
-      </if>
       <if test="pState != null" >
         p_state = #{pState,jdbcType=CHAR},
-      </if>
-      <if test="pDateInvestend != null" >
-        p_date_investend = #{pDateInvestend,jdbcType=TIMESTAMP},
-      </if>
-      <if test="pDateline != null" >
-        p_dateline = #{pDateline,jdbcType=TIMESTAMP},
       </if>
       <if test="pBorrowerId != null" >
         p_borrower_id = #{pBorrowerId,jdbcType=INTEGER},
@@ -391,6 +358,9 @@
       <if test="pAddtime != null" >
         p_addtime = #{pAddtime,jdbcType=TIMESTAMP},
       </if>
+      <if test="pDateline != null" >
+        p_dateline = #{pDateline,jdbcType=INTEGER},
+      </if>
     </set>
     where p_id = #{pId,jdbcType=INTEGER}
   </update>
@@ -401,10 +371,7 @@
       p_amount = #{pAmount,jdbcType=DECIMAL},
       p_invest_amount = #{pInvestAmount,jdbcType=DECIMAL},
       p_introduction = #{pIntroduction,jdbcType=VARCHAR},
-      p_date_investfirst = #{pDateInvestfirst,jdbcType=TIMESTAMP},
       p_state = #{pState,jdbcType=CHAR},
-      p_date_investend = #{pDateInvestend,jdbcType=TIMESTAMP},
-      p_dateline = #{pDateline,jdbcType=TIMESTAMP},
       p_borrower_id = #{pBorrowerId,jdbcType=INTEGER},
       p_rate = #{pRate,jdbcType=VARCHAR},
       p_auditor_id = #{pAuditorId,jdbcType=INTEGER},
@@ -412,7 +379,8 @@
       p_examine_content = #{pExamineContent,jdbcType=VARCHAR},
       p_content = #{pContent,jdbcType=VARCHAR},
       p_examine_date = #{pExamineDate,jdbcType=TIMESTAMP},
-      p_addtime = #{pAddtime,jdbcType=TIMESTAMP}
+      p_addtime = #{pAddtime,jdbcType=TIMESTAMP},
+      p_dateline = #{pDateline,jdbcType=INTEGER}
     where p_id = #{pId,jdbcType=INTEGER}
   </update>
 </mapper>

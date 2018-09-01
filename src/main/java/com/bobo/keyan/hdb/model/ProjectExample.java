@@ -496,66 +496,6 @@ public class ProjectExample {
             return (Criteria) this;
         }
 
-        public Criteria andPDateInvestfirstIsNull() {
-            addCriterion("p_date_investfirst is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDateInvestfirstIsNotNull() {
-            addCriterion("p_date_investfirst is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDateInvestfirstEqualTo(Date value) {
-            addCriterion("p_date_investfirst =", value, "pDateInvestfirst");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDateInvestfirstNotEqualTo(Date value) {
-            addCriterion("p_date_investfirst <>", value, "pDateInvestfirst");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDateInvestfirstGreaterThan(Date value) {
-            addCriterion("p_date_investfirst >", value, "pDateInvestfirst");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDateInvestfirstGreaterThanOrEqualTo(Date value) {
-            addCriterion("p_date_investfirst >=", value, "pDateInvestfirst");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDateInvestfirstLessThan(Date value) {
-            addCriterion("p_date_investfirst <", value, "pDateInvestfirst");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDateInvestfirstLessThanOrEqualTo(Date value) {
-            addCriterion("p_date_investfirst <=", value, "pDateInvestfirst");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDateInvestfirstIn(List<Date> values) {
-            addCriterion("p_date_investfirst in", values, "pDateInvestfirst");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDateInvestfirstNotIn(List<Date> values) {
-            addCriterion("p_date_investfirst not in", values, "pDateInvestfirst");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDateInvestfirstBetween(Date value1, Date value2) {
-            addCriterion("p_date_investfirst between", value1, value2, "pDateInvestfirst");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDateInvestfirstNotBetween(Date value1, Date value2) {
-            addCriterion("p_date_investfirst not between", value1, value2, "pDateInvestfirst");
-            return (Criteria) this;
-        }
-
         public Criteria andPStateIsNull() {
             addCriterion("p_state is null");
             return (Criteria) this;
@@ -623,126 +563,6 @@ public class ProjectExample {
 
         public Criteria andPStateNotBetween(String value1, String value2) {
             addCriterion("p_state not between", value1, value2, "pState");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDateInvestendIsNull() {
-            addCriterion("p_date_investend is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDateInvestendIsNotNull() {
-            addCriterion("p_date_investend is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDateInvestendEqualTo(Date value) {
-            addCriterion("p_date_investend =", value, "pDateInvestend");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDateInvestendNotEqualTo(Date value) {
-            addCriterion("p_date_investend <>", value, "pDateInvestend");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDateInvestendGreaterThan(Date value) {
-            addCriterion("p_date_investend >", value, "pDateInvestend");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDateInvestendGreaterThanOrEqualTo(Date value) {
-            addCriterion("p_date_investend >=", value, "pDateInvestend");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDateInvestendLessThan(Date value) {
-            addCriterion("p_date_investend <", value, "pDateInvestend");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDateInvestendLessThanOrEqualTo(Date value) {
-            addCriterion("p_date_investend <=", value, "pDateInvestend");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDateInvestendIn(List<Date> values) {
-            addCriterion("p_date_investend in", values, "pDateInvestend");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDateInvestendNotIn(List<Date> values) {
-            addCriterion("p_date_investend not in", values, "pDateInvestend");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDateInvestendBetween(Date value1, Date value2) {
-            addCriterion("p_date_investend between", value1, value2, "pDateInvestend");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDateInvestendNotBetween(Date value1, Date value2) {
-            addCriterion("p_date_investend not between", value1, value2, "pDateInvestend");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDatelineIsNull() {
-            addCriterion("p_dateline is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDatelineIsNotNull() {
-            addCriterion("p_dateline is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDatelineEqualTo(Date value) {
-            addCriterion("p_dateline =", value, "pDateline");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDatelineNotEqualTo(Date value) {
-            addCriterion("p_dateline <>", value, "pDateline");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDatelineGreaterThan(Date value) {
-            addCriterion("p_dateline >", value, "pDateline");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDatelineGreaterThanOrEqualTo(Date value) {
-            addCriterion("p_dateline >=", value, "pDateline");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDatelineLessThan(Date value) {
-            addCriterion("p_dateline <", value, "pDateline");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDatelineLessThanOrEqualTo(Date value) {
-            addCriterion("p_dateline <=", value, "pDateline");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDatelineIn(List<Date> values) {
-            addCriterion("p_dateline in", values, "pDateline");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDatelineNotIn(List<Date> values) {
-            addCriterion("p_dateline not in", values, "pDateline");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDatelineBetween(Date value1, Date value2) {
-            addCriterion("p_dateline between", value1, value2, "pDateline");
-            return (Criteria) this;
-        }
-
-        public Criteria andPDatelineNotBetween(Date value1, Date value2) {
-            addCriterion("p_dateline not between", value1, value2, "pDateline");
             return (Criteria) this;
         }
 
@@ -1253,6 +1073,66 @@ public class ProjectExample {
 
         public Criteria andPAddtimeNotBetween(Date value1, Date value2) {
             addCriterion("p_addtime not between", value1, value2, "pAddtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPDatelineIsNull() {
+            addCriterion("p_dateline is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPDatelineIsNotNull() {
+            addCriterion("p_dateline is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPDatelineEqualTo(Integer value) {
+            addCriterion("p_dateline =", value, "pDateline");
+            return (Criteria) this;
+        }
+
+        public Criteria andPDatelineNotEqualTo(Integer value) {
+            addCriterion("p_dateline <>", value, "pDateline");
+            return (Criteria) this;
+        }
+
+        public Criteria andPDatelineGreaterThan(Integer value) {
+            addCriterion("p_dateline >", value, "pDateline");
+            return (Criteria) this;
+        }
+
+        public Criteria andPDatelineGreaterThanOrEqualTo(Integer value) {
+            addCriterion("p_dateline >=", value, "pDateline");
+            return (Criteria) this;
+        }
+
+        public Criteria andPDatelineLessThan(Integer value) {
+            addCriterion("p_dateline <", value, "pDateline");
+            return (Criteria) this;
+        }
+
+        public Criteria andPDatelineLessThanOrEqualTo(Integer value) {
+            addCriterion("p_dateline <=", value, "pDateline");
+            return (Criteria) this;
+        }
+
+        public Criteria andPDatelineIn(List<Integer> values) {
+            addCriterion("p_dateline in", values, "pDateline");
+            return (Criteria) this;
+        }
+
+        public Criteria andPDatelineNotIn(List<Integer> values) {
+            addCriterion("p_dateline not in", values, "pDateline");
+            return (Criteria) this;
+        }
+
+        public Criteria andPDatelineBetween(Integer value1, Integer value2) {
+            addCriterion("p_dateline between", value1, value2, "pDateline");
+            return (Criteria) this;
+        }
+
+        public Criteria andPDatelineNotBetween(Integer value1, Integer value2) {
+            addCriterion("p_dateline not between", value1, value2, "pDateline");
             return (Criteria) this;
         }
     }

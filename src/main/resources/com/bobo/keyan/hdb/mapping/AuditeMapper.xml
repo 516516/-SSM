@@ -5,7 +5,7 @@
     <id column="a_id" property="aId" jdbcType="INTEGER" />
     <result column="a_userid" property="aUserid" jdbcType="INTEGER" />
     <result column="a_amount" property="aAmount" jdbcType="DECIMAL" />
-    <result column="a_dateline" property="aDateline" jdbcType="TIMESTAMP" />
+    <result column="a_dateline" property="aDateline" jdbcType="INTEGER" />
     <result column="a_interest" property="aInterest" jdbcType="DECIMAL" />
     <result column="a_applytime" property="aApplytime" jdbcType="TIMESTAMP" />
     <result column="a_state" property="aState" jdbcType="CHAR" />
@@ -106,7 +106,7 @@
       a_dateline, a_interest, a_applytime, 
       a_state)
     values (#{aId,jdbcType=INTEGER}, #{aUserid,jdbcType=INTEGER}, #{aAmount,jdbcType=DECIMAL}, 
-      #{aDateline,jdbcType=TIMESTAMP}, #{aInterest,jdbcType=DECIMAL}, #{aApplytime,jdbcType=TIMESTAMP}, 
+      #{aDateline,jdbcType=INTEGER}, #{aInterest,jdbcType=DECIMAL}, #{aApplytime,jdbcType=TIMESTAMP}, 
       #{aState,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.bobo.keyan.hdb.model.Audite" >
@@ -145,7 +145,7 @@
         #{aAmount,jdbcType=DECIMAL},
       </if>
       <if test="aDateline != null" >
-        #{aDateline,jdbcType=TIMESTAMP},
+        #{aDateline,jdbcType=INTEGER},
       </if>
       <if test="aInterest != null" >
         #{aInterest,jdbcType=DECIMAL},
@@ -177,7 +177,7 @@
         a_amount = #{record.aAmount,jdbcType=DECIMAL},
       </if>
       <if test="record.aDateline != null" >
-        a_dateline = #{record.aDateline,jdbcType=TIMESTAMP},
+        a_dateline = #{record.aDateline,jdbcType=INTEGER},
       </if>
       <if test="record.aInterest != null" >
         a_interest = #{record.aInterest,jdbcType=DECIMAL},
@@ -198,7 +198,7 @@
     set a_id = #{record.aId,jdbcType=INTEGER},
       a_userid = #{record.aUserid,jdbcType=INTEGER},
       a_amount = #{record.aAmount,jdbcType=DECIMAL},
-      a_dateline = #{record.aDateline,jdbcType=TIMESTAMP},
+      a_dateline = #{record.aDateline,jdbcType=INTEGER},
       a_interest = #{record.aInterest,jdbcType=DECIMAL},
       a_applytime = #{record.aApplytime,jdbcType=TIMESTAMP},
       a_state = #{record.aState,jdbcType=CHAR}
@@ -216,7 +216,7 @@
         a_amount = #{aAmount,jdbcType=DECIMAL},
       </if>
       <if test="aDateline != null" >
-        a_dateline = #{aDateline,jdbcType=TIMESTAMP},
+        a_dateline = #{aDateline,jdbcType=INTEGER},
       </if>
       <if test="aInterest != null" >
         a_interest = #{aInterest,jdbcType=DECIMAL},
@@ -234,7 +234,7 @@
     update audite
     set a_userid = #{aUserid,jdbcType=INTEGER},
       a_amount = #{aAmount,jdbcType=DECIMAL},
-      a_dateline = #{aDateline,jdbcType=TIMESTAMP},
+      a_dateline = #{aDateline,jdbcType=INTEGER},
       a_interest = #{aInterest,jdbcType=DECIMAL},
       a_applytime = #{aApplytime,jdbcType=TIMESTAMP},
       a_state = #{aState,jdbcType=CHAR}

@@ -295,52 +295,52 @@ public class AuditeExample {
             return (Criteria) this;
         }
 
-        public Criteria andADatelineEqualTo(Date value) {
+        public Criteria andADatelineEqualTo(Integer value) {
             addCriterion("a_dateline =", value, "aDateline");
             return (Criteria) this;
         }
 
-        public Criteria andADatelineNotEqualTo(Date value) {
+        public Criteria andADatelineNotEqualTo(Integer value) {
             addCriterion("a_dateline <>", value, "aDateline");
             return (Criteria) this;
         }
 
-        public Criteria andADatelineGreaterThan(Date value) {
+        public Criteria andADatelineGreaterThan(Integer value) {
             addCriterion("a_dateline >", value, "aDateline");
             return (Criteria) this;
         }
 
-        public Criteria andADatelineGreaterThanOrEqualTo(Date value) {
+        public Criteria andADatelineGreaterThanOrEqualTo(Integer value) {
             addCriterion("a_dateline >=", value, "aDateline");
             return (Criteria) this;
         }
 
-        public Criteria andADatelineLessThan(Date value) {
+        public Criteria andADatelineLessThan(Integer value) {
             addCriterion("a_dateline <", value, "aDateline");
             return (Criteria) this;
         }
 
-        public Criteria andADatelineLessThanOrEqualTo(Date value) {
+        public Criteria andADatelineLessThanOrEqualTo(Integer value) {
             addCriterion("a_dateline <=", value, "aDateline");
             return (Criteria) this;
         }
 
-        public Criteria andADatelineIn(List<Date> values) {
+        public Criteria andADatelineIn(List<Integer> values) {
             addCriterion("a_dateline in", values, "aDateline");
             return (Criteria) this;
         }
 
-        public Criteria andADatelineNotIn(List<Date> values) {
+        public Criteria andADatelineNotIn(List<Integer> values) {
             addCriterion("a_dateline not in", values, "aDateline");
             return (Criteria) this;
         }
 
-        public Criteria andADatelineBetween(Date value1, Date value2) {
+        public Criteria andADatelineBetween(Integer value1, Integer value2) {
             addCriterion("a_dateline between", value1, value2, "aDateline");
             return (Criteria) this;
         }
 
-        public Criteria andADatelineNotBetween(Date value1, Date value2) {
+        public Criteria andADatelineNotBetween(Integer value1, Integer value2) {
             addCriterion("a_dateline not between", value1, value2, "aDateline");
             return (Criteria) this;
         }
