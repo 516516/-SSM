@@ -24,7 +24,6 @@ public class UserController {
 	@Autowired
 	UserService userService;
 	
-	
 	@ResponseBody
     @RequestMapping("/selectAllusers")
 	public Map<String, Object> getAllUsers(HttpServletResponse response, HttpServletRequest request) throws Exception {		
@@ -49,6 +48,7 @@ public class UserController {
 				 resultMap.put("result", 0);
 			 }else {
 				 resultMap.put("result", 1);
+				 System.out.println("测试推拉版本");
 			 }		 
 		 return resultMap;		 
 	}
