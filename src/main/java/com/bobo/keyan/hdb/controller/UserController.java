@@ -24,6 +24,7 @@ public class UserController {
 	@Autowired
 	UserService userService;
 	
+	
 	@ResponseBody
     @RequestMapping("/selectAllusers")
 	public Map<String, Object> getAllUsers(HttpServletResponse response, HttpServletRequest request) throws Exception {		
