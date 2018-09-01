@@ -31,6 +31,7 @@ public class ProjectController {
 	
 	@ResponseBody
     @RequestMapping("/addproject")
+	
 	public Map<String, Object> addproject(HttpServletResponse response, HttpServletRequest request) throws Exception {		
 		 Map<String, Object> resultMap = new ConcurrentHashMap<String,Object>();
 		 String projectname=request.getParameter("projectname");		 
