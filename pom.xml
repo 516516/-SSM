@@ -13,7 +13,7 @@
 		<!-- Mybatis generator 的配置文件 -->
 		<mybatis.generator.configurationFile>src/main/resources/config/generatorConfig2.xml</mybatis.generator.configurationFile>
 	</properties>
-
+	
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
