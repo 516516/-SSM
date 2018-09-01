@@ -36,6 +36,10 @@ public class Project {
 
     private String pContent;
 
+    private Date pExamineDate;
+
+    private Date pAddtime;
+
     public Integer getpId() {
         return pId;
     }
@@ -162,5 +166,21 @@ public class Project {
 
     public void setpContent(String pContent) {
         this.pContent = pContent == null ? null : pContent.trim();
+    }
+
+    public Date getpExamineDate() {
+        return pExamineDate;
+    }
+
+    public void setpExamineDate(Date pExamineDate) {
+        this.pExamineDate = pExamineDate;
+    }
+
+    public Date getpAddtime() {
+        return pAddtime;
+    }
+
+    public void setpAddtime(Date pAddtime) {
+        this.pAddtime = pAddtime;
     }
 }

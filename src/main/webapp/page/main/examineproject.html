@@ -41,6 +41,7 @@
 					    "<td>"+(index+1)+"</td>"+
 					    "<td>"+item.pName+"</td>"+
 					    "<td>"+item.pCreatorId+"</td>"+
+					    "<td>"+getFormatDate(item.pAddtime)+"</td>"+
 					     "<td>"+getFormatDate(item.pDateInvestfirst)+"</td>"+ 
 					     "<td>"+getFormatDate(item.pDateInvestend)+"</td>"+ 
 					     "<td>"+getFormatDate(item.pDateline)+"</td>"+ 
@@ -95,7 +96,7 @@
 		function formate(d){
 		return d>9?d:'0'+d;
 	}
-		
+	
 	var projectId=0;
 	
 	function exam(pId){
@@ -124,16 +125,20 @@
 						icon:1
 					});
 					getData();
+					$("#examine").hide();
 				}else{
 					layer.msg("请求成功,审核操作失败",{
 						icon:1
 					});
+					getData();
+					$("#examine").hide();
 				}
 			},
 			error:function(data){// 如果请求失败要运行的函数。
 				layer.msg("请求失败，审核操作失败",{
 					icon:1
 				});
+				$("#examine").hide();
 			}
 		});
 	}
@@ -145,7 +150,8 @@
 			data:{
 				"content1":$("#content1").val(),
 				"content2":$("#content2").val(),
-				"projectId":projectId
+				"projectId":projectId,
+				"userId":sessionStorage.getItem("userId1")
 			},//规定要发送到服务器的数据。
 			async:false,//是否异步处理。
 			cache:false,//浏览器是否缓存被请求页面
@@ -156,16 +162,19 @@
 						icon:1
 					});
 					getData();
+					$("#examine").hide();
 				}else{
 					layer.msg("请求成功,审核操作失败",{
 						icon:1
 					});
+					$("#examine").hide();
 				}
 			},
 			error:function(data){// 如果请求失败要运行的函数。
 				layer.msg("请求失败，审核操作失败",{
 					icon:1
 				});
+				$("#examine").hide();
 			}
 		});
 	}
@@ -180,6 +189,7 @@
 				<td>序号</td>
 				<td>项目名称</td>
 				<td>项目创建人ID</td>
+				<td>项目创建时间</td>
 				<td>融资开始时间</td>
 				<td>融资结束时间</td>
 				<td>项目结束时间</td>

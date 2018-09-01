@@ -1135,6 +1135,126 @@ public class ProjectExample {
             addCriterion("p_content not between", value1, value2, "pContent");
             return (Criteria) this;
         }
+
+        public Criteria andPExamineDateIsNull() {
+            addCriterion("p_examine_date is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPExamineDateIsNotNull() {
+            addCriterion("p_examine_date is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPExamineDateEqualTo(Date value) {
+            addCriterion("p_examine_date =", value, "pExamineDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andPExamineDateNotEqualTo(Date value) {
+            addCriterion("p_examine_date <>", value, "pExamineDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andPExamineDateGreaterThan(Date value) {
+            addCriterion("p_examine_date >", value, "pExamineDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andPExamineDateGreaterThanOrEqualTo(Date value) {
+            addCriterion("p_examine_date >=", value, "pExamineDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andPExamineDateLessThan(Date value) {
+            addCriterion("p_examine_date <", value, "pExamineDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andPExamineDateLessThanOrEqualTo(Date value) {
+            addCriterion("p_examine_date <=", value, "pExamineDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andPExamineDateIn(List<Date> values) {
+            addCriterion("p_examine_date in", values, "pExamineDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andPExamineDateNotIn(List<Date> values) {
+            addCriterion("p_examine_date not in", values, "pExamineDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andPExamineDateBetween(Date value1, Date value2) {
+            addCriterion("p_examine_date between", value1, value2, "pExamineDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andPExamineDateNotBetween(Date value1, Date value2) {
+            addCriterion("p_examine_date not between", value1, value2, "pExamineDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andPAddtimeIsNull() {
+            addCriterion("p_addtime is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPAddtimeIsNotNull() {
+            addCriterion("p_addtime is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPAddtimeEqualTo(Date value) {
+            addCriterion("p_addtime =", value, "pAddtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPAddtimeNotEqualTo(Date value) {
+            addCriterion("p_addtime <>", value, "pAddtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPAddtimeGreaterThan(Date value) {
+            addCriterion("p_addtime >", value, "pAddtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPAddtimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("p_addtime >=", value, "pAddtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPAddtimeLessThan(Date value) {
+            addCriterion("p_addtime <", value, "pAddtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPAddtimeLessThanOrEqualTo(Date value) {
+            addCriterion("p_addtime <=", value, "pAddtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPAddtimeIn(List<Date> values) {
+            addCriterion("p_addtime in", values, "pAddtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPAddtimeNotIn(List<Date> values) {
+            addCriterion("p_addtime not in", values, "pAddtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPAddtimeBetween(Date value1, Date value2) {
+            addCriterion("p_addtime between", value1, value2, "pAddtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPAddtimeNotBetween(Date value1, Date value2) {
+            addCriterion("p_addtime not between", value1, value2, "pAddtime");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

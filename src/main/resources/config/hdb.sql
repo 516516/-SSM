@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80003
 File Encoding         : 65001
 
-Date: 2018-08-29 20:12:05
+Date: 2018-09-01 17:10:57
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -32,10 +32,6 @@ CREATE TABLE `article` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of article
--- ----------------------------
-
--- ----------------------------
 -- Table structure for audite
 -- ----------------------------
 DROP TABLE IF EXISTS `audite`;
@@ -51,10 +47,6 @@ CREATE TABLE `audite` (
   KEY `a_userid` (`a_userid`),
   CONSTRAINT `a_userid` FOREIGN KEY (`a_userid`) REFERENCES `user` (`u_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of audite
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for credit
@@ -75,10 +67,6 @@ CREATE TABLE `credit` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of credit
--- ----------------------------
-
--- ----------------------------
 -- Table structure for invest
 -- ----------------------------
 DROP TABLE IF EXISTS `invest`;
@@ -97,10 +85,6 @@ CREATE TABLE `invest` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of invest
--- ----------------------------
-
--- ----------------------------
 -- Table structure for manager
 -- ----------------------------
 DROP TABLE IF EXISTS `manager`;
@@ -112,10 +96,6 @@ CREATE TABLE `manager` (
   `m_phone` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '手机号',
   PRIMARY KEY (`m_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of manager
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for project
@@ -138,17 +118,10 @@ CREATE TABLE `project` (
   `p_creator_id` int(20) DEFAULT NULL COMMENT '创建项目管理人员id',
   `p_examine_content` varchar(1000) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '审核意见',
   `p_content` varchar(1000) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '风险审核意见',
+  `p_examine_date` datetime DEFAULT NULL COMMENT '项目审核时间',
+  `p_addtime` datetime DEFAULT NULL COMMENT '项目添加时间',
   PRIMARY KEY (`p_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of project
--- ----------------------------
-INSERT INTO `project` VALUES ('1', '测试项目', null, '3000000', null, '测试i项目', '2018-08-25 16:08:41', '5', '2018-08-25 16:08:43', '2018-08-25 16:08:44', null, '0.14', null, null, '不通过', '不通过');
-INSERT INTO `project` VALUES ('2', '测试项目', null, '3000000', null, '测试i项目', '2018-08-25 16:08:41', '0', '2018-08-25 16:08:43', '2018-08-25 16:08:44', null, '0.14', null, null, '通过', '通过');
-INSERT INTO `project` VALUES ('3', '测试项目2', null, '4000', null, '测试项目', '2018-08-26 18:08:07', '0', '2018-08-26 18:08:10', '2018-08-26 18:08:11', null, '0.2', null, '7', '通过', '通过');
-INSERT INTO `project` VALUES ('4', '测试3', null, '3000000', null, '测试项目，勿投资', '2018-08-26 18:08:47', '0', '2018-08-26 18:08:50', '2018-08-26 18:08:51', null, '0.14', null, '7', '通过', '通过');
-INSERT INTO `project` VALUES ('5', '测试项目3', null, '2000', null, '测试项目', '2018-08-26 20:08:18', '0', '2018-08-26 20:08:19', '2018-08-26 20:08:21', null, '0.1', null, '7', '通过', '通过');
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for stream
@@ -170,10 +143,6 @@ CREATE TABLE `stream` (
   CONSTRAINT `s_projectid` FOREIGN KEY (`s_projectid`) REFERENCES `project` (`p_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `s_userid` FOREIGN KEY (`s_userid`) REFERENCES `user` (`u_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of stream
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for user
@@ -198,18 +167,4 @@ CREATE TABLE `user` (
   `u_realname` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '真实姓名',
   `u_sex` char(1) DEFAULT NULL COMMENT '0---男   1---女  2---未知',
   PRIMARY KEY (`u_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of user
--- ----------------------------
-INSERT INTO `user` VALUES ('1', 'bobo', '12345', 'boubou', '17761700663', '2018-05-08 16:11:12', '2018-05-08 16:11:17', '0', '30000000', '10000', '5000', '南京', '122222222', '12345', '100', '胡波', '0');
-INSERT INTO `user` VALUES ('2', 'huhu', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `user` VALUES ('3', '短发短发的', '111', '打法大师傅', 'dfdf', '2018-08-17 22:01:39', '2018-08-17 22:01:39', null, null, null, null, 'dfdfd', null, null, null, null, '0');
-INSERT INTO `user` VALUES ('4', 'hubo', 'ddd', 'dfdf', 'ddd', '2018-08-17 22:02:53', '2018-08-17 22:02:53', null, null, null, null, 'ddd', null, null, null, null, '0');
-INSERT INTO `user` VALUES ('5', 'hu', 'qqq', 'dfdf', 'qqq', '2018-08-17 22:04:57', '2018-08-17 22:04:57', null, null, null, null, 'qqq', null, null, null, null, '0');
-INSERT INTO `user` VALUES ('6', 'qq', 'qq', 'qq', 'qq', '2018-08-17 22:38:44', '2018-08-17 22:38:44', null, null, null, null, 'qq', null, null, null, null, '0');
-INSERT INTO `user` VALUES ('7', 'HUBO', '222', 'bobo', '17761700664', '2018-08-17 22:56:14', '2018-08-17 22:56:14', null, null, null, null, '江苏南京', null, null, null, null, '0');
-INSERT INTO `user` VALUES ('8', '的发达省份的', '111', '等等带', '多对多的', '2018-08-17 23:38:00', '2018-08-17 23:38:00', null, null, null, null, '等等带', null, null, null, null, '0');
-INSERT INTO `user` VALUES ('9', '胡波', '516516', 'bobo', '17761700663', '2018-08-25 16:10:15', '2018-08-25 16:10:15', null, null, null, null, '江苏南京', null, null, null, null, '0');
-INSERT INTO `user` VALUES ('10', 'dqj', '13550607841', 'dqj2', '18180980541', '2018-08-25 16:56:25', '2018-08-25 16:56:25', null, null, null, null, 'drtd', null, null, null, null, '0');
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;

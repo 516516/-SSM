@@ -18,6 +18,8 @@
     <result column="p_creator_id" property="pCreatorId" jdbcType="INTEGER" />
     <result column="p_examine_content" property="pExamineContent" jdbcType="VARCHAR" />
     <result column="p_content" property="pContent" jdbcType="VARCHAR" />
+    <result column="p_examine_date" property="pExamineDate" jdbcType="TIMESTAMP" />
+    <result column="p_addtime" property="pAddtime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -80,7 +82,7 @@
   <sql id="Base_Column_List" >
     p_id, p_name, p_type, p_amount, p_invest_amount, p_introduction, p_date_investfirst, 
     p_state, p_date_investend, p_dateline, p_borrower_id, p_rate, p_auditor_id, p_creator_id, 
-    p_examine_content, p_content
+    p_examine_content, p_content, p_examine_date, p_addtime
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bobo.keyan.hdb.model.ProjectExample" >
     select
@@ -118,13 +120,15 @@
       p_date_investfirst, p_state, p_date_investend, 
       p_dateline, p_borrower_id, p_rate, 
       p_auditor_id, p_creator_id, p_examine_content, 
-      p_content)
+      p_content, p_examine_date, p_addtime
+      )
     values (#{pId,jdbcType=INTEGER}, #{pName,jdbcType=VARCHAR}, #{pType,jdbcType=CHAR}, 
       #{pAmount,jdbcType=DECIMAL}, #{pInvestAmount,jdbcType=DECIMAL}, #{pIntroduction,jdbcType=VARCHAR}, 
       #{pDateInvestfirst,jdbcType=TIMESTAMP}, #{pState,jdbcType=CHAR}, #{pDateInvestend,jdbcType=TIMESTAMP}, 
       #{pDateline,jdbcType=TIMESTAMP}, #{pBorrowerId,jdbcType=INTEGER}, #{pRate,jdbcType=VARCHAR}, 
       #{pAuditorId,jdbcType=INTEGER}, #{pCreatorId,jdbcType=INTEGER}, #{pExamineContent,jdbcType=VARCHAR}, 
-      #{pContent,jdbcType=VARCHAR})
+      #{pContent,jdbcType=VARCHAR}, #{pExamineDate,jdbcType=TIMESTAMP}, #{pAddtime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.bobo.keyan.hdb.model.Project" >
     insert into project
@@ -177,6 +181,12 @@
       <if test="pContent != null" >
         p_content,
       </if>
+      <if test="pExamineDate != null" >
+        p_examine_date,
+      </if>
+      <if test="pAddtime != null" >
+        p_addtime,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="pId != null" >
@@ -226,6 +236,12 @@
       </if>
       <if test="pContent != null" >
         #{pContent,jdbcType=VARCHAR},
+      </if>
+      <if test="pExamineDate != null" >
+        #{pExamineDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pAddtime != null" >
+        #{pAddtime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -286,6 +302,12 @@
       <if test="record.pContent != null" >
         p_content = #{record.pContent,jdbcType=VARCHAR},
       </if>
+      <if test="record.pExamineDate != null" >
+        p_examine_date = #{record.pExamineDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.pAddtime != null" >
+        p_addtime = #{record.pAddtime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -308,7 +330,9 @@
       p_auditor_id = #{record.pAuditorId,jdbcType=INTEGER},
       p_creator_id = #{record.pCreatorId,jdbcType=INTEGER},
       p_examine_content = #{record.pExamineContent,jdbcType=VARCHAR},
-      p_content = #{record.pContent,jdbcType=VARCHAR}
+      p_content = #{record.pContent,jdbcType=VARCHAR},
+      p_examine_date = #{record.pExamineDate,jdbcType=TIMESTAMP},
+      p_addtime = #{record.pAddtime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -361,6 +385,12 @@
       <if test="pContent != null" >
         p_content = #{pContent,jdbcType=VARCHAR},
       </if>
+      <if test="pExamineDate != null" >
+        p_examine_date = #{pExamineDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pAddtime != null" >
+        p_addtime = #{pAddtime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where p_id = #{pId,jdbcType=INTEGER}
   </update>
@@ -380,7 +410,9 @@
       p_auditor_id = #{pAuditorId,jdbcType=INTEGER},
       p_creator_id = #{pCreatorId,jdbcType=INTEGER},
       p_examine_content = #{pExamineContent,jdbcType=VARCHAR},
-      p_content = #{pContent,jdbcType=VARCHAR}
+      p_content = #{pContent,jdbcType=VARCHAR},
+      p_examine_date = #{pExamineDate,jdbcType=TIMESTAMP},
+      p_addtime = #{pAddtime,jdbcType=TIMESTAMP}
     where p_id = #{pId,jdbcType=INTEGER}
   </update>
 </mapper>

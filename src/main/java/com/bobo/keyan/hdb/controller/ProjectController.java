@@ -10,6 +10,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.dbcp.datasources.PerUserPoolDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +47,8 @@ public class ProjectController {
 		 String projectintroduct=request.getParameter("projectintroduct");
 		 Integer userId=Integer.parseInt(request.getParameter("userId"));
 		 
+		 Date addtime= new Date();
+		 
 		 Project project=new Project();
 		 project.setpDateInvestfirst(projectfirstdate);
 		 project.setpDateInvestend(projectenddate);
@@ -55,6 +59,7 @@ public class ProjectController {
 		 project.setpRate(projectrate1);
 		 project.setpState("4");
 		 project.setpCreatorId(userId);
+		 project.setpAddtime(addtime);
 		 
 		 int flag=projectService.insertSelective(project);
 		 if(1==flag) {
@@ -70,7 +75,7 @@ public class ProjectController {
 	public Map<String, Object> getAllporjects(HttpServletResponse response, HttpServletRequest request) throws Exception {			
 		 Map<String, Object> resultMap = new ConcurrentHashMap<String,Object>();
 		 ProjectExample example=new ProjectExample();
-		 example.setOrderByClause("p_date_investfirst desc");
+		 example.setOrderByClause("p_addtime desc");
 		 List<Project> projectsList=projectService.selectByExample(example);
 		 resultMap.put("result", projectsList);
 		 return resultMap;
@@ -99,6 +104,7 @@ public class ProjectController {
 		 String content2=request.getParameter("content2");
 		 Integer projectId=Integer.parseInt(request.getParameter("projectId"));
 		 Integer userId=Integer.parseInt(request.getParameter("userId"));
+		 Date exam_date=new Date();
 		 
 		 Project project=new Project();
 		 project.setpExamineContent(content1);
@@ -106,6 +112,7 @@ public class ProjectController {
 		 project.setpState("0");
 		 project.setpId(projectId);
 		 project.setpAuditorId(userId);
+		 project.setpExamineDate(exam_date);
 		 
 		 int result=projectService.updateByPrimaryKeySelective(project);
 		 if(result!=0) {
@@ -124,12 +131,16 @@ public class ProjectController {
 		 String content1=request.getParameter("content1");
 		 String content2=request.getParameter("content2");
 		 Integer projectId=Integer.parseInt(request.getParameter("projectId"));
+		 Integer userId=Integer.parseInt(request.getParameter("userId"));
 		 
+		 Date exam_date=new Date();
 		 Project project=new Project();
 		 project.setpExamineContent(content1);
 		 project.setpContent(content2);
 		 project.setpState("5");
 		 project.setpId(projectId);
+		 project.setpAuditorId(userId);
+		 project.setpExamineDate(exam_date);
 		 
 		 int result=projectService.updateByPrimaryKeySelective(project);
 		 if(result!=0) {
@@ -139,4 +150,5 @@ public class ProjectController {
 		 }
 		 return resultMap;
 	}
-}
+	
+}   
