@@ -9,9 +9,12 @@
 <script type="text/javascript" src="../../js/layer/layer.js"></script>
 
 <script type="text/javascript">
+
 	$(document).ready(function(){
 		getData();
 		$("#examine").hide();
+		var userId=sessionStorage.getItem("userId1");
+		console.log(userId);
 	});
 	
 	function getData(){
@@ -37,6 +40,7 @@
 					td+="<tr>"+
 					    "<td>"+(index+1)+"</td>"+
 					    "<td>"+item.pName+"</td>"+
+					    "<td>"+item.pCreatorId+"</td>"+
 					     "<td>"+getFormatDate(item.pDateInvestfirst)+"</td>"+ 
 					     "<td>"+getFormatDate(item.pDateInvestend)+"</td>"+ 
 					     "<td>"+getFormatDate(item.pDateline)+"</td>"+ 
@@ -108,7 +112,8 @@
 			data:{
 				"content1":$("#content1").val(),
 				"content2":$("#content2").val(),
-				"projectId":projectId
+				"projectId":projectId,
+				"userId":sessionStorage.getItem("userId1")
 			},//规定要发送到服务器的数据。
 			async:false,//是否异步处理。
 			cache:false,//浏览器是否缓存被请求页面
@@ -174,6 +179,7 @@
 			<tr>
 				<td>序号</td>
 				<td>项目名称</td>
+				<td>项目创建人ID</td>
 				<td>融资开始时间</td>
 				<td>融资结束时间</td>
 				<td>项目结束时间</td>

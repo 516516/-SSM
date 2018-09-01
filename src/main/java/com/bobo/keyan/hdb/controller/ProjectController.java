@@ -10,8 +10,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.ibatis.type.IntegerTypeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -100,12 +98,14 @@ public class ProjectController {
 		 String content1=request.getParameter("content1");
 		 String content2=request.getParameter("content2");
 		 Integer projectId=Integer.parseInt(request.getParameter("projectId"));
+		 Integer userId=Integer.parseInt(request.getParameter("userId"));
 		 
 		 Project project=new Project();
 		 project.setpExamineContent(content1);
 		 project.setpContent(content2);
 		 project.setpState("0");
 		 project.setpId(projectId);
+		 project.setpAuditorId(userId);
 		 
 		 int result=projectService.updateByPrimaryKeySelective(project);
 		 if(result!=0) {
