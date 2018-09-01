@@ -49,6 +49,7 @@ public class UserController {
 			 }else {
 				 resultMap.put("result", 1);
 				 System.out.println("测试推拉版本");
+				 System.out.println("测试推拉版本");
 			 }		 
 		 return resultMap;		 
 	}
