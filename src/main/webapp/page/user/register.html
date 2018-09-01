@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<script type="text/javascript" src="../../js/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../js/layer/layer.js"></script> 
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		
+	});
+	
+	function submit(){
+		if(1==check()){
+			console.log(check());
+			var sex=document.getElementsByName("sex");
+			var sex1="";
+			for(var i=0;i<sex.length;i++){
+				if(sex[i].checked){
+					sex1=sex[i].value;
+					break;
+				}			
+			}						
+			$.ajax({
+				url:"/HDB2/user/registers",
+				type:"post",
+				data:{
+					"loginname":$("#loginname").val(),
+					"nickname":$("#nickname").val(),
+					"password1":$("#password1").val(),
+					"phonenumber":$("#phonenumber").val(),
+					"address":$("#address").val(),
+					"sex":sex1
+				},
+				cache:false,
+				asyc:false,
+				dataType:"json",
+				success:successfunction,
+				error:errorfunction
+			});
+			
+			function successfunction(data){
+				console.log("result"+data.result);
+				if(0==data.result){
+					layer.msg("注册失败",{
+						icon:1,
+						time:2000
+					});
+				}else{
+					layer.msg("注册成功",{
+						icon:1,
+						time:2000
+					});
+				}				
+			}
+			
+			function errorfunction(){
+				console.log("请求失败");
+			}
+			
+		}
+	}
+	function reset(){
+		$("#loginname").val("");
+		$("#nickname").val("");
+		$("#password1").val("");
+		$("#password2").val("");
+		$("#phonenumber").val("");
+		$("#address").val("");
+		var sexs=document.getElementsByName("sex");
+		for(var i=0;i<sexs.length;i++){
+			sexs[i].checked=false;
+		}	
+	}
+	
+	function check(){
+		var loginname=$("#loginname").val();
+		if(loginname==null||loginname==""){
+			layer.msg("用户名为空",{
+				icon:2
+			});
+			return 0;
+		}
+		console.log(loginname);
+		var nickname=$("#nickname").val();
+		if(nickname==null||nickname==""){
+			layer.msg("昵称为空",{
+				icon:2
+			});
+			return 0;
+		}	
+		console.log(nickname);
+		var password1=$("#password1").val();
+		if(password1==null||password1==""){
+			layer.msg("密码为空",{
+				icon:2
+			});
+			return 0;
+		}
+		var password2=$("#password2").val();
+		if(password2==null||password2==""){
+			layer.msg("密码为空",{
+				icon:2
+			});
+			return 0;
+		}
+		if(password1!=password2){
+			layer.msg("两次密码不一致",{
+				icon:2
+			});
+			return 0;
+		}		
+		console.log(password1);
+		var phonenumber=$("#phonenumber").val();
+		if(phonenumber==null||phonenumber==""){
+			layer.msg("电话号码为空 ",{
+				icon:2
+			});
+			return 0;
+		}		
+		console.log(phonenumber);
+		var address=$("#address").val();
+		if(address==null||address==""){
+			layer.msg("地址为空 ",{
+				icon:2
+			});
+			return 0;
+		}
+		console.log(address);
+		var sex=document.getElementsByName("sex");
+		var flag=0;
+		var sex1="";
+		for(var i=0;i<sex.length;i++){
+			if(sex[i].checked){
+				flag=1;
+				sex1=sex[i].value;
+				break;
+			}			
+		}
+		if(0==flag){
+			layer.msg("性别为空 ",{
+				icon:2
+			});
+			return 0;
+		}
+		console.log(sex1);
+		return 1;
+	}
+	function userNameChanged(){
+		console.log("执行userNameChanged函数");
+		$.ajax({
+			url:"/HDB2/user/getUserByLoginName",
+			type:"post",
+			data:{
+				"loginname":$("#loginname").val()
+			},
+			cache:false,
+			asyc:false,
+			dataType:"json",
+			success:successfunction,
+			error:errorfunction
+		});		
+		function successfunction(data){
+			console.log("result"+data.result);
+			if(0==data.result){
+				$("#message").html("用户名有效");
+			}else{
+				$("#message").html("该用户名已被注册");
+			}				
+		}
+		function errorfunction(){
+			console.log("请求失败");
+		}
+	}
+</script>
+</head>
+<body>
+<div>
+	用户名：<input type="text" id="loginname" onchange="userNameChanged();"><span id="message"></span><br>
+	昵称：<input type="text" id="nickname"><br>
+	设置密码：<input type="password" id="password1"><br>
+	重复密码：<input type="password" id="password2"><br>
+	电话号码：<input type="text" id="phonenumber"><br>
+	现居地址：<input type="text" id="address"><br>
+	性别：<input type="radio" id="sex" name="sex" value="0">男
+	      <input type="radio" id="sex1" name="sex" value="1">女<br>
+	      <button type="button" id="submit" onclick="submit();">注册</button>
+	      <button type="button" id="reset"  onclick="reset();">重置</button>   
+</div>
+</body>
+</html>

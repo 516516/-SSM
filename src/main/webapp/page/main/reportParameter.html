@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>报表列表</title>
+    <!-- jQuery jquery 要放在select2的前面 -->
+    <script type="text/javascript" src="../js/jquery/jquery-2.2.4.min.js"></script>
+    <!--bootstrapt  -->	
+	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+	<!-- bootstrapt-select2 -->
+	<link href="../css/select2/select2.min.css" type="text/css" rel="stylesheet" />
+	<script type="text/javascript "src="../js/select2/select2.min.js"></script> 
+	
+	<!--font-awesome  -->
+	<link href="../css/font-awesome/css/font-awesome.min.css" type="text/css" rel="stylesheet" />
+	
+	<!--Base64.js  -->
+	<script type="text/javascript" src="../js/Base64.js"></script>
+	<script type="text/javascript" src="../js/ZeroClipboard/jquery.zclip.min.js"></script>
+	<script type="text/javascript" src="../js/layer/layer.js"></script>
+	
+    <script type="text/javascript"  th:inline="javascript">
+    
+        var base_url = /*[[@{/}]]*/'base_url';
+        var clipBoardContent = /*[[${clipBoardContent}]]*/'clipBoardContent';
+        
+    	$(document).ready(function(){    		
+    		jQuery.ajax({
+      	         url :base_url + 'reportParameter/getAlluser.do',
+      	         type : 'post',
+      	         dataType : 'JSON',
+      	         async : true,
+      	         abortOnRetry : true,
+      	         data : { },
+      	         success : function(data) {
+        	        // console.log("请求成功");
+      	        	// console.log(data);
+      	        	 //console.log(JSON.stringify(data));
+      	        	 var html='';
+       	         $.each(data.userList,function(){
+      	        		html += "<option value='" + this.usercode + "'>"
+   						+ this.usercode+"--"+this.username + "</option>";
+      	        	 }); 
+       	         
+       	      	 $("#QueryByUserAndId").append(html);      	
+      	         }, 
+      	         error : function() {
+      	            alert("请求失败");
+      	         }
+           	});
+   	   	    
+    		
+        	jQuery.ajax({
+    			type : "GET",
+    			url :base_url+'reportParameter/getLabels.do',
+    			data : {},
+    			dataType : "json",
+    			success : function(data) {
+    				console.info(data);
+    	            var html = "";
+    				$.each(data.labelsList, function () {
+    					console.info(this);
+    	   				html += "<option value='" + this.labelid + "'>"
+    	   						+ this.labelname + "</option>";
+    				})
+    				$("#themeLabel").empty();
+        			$("#themeLabel").append(html);
+        			$('#themeLabel').select2();
+    			},
+    			error : function() {
+    			}
+    		})
+    		queryData(1);
+    	});
+        
+    	var td="";
+    	function queryData(pageIndex){   
+    		
+    		var _pageSize = new Number(10); //分页数量
+            if (pageIndex == null || pageIndex == "" || pageIndex <= 1) {
+                pageIndex = new Number(1);
+            }        
+            /* themeLabel */
+            var labelList = $('#themeLabel').val();
+            if(null != labelList){
+            	labelList = labelList.toString();
+            }           
+            /* state */
+            var states=document.getElementsByName("state");	
+            var stateList=new Array();
+            var stateValue=0;
+            for(x in states){
+            	if(states[x].checked){
+            		stateList.push(states[x].value);
+            	}
+            }         	
+            for(var i=0;i<stateList.length;i++){
+            	console.log(stateList[i]);
+            	stateValue+=parseInt(stateList[i]);
+            } 
+            
+            jQuery.ajax({
+            	url:base_url+'reportParameter/getParameterList.do',
+                type: 'post',
+                dataType: 'JSON',
+                async: true,
+                abortOnRetry: true,
+                data: {
+                    "page": pageIndex,
+                    "pageSize": _pageSize,
+                    "parameterName": $('#parameterName').val(),
+                    "keeper": $('#keeper2').val(),
+                    "themeLabel":  labelList,
+                    "states":stateValue,
+                },
+                
+                success:function(data){
+                	console.log("请求成功");
+                	console.info(data);
+                	var dataList=data.parameterList;
+                	console.info(dataList);
+                    var totalCount = data.total;
+                    var totalparameter=data.parameterList.length;
+                    if (totalparameter < 1) {
+                    	$("#dataList").html('');
+                        $('#page').empty();
+                        createPagination(1, _pageSize, 0);
+                        return;
+                    }
+                	
+                	
+                	$(dataList).each(function(index,intm){
+                		
+                		td=td+"<tr ondblclick=\"openDetail('"+intm.parameterid+"')\">"+
+                		    "<td width=\"4%\" style=\"text-align: center\">"+(index+1)+"</td>"+
+                			"<td width=\"12%\" style=\"text-align: center\">"+intm.parametername+"</td>"+
+                			"<td width=\"14%\" style=\"text-align: center\">"+intm.parameterid+"</td> ";
+                			
+                            switch (intm.state) {
+                            case "0":
+                            	td=td+"<td width=\"6%\" style=\"text-align: center\">"+"<button type=\"button\" class=\"btn btn-success btn-xs\">在线</button>"+"</td>"
+                                break;
+                            case "1":
+                            	td=td+"<td width=\"6%\" style=\"text-align: center\">"+"<button type=\"button\" class=\"btn btn-default btn-xs\" style=\" background:gray\"><font style=\"color:white\">离线</font></button>"+"</td>"
+                                break;
+                            }	
+                            
+                            if(intm.labelList){
+                            	var labelList = "";
+                            	this.labelList.forEach(function(e){
+                            		labelList += "<span class='badge badge-info' style='color:white; background:#FCB322; font-weight:bold; outline:none;'>"+e.labelName+"</span>";
+                                })
+                                td+="<td width=\"15%\" style=\"text-align: center\">"+labelList+"</td>"
+                            }else {
+                            	td+="<td width=\"15%\" style=\"text-align: center\">"+" "+"</td>"
+                            }
+                            
+                            td+="<td width=\"5%\" style=\"text-align: center\">"+intm.userName+"</td>"+
+                            	"<td width=\"5%\" style=\"text-align: center\">"+intm.keeperName+"</td>"+
+                            	"<td width=\"10%\" style=\"text-align: center\">"+intm.lasttime+"</td>";
+                            	
+/*                                 var urlButton = "<button type='button' class='btn btn-default btn-xs' style='color:white;  background:#26c281; font-weight:bold; outline:none;' onclick=\"copyToClipBoard('"+this.parameterid+"')\">复制URL</button>";
+        	                    var editButton = "<button type='button' class='btn btn-default btn-xs' style='color: white;  background:#26c281; font-weight:bold; outline:none;' onclick=\"toEditJob('"+this.parameterid+"')\">编辑</button>";
+        	                    var emailButton = "<button type='button' class='btn btn-default btn-xs' style='color: white;  background:#26c281; font-weight:bold; outline:none;' onclick=\"toSendEmail('"+this.parameterid+"', '"+this.parametername+"', '"+this.userName+"', '"+this.keeperName+"')\">邮件</button>";
+        	                    var detailButton = "<button type='button' class='btn btn-default btn-xs' style='color: white;  background:#26c281; font-weight:bold; outline:none;' onclick=\"toEditJob('"+this.parameterid+"')\">查看</button>";
+                                var offButton ="<button type='button' class='btn btn-default btn-xs' style='color: white;  background:#26c281; font-weight:bold; outline:none;' onclick=\"offLine('"+this.parameterid+"', '"+this.parametername+"')\">下线</button>";
+                                var onButton ="<button type='button' class='btn btn-default btn-xs' style='color: white;  background:#51a351; font-weight:bold; outline:none;' onclick=\"onLine('"+this.parameterid+"', '"+this.parametername+"')\">上线</button>";
+                                var editKeeperButton ="<button type='button' class='btn btn-default btn-xs' style='color: white;  background:#51a351; font-weight:bold; outline:none;' onclick=\"editKeeper('"+this.parameterid+"')\">修改维护人</button>";
+                                var logButton ="<button type='button' class='btn btn-default btn-xs ' style='color: white;  background:#51a351; font-weight:bold; outline:none;' onclick=\"executionLog('"+this.parameterid+"')\">日志</button>";
+                             */
+                                var urlButton="<a href='javascript:void(0)' onclick=\"copyToClipBoard('"+intm.parameterid+"')\">【复制URL】</a>";
+                                var editButton="<a href='javascript:void(0)' onclick=\"toEditJob('"+intm.parameterid+"')\">【编辑】</a>";
+                                var emailButton="<a href='javascript:void(0)' onclick=\"toSendEmail('"+intm.parameterid+"', '"+intm.parametername+"', '"+intm.userName+"', '"+intm.keeperName+"')\">【邮件】</a>";
+                                var detailButton="<a href='javascript:void(0)' onclick=\"toEditJob('"+intm.parameterid+"')\">【查看】</a>";                             
+                                var offButton="<a href='javascript:void(0)' onclick=\"offLine('"+intm.parameterid+"', '"+intm.parametername+"')\">【下线】</a>";
+                                var onButton="<a href='javascript:void(0)' onclick=\"onLine('"+intm.parameterid+"', '"+intm.parametername+"')\">【上线】</a>";
+                                var editKeeperButton="<a href='javascript:void(0)'  onclick=\"editKeeper('"+intm.parameterid+"')\">【修改维护人】</a>";
+                                var logButton="<a href='javascript:void(0)'  onclick=\"executionLog('"+intm.parameterid+"')\">【日志】</a>";
+                                 
+                                if(intm.state=="0"){
+                                	td+="<td width=\"20%\" style=\"text-align: center\">"+logButton+detailButton+urlButton+offButton+"</td>"; 
+                                }else{
+                                	td+="<td width=\"20%\" style=\"text-align: center\">"+logButton+editButton+emailButton+editKeeperButton+"</td>"; 
+                                }                             
+                           td=td+"</tr>";             
+                	});
+                	$("#dataList").html('');
+                	$("#dataList").append(td);
+                	td="";
+                	createPagination(pageIndex, _pageSize, totalCount);
+                },               
+                error:function(){
+                	alert("请求失败");
+                }
+            });
+    	}
+    	
+    	
+    	
+    	/*创建分页
+    	 **@ pageIndex  当前页
+    	 **@ pageSize   每页记录数量
+    	 **@ totalCount 总记录条数
+    	 */   	 
+    	function createPagination(pageIndex,pageSize,totalCount){
+    		
+    		var totalPage = Math.ceil(totalCount / pageSize);//总页数
+    		var showPageNum = 5;//页面显示页码的数量,即角标分页显示多少个页码
+    		var pageNumString = '';
+    		var realPageIndex = pageIndex;
+            //只显示showPageNum 个页码-------------------------------
+            if (totalPage <= showPageNum) {
+                pageIndex = 1;
+            } else if ((totalPage - pageIndex) < (showPageNum - 1)) {
+                pageIndex = (totalPage - showPageNum + 1);
+            }
+            
+            //只显示showPageNum 个页码-------------------------------
+            for (var i = 0; i < totalPage; i++) {
+                if ((pageIndex + i) > totalPage) {
+                    break;
+                }
+                if (i >= showPageNum) {
+                    break;
+                }
+
+                if ((pageIndex + i) == realPageIndex) {
+                    pageNumString += '<li class="active"><a href="javascript:void(0);"onclick="queryData('
+                        + (pageIndex + i)
+                        + ')">'
+                        + (pageIndex + i)
+                        + '</a></li>';
+                } else {
+                    pageNumString += '<li><a href="javascript:void(0);"onclick="queryData('
+                        + (pageIndex + i)
+                        + ')">'
+                        + (pageIndex + i)
+                        + '</a></li>';
+                }
+            }
+            var pageIndexPre = (realPageIndex - 1) <= 0 ? 1 : (realPageIndex - 1);//前一页
+            var pageIndexNext = (realPageIndex + 1) >= totalPage ? totalPage: (realPageIndex + 1);//后一页
+            var page = "<nav>"
+                + '<ul class="pagination"> '
+                + '<li><a><span aria-hidden="true">共 '
+                + totalCount
+                + ' 条</span></a></li>'
+                + '<li><a href="javascript:void(0);" onclick="queryData(0);" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>'
+                + '<li><a href="javascript:void(0);" onclick="queryData('
+                + pageIndexPre
+                + ');" aria-label="Previous">'
+                + '<span aria-hidden="true">&lsaquo;</span></a></li>'
+                + pageNumString
+                + '<li><a href="javascript:void(0);" onclick="queryData('
+                + pageIndexNext
+                + ');" aria-label="Next"> '
+                + '<span aria-hidden="true">&rsaquo;</span></a></li>'
+                + '<li><a href="javascript:void(0);" onclick="queryData('
+                + totalPage
+                + ');" aria-label="Previous"><span aria-hidden="true">&raquo;</span></a></li>'
+                + '</ul>' + '</nav>';
+            $('#page').empty();
+            $('#page').append(page);           		                 
+    	}
+    	
+    	function delect(){
+	        $('#parameterName').val("");
+	        $('#keeper2').val("");
+	        $('#themeLabel').val("").trigger("change");
+	        var states=document.getElementsByName("state");
+	        for(x in states){
+	        	states[x].checked=false;
+	        } 
+	        queryData();
+    	}
+    	
+        function toAddParameter() {
+            return layer.open({
+                type: 2,
+                title: '',
+                closeBtn: 0,
+                shadeClose: false, //点击遮罩关闭层
+                area: ['100%', '100%'],
+                content: base_url + 'reportParameter/openAddParameterPage.do'
+            })
+        }
+        
+        function toUpdateManager() {
+            return layer.open({
+                type: 2,
+                title: '',
+                closeBtn: 1,
+                shadeClose: false, //点击遮罩关闭层
+                area: ['85%', '85%'],
+                content: base_url + 'reportParameter/openUpdateManagerPage.do'
+            })
+        }
+        
+        function openDetail(parameterId) {
+            layer.open({
+                type: 2,
+                title: '',
+                closeBtn: 0,
+                shadeClose: true, //点击遮罩关闭层
+                area: ['100%', '100%'],
+                content: base_url + 'reportParameter/getParameterReportNew.do?parameterId=' + parameterId
+            })
+        }
+        
+        //编辑
+        function toEditJob(parameterId) {
+             layer.open({
+                 type: 2,
+                 title: '',
+                 closeBtn: 0,
+                 shadeClose: true, //点击遮罩关闭层
+                 area: ['100%', '100%'],
+                 content: base_url + 'reportParameter/editReportParameter.do?parameterId=' + parameterId,
+                 end: function () {
+                	 queryData(1);
+                 }
+             })
+         } 
+        
+        //发送邮件
+        function toSendEmail(parameterId, parameterName, userName, keeperName) {
+        	layer.confirm('确认发送邮件上线报表['+parameterName+']？', {
+      		  btn: ['确定','取消'] //按钮
+      		}, function(){
+      			jQuery.ajax({
+      	            url : 'toSendEmail.do',
+      	            type : 'post',
+      	            dataType : 'JSON',
+      	            async : true,
+      	            abortOnRetry : true,
+      	            data : {
+      	            	'parameterId' : parameterId,
+      	            	'parameterName' : parameterName,
+      	            	'userName' : userName,
+      	            	'keeperName' : keeperName,
+      	            },
+      	            success : function(data) {
+      	                console.info(data.resultCode);
+      	                if(data.resultCode == 0) {
+      	                    layer.msg('发送邮件成功', {
+      	                        time: 1000,
+      	                        icon:1
+      	                    });      	                    
+      	                } else {
+      	                    layer.alert(data.errorMessage, {icon: 5});
+      	                }
+      	            }, error : function() {
+      	                layer.alert('发送邮件失败', {icon: 5});
+      	            }
+      	        });
+      		}, function(){
+      		});
+         } 
+        
+        //复制URL
+        function copyToClipBoard(parameterId){
+        	layer.open({
+      		  type: 1,
+      		  skin: 'layui-layer-molv', //加上边框
+      		  title: "URL复制成功!   (注：必须加上所挂系统的AppCode)",
+      		  area: ['500px', '220px'], //宽高
+      		  content: '</br>'+'<textarea readonly="readonly" style="width:500px; height:100px; font-size:18px; BORDER-BOTTOM: 0px solid; BORDER-LEFT: 0px solid; BORDER-RIGHT: 0px solid; BORDER-TOP: 0px solid; resize:none;" id="URLarea"></textarea>'
+      		  ,btn: ['确定']
+        	});
+       		var contentUrl = clipBoardContent + base_url + 'reportParameter/getParameterReport.do?parameterId=' + parameterId + '&appcode=';
+        	$("#URLarea").val(contentUrl);
+        	
+        	var Url=document.getElementById("URLarea");
+    	    Url.select();
+    	    document.execCommand("Copy");
+    	    
+    	}
+        
+        //停用报表
+        function offLine(parameterId, parameterName){
+        	layer.confirm('确认停用报表['+parameterName+']？', {
+        		  btn: ['确定','取消'] //按钮
+        		}, function(){
+        			jQuery.ajax({
+        	            url : 'toModifyState.do',
+        	            type : 'post',
+        	            dataType : 'JSON',
+        	            async : true,
+        	            abortOnRetry : true,
+        	            data : {     	   			
+        	            	'parameterId' : parameterId,
+        	            	'state' : "1",
+        	            },
+        	            success : function(data) {
+        	                console.info(data.resultCode);
+        	                if(data.resultCode == 0) {
+        	                    layer.msg('停用报表成功', {
+        	                        time: 1000 ,
+        	                        icon:1
+        	                    });
+        	                    queryData(1);
+        	                } else {
+        	                    layer.alert(data.errorMessage, {icon: 5});
+        	                }
+        	            }, error : function() {
+        	                layer.alert('停用报表失败', {icon: 5});
+        	            }
+        	        });
+        		}, function(){
+        		});
+        }
+        
+        //启用报表
+        function onLine(parameterId, parameterName){
+        	layer.confirm('确认启用报表['+parameterName+']？', {
+        		btn: ['确定','取消'] //按钮
+        		}, function(){
+        			jQuery.ajax({
+        	            url : 'toModifyState.do',
+        	            type : 'post',
+        	            dataType : 'JSON',
+        	            async : true,
+        	            abortOnRetry : true,
+        	            data : {
+        	   			
+        	            	'parameterId' : parameterId,
+        	            	'state' : "0",
+        	            },
+        	            success : function(data) {
+        	                console.info(data.resultCode);
+        	                if(data.resultCode == 0) {
+        	                    layer.msg('启用报表成功', {
+        	                        time: 1000 ,
+        	                        icon:1
+        	                    });
+        	                    queryData();
+        	                } else {
+        	                    layer.alert(data.errorMessage, {icon: 5});
+        	                }
+        	            }, error : function() {
+        	                layer.alert('启用报表失败', {icon: 5});
+        	            }
+        	        });
+        		}, function(){
+        		});
+        }
+        
+/*         
+        function editKeeper(parameterId) {
+        	layer.open({
+                type: 2,
+                title: '',
+                closeBtn: 0,
+                shadeClose: true, //点击遮罩关闭层
+                area: ['43%', '45%'],
+                content: base_url + 'reportParameter/editKeeper.do?parameterId=' + parameterId,
+                end: function () {
+                	queryData(1);
+                }
+            })
+        }
+         */
+        
+        function executionLog(parameterId) {
+        	layer.open({
+                type: 2,
+                title: '',
+                closeBtn: 0,
+                shadeClose: true, //点击遮罩关闭层
+                area: ['100%', '100%'],
+                content: base_url + 'parameterInstance/toExecutionLog.do?parameterId=' + parameterId,
+                end: function () {
+                }
+            })
+        }
+        
+         
+        var parameterIdm="";
+       	function editKeeper(parameterIdvalue){      		
+       		parameterIdm=parameterIdvalue;
+       		$('#myModal').modal('show');
+       		$("#myModal").on("shown.bs.modal", function(){ 
+       		  //等待弹出框弹出后再渲染select2控件 
+       		      $("#QueryByUserAndId").select2(); 
+       		 });
+       	}
+       	
+        function colseModel(){
+        	parameterIdm="";
+        	$('#myModal').modal('hide');	
+        }
+        
+        function editKeeper1(){
+        	var message = validate();
+            if(null != message && '' != message) {
+                layer.alert(message, {icon: 5});
+                return;
+            }
+            if(""==parameterIdm){
+            	layer.alert("pramaterId为空", {icon: 5});
+            	return;
+            }
+            jQuery.ajax({
+    	         url :base_url + 'reportParameter/toEditKeeper.do',
+    	         type : 'post',
+    	         dataType : 'JSON',
+    	         async : true,
+    	         abortOnRetry : true,
+    	         data : {
+    	         	'parameterId' : parameterIdm,
+    	         	'userCode' : $("#QueryByUserAndId").val(), 
+    	         },
+    	         success : function(data) {
+    	        	 parameterId="";
+    	             console.info(data.resultCode);
+    	             if(data.resultCode == 0) {
+/*     	            	 layer.msg('修改成功', {
+    						time: 0
+    						,btn: ['确定']
+    						,yes: function(index){
+    							//alert(index);
+    							layer.close(index);
+    							colseModel(); 
+    							queryData();
+    							//parent.reQuery();
+    							//closeSelf();
+    						}
+    					 }); */
+    	            	 
+    	            	 layer.msg('修改成功',{
+    	            		time:1000,
+    	            		icon:1
+    	            	 });
+    	            	 colseModel(); 
+						 queryData();
+    	             } else {
+    	                 layer.alert(data.errorMessage, {icon: 5});
+    	             }
+    	         }, error : function() {
+    	             layer.alert('修改失败', {icon: 5});
+    	         }
+         	});    
+        }
+        
+        function validate() {
+            var userCode = $("#QueryByUserAndId").val();
+            if(null == userCode || '' == userCode) {
+                return '请选择开发人员！';
+            }
+        }  
+        
+        
+    </script>
+    <script type="text/javascript">
+		$.fn.modal.Constructor.prototype.enforceFocus = function () { };
+	</script>
+</head>
+
+
+<body>
+	<input type="hidden" id="baseURL" th:value="@{/}"/>
+	<div class="container-fluid" style="margin-left: 5px;margin-right: 5px;">
+	<br>
+		<div class="panel panel-primary" style="border-color:#ddd;">
+			<div class="panel-heading" style="font-weight: bold;font-size: 16px;">
+				搜索条件
+			</div>
+			<div class="panel-body">
+				<form class="form-inline">
+					<div class="form-group" style="width:100%">
+																				
+						<label for="parameterName" style="margin-left: 1%">报表名称：</label>
+				    	<input type="text" id="parameterName" class="form-control" name="parameterName" placeholder="报表名称" style="width:200px"/>
+				    	
+				    	<label for="themeLabel" style="margin-left:1%">业务主题：</label>
+						<select id="themeLabel" class="form-control" multiple="multiple" style="width:200px" >
+						</select>
+						
+<!-- 					<label for="keeper2" id="keeper1" style="margin-left:1%">维护人：</label>
+				    	<input type="text" id="keeper2" class="form-control" name="keeper" placeholder="维护人" style="width:200px;"/> 
+				    	 -->				
+						<label style="margin-left: 1%">&nbsp;&nbsp;&nbsp;状态：</label>
+						
+	                	<label class="checkbox-inline" style="margin-left:1%">
+        					<input type="checkbox" class="" name="state" id="inlineCheckbox1" value="1" style="">在线
+   				    	</label>
+   				    	
+    					<label class="checkbox-inline" style="margin-left:2%">
+        					<input type="checkbox"  class="" name="state" id="inlineCheckbox2" value="10" > 离线
+    			    	</label>
+
+    			    	<button id="query" type="button" class="btn btn-primary"  onclick="queryData();" style="margin-left: 2%; color: white;    outline:none;"><i class="fa fa-search"></i>&nbsp;&nbsp;查询</button>					
+				   		<button id="reset1" onclick="delect()" type="button" class="btn btn-primary"     style="margin-left: 2%; color: white;    outline:none;"><i class="fa fa-trash"></i>&nbsp;&nbsp;清空</button>			   						   		
+					</div>
+				</form>
+			</div>
+		</div>	
+		
+		<div class="panel panel-default" >
+			<div class="panel-heading" style="background-color: #FFFFFF; color: #000000; font-size: 17px;font-weight: bold;">
+ 				<button class="btn btn-primary" onclick="toAddParameter()"  style="margin-left: 5px;font-weight: bold;"><i class="fa fa-plus fa-1x"></i>&nbsp;&nbsp;新增报表</button>
+			</div>
+			<div class="table-responsive">
+				<table class="table  table-bordered"  id="tableList" style="font-family: Helvetica, 微软雅黑;">
+					<thead>
+						<tr>
+							<th width="4%" style="text-align: center">序号</th>
+                       	 	<th width="12%" style="text-align: center">报表名称</th>
+                        	<th width="14%" style="text-align: center">报表ID</th> 
+                        	<th width="6%" style="text-align: center">状态</th>
+                        	<th width="15%" style="text-align: center">业务主题</th>
+                        	<th width="5%" style="text-align: center">创建者</th>
+                        	<th width="5%" style="text-align: center">维护者</th>
+                        	<th width="10%" style="text-align: center">最后操作时间</th>
+                        	<th width="20%" style="text-align: center">操作</th>
+                        </tr>
+					</thead>
+					<tbody id="dataList">						
+					</tbody>
+				</table>
+		    </div>		
+		</div>		
+	</div>
+	<!-- 分页 -->
+	<div id="page" style="text-align: right; margin-right: 15px;"></div>
+		
+
+    <!--修改维护人的模态框  -->
+	<!-- 模态框（Modal） -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog"  role="document" style="margin-top:200px;width: 35%; height: 100%">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+					</button>
+					<h4 class="modal-title" id="myModalLabel">
+						更改维护人						                  				
+					</h4>
+				</div>	
+				<div style="padding: 0px;">
+					<form class="form-horizontal" style="margin-top: 50px;margin-bottom: 50px;">
+						<div class="form-group">
+							<label for="QueryByUserAndId" class="col-sm-4 control-label" style="margin-left: 1px;">选择开发人员：</label>
+							<div class="col-sm-6">
+								<select id="QueryByUserAndId" class="form-control QueryByUserAndId1"   style=" outline: none;">	
+								<option value=" " selected="selected">----请选择----</option>				 													        
+                    			</select> 
+							</div>
+							<span style="color:red;"><font size="5px">*</font></span>
+						</div>
+					</form>				
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+						<button type="button" class="btn btn-primary" onclick="editKeeper1();">确认</button>															
+					</div>					
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+</body>
+</html>

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bobo.keyan.hdb.mapper.ManagerMapper" >
+  <resultMap id="BaseResultMap" type="com.bobo.keyan.hdb.model.Manager" >
+    <id column="m_id" property="mId" jdbcType="INTEGER" />
+    <result column="m_name" property="mName" jdbcType="VARCHAR" />
+    <result column="m_type" property="mType" jdbcType="CHAR" />
+    <result column="m_password" property="mPassword" jdbcType="VARCHAR" />
+    <result column="m_phone" property="mPhone" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    m_id, m_name, m_type, m_password, m_phone
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bobo.keyan.hdb.model.ManagerExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from manager
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from manager
+    where m_id = #{mId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from manager
+    where m_id = #{mId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bobo.keyan.hdb.model.ManagerExample" >
+    delete from manager
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bobo.keyan.hdb.model.Manager" >
+    insert into manager (m_id, m_name, m_type, 
+      m_password, m_phone)
+    values (#{mId,jdbcType=INTEGER}, #{mName,jdbcType=VARCHAR}, #{mType,jdbcType=CHAR}, 
+      #{mPassword,jdbcType=VARCHAR}, #{mPhone,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bobo.keyan.hdb.model.Manager" >
+    insert into manager
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="mId != null" >
+        m_id,
+      </if>
+      <if test="mName != null" >
+        m_name,
+      </if>
+      <if test="mType != null" >
+        m_type,
+      </if>
+      <if test="mPassword != null" >
+        m_password,
+      </if>
+      <if test="mPhone != null" >
+        m_phone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="mId != null" >
+        #{mId,jdbcType=INTEGER},
+      </if>
+      <if test="mName != null" >
+        #{mName,jdbcType=VARCHAR},
+      </if>
+      <if test="mType != null" >
+        #{mType,jdbcType=CHAR},
+      </if>
+      <if test="mPassword != null" >
+        #{mPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="mPhone != null" >
+        #{mPhone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bobo.keyan.hdb.model.ManagerExample" resultType="java.lang.Integer" >
+    select count(*) from manager
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update manager
+    <set >
+      <if test="record.mId != null" >
+        m_id = #{record.mId,jdbcType=INTEGER},
+      </if>
+      <if test="record.mName != null" >
+        m_name = #{record.mName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mType != null" >
+        m_type = #{record.mType,jdbcType=CHAR},
+      </if>
+      <if test="record.mPassword != null" >
+        m_password = #{record.mPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mPhone != null" >
+        m_phone = #{record.mPhone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update manager
+    set m_id = #{record.mId,jdbcType=INTEGER},
+      m_name = #{record.mName,jdbcType=VARCHAR},
+      m_type = #{record.mType,jdbcType=CHAR},
+      m_password = #{record.mPassword,jdbcType=VARCHAR},
+      m_phone = #{record.mPhone,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bobo.keyan.hdb.model.Manager" >
+    update manager
+    <set >
+      <if test="mName != null" >
+        m_name = #{mName,jdbcType=VARCHAR},
+      </if>
+      <if test="mType != null" >
+        m_type = #{mType,jdbcType=CHAR},
+      </if>
+      <if test="mPassword != null" >
+        m_password = #{mPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="mPhone != null" >
+        m_phone = #{mPhone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where m_id = #{mId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bobo.keyan.hdb.model.Manager" >
+    update manager
+    set m_name = #{mName,jdbcType=VARCHAR},
+      m_type = #{mType,jdbcType=CHAR},
+      m_password = #{mPassword,jdbcType=VARCHAR},
+      m_phone = #{mPhone,jdbcType=VARCHAR}
+    where m_id = #{mId,jdbcType=INTEGER}
+  </update>
+</mapper>

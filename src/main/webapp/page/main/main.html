@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="../../js/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../js/jquery/cookie.js"></script>
+<script type="text/javascript" src="../../js/layer/layer.js"></script>
+
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		getAllProject();
+		getCookiesss();
+		var itemvalue=sessionStorage.getItem("userId1");
+		console.log("session:"+itemvalue);
+	});
+	
+	function getCookiesss(){
+		var userId=getCookie("userId");
+		var idvalue=sessionStorage.getItem("userId1");
+		console.log("getcookie:"+userId);
+		console.log("session:"+idvalue);
+	}
+	
+	function getAllProject(){
+		$.ajax({
+			url:"/HDB2/project/getAllporjects",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+			type:"post",//规定请求的类型（GET 或 POST）。
+			data:{},//规定要发送到服务器的数据。
+			async:false,//是否异步处理。
+			cache:false,//浏览器是否缓存被请求页面
+			dataType:"json",//预期的服务器响应的数据类型。
+			success:function(data){//当请求成功时运行的函数。
+				layer.msg("请求成功",{
+					icon:1
+				});
+			    console.info(data);
+			    var td="";
+			    if(data.result.length==0){
+			    	$("#tablelist").html('');
+			    	td="";
+			    	return;
+			    }
+				$.each(data.result,function(index,item){
+					td+="<tr>"+
+					    "<td>"+(index+1)+"</td>"+
+					    "<td>"+item.pName+"</td>"+
+					     "<td>"+getFormatDate(item.pDateInvestfirst)+"</td>"+ 
+					     "<td>"+getFormatDate(item.pDateInvestend)+"</td>"+ 
+					     "<td>"+getFormatDate(item.pDateline)+"</td>"+ 
+					    "<td>"+item.pRate+"</td>";
+					    /* "<td>"+item.pState+"</td>"+ */
+					    if(item.pState=="0"){
+					    	td+="<td>筹资</td>";
+					    }else if(item.pState=="1"){
+					    	td+="<td>满标</td>";
+					    }else if(item.pState=="2"){
+					    	td+="<td>还款</td>";
+					    }else if(item.pState=="3"){
+					    	td+="<td>完成 </td>";
+					    }else if(item.pState=="4"){
+					    	td+="<td>"+"待审核"+"</td>";
+					    }else if(item.pState=="5"){
+					    	td+="<td>"+"风险审核不通过"+"</td>";
+					    }else{
+					    	td+="<td>"+" "+"</td>";
+					    }
+					    td+="<td>"+item.pIntroduction+"</td>"; 
+					td+="</tr>";
+				})
+				$("#tablelist").html('');
+				$("#tablelist").append(td);
+				td="";
+			},
+			error:function(data){// 如果请求失败要运行的函数。
+				layer.msg("请求失败",{
+					icon:1
+				});
+			}
+		});
+	}
+	
+	function getFormatDate(mills){
+		var d=new Date(mills);
+		var year=d.getFullYear();
+		var day=d.getDate();
+		var month=+d.getMonth()+1;
+		var hour=d.getHours();
+		var minute=d.getMinutes();
+		var second=d.getSeconds();
+		var misec=d.getMilliseconds();
+		var f=year+"-"+formate(month)+"-"+formate(day)+" "+formate(hour)+":"+formate(minute)+":"+formate(second);
+		return f;
+		}
+		function formate(d){
+		return d>9?d:'0'+d;
+	}
+		
+	function addproject(){
+		location.href="../main/addproject.html";
+	}
+	function invest(){
+		location.href="../main/invest.html";
+	}
+	function borrow(){
+		location.href="../main/borrow.html";
+	}
+	function myAccount(){
+		location.href="../main/myaccount.html";
+	}
+	function examineproject(){
+		location.href="../main/examineproject.html";
+	}
+	
+</script>
+</head>
+<body>
+<div>
+	<button type="button" id="addproject" onclick="addproject();">添加投资项目_后期管理员的职能</button>
+	<button type="button" onclick="examineproject();">项目审核</button>
+	<button type="button" id="invest" onclick="invest();">我要投资</button>
+	<button type="button" id="borrow" onclick="borrow();">我要借款</button>
+	<button type="button" id="myAccount" onclick="myAccount();">我的账户</button>	
+</div>
+<div>
+	<table border="1">
+		<thead>
+			<tr>
+				<td>序号</td>
+				<td>项目名称</td>
+				<td>融资开始时间</td>
+				<td>融资结束时间</td>
+				<td>项目结束时间</td>
+				<td>利率</td>
+				<td>状态</td>
+				<td>操作</td>
+			</tr>
+		</thead>
+		<tbody id="tablelist" >
+		</tbody>
+	</table>
+</div>
+</body>
+</html>

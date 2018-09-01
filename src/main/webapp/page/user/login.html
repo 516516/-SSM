@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="../../js/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../js/jquery/cookie.js"></script>
+<script type="text/javascript" src="../../js/layer/layer.js"></script> 
+<script type="text/javascript">
+
+	$(document).ready(function(){
+	});
+	
+	function submit(){
+		$.ajax({
+			url:"/HDB2/user/logins",
+			type:"post",
+			data:{
+				"loginname":$("#loginname").val(),
+				"password":$("#password").val()
+			},
+			cache:false,
+			asyc:false,
+			dataType:"json",
+			success:successfunction,
+			error:errorfunction
+		});
+		function successfunction(data){
+			layer.msg("请求数据成功");	
+			console.log(data.result);
+			if(data.result==0){
+				layer.msg("该用户名还未被注册");
+			}else if(data.result==2){
+				layer.msg("密码输入有误，请重新输入");
+			}else{
+				layer.msg("登录成功,3秒后将跳转到主界面",{
+					icon:1
+				});
+				console.log(data.result);
+				
+				setCookie("userId",data.result,7);
+				
+				/* 设置session值 */
+				sessionStorage.setItem("userId1",data.result);
+				var itemvalue=sessionStorage.getItem("userId1");
+				
+				console.log("session:"+itemvalue);
+				var userId=getCookie("userId");
+				console.log("getcookie:"+userId);
+				setTimeout(() => {
+					location.href="../main/main.html";
+				}, 3000);
+			}
+		}
+		function errorfunction(){
+			console.log("请求失败");
+		}
+	}
+	
+	function reset(){
+		//layer.msg("执行reset()函数");
+		$("#loginname").val('');
+		$("#password").val('');
+	}
+	
+</script>
+</head>
+
+<body>
+<div>
+	用户名：<input type="text" id="loginname"><br>
+	密码：<input type="password" id="password"><br>
+	
+	<button type="button" id="submit" onclick="submit();">提交</button>
+	<button type="button" id="reset" onclick="reset();">重置</button>
+</div>
+</body>
+</html>

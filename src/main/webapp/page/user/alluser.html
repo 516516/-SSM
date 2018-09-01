@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="../../js/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../js/layer/layer.js"></script> 
+<script type="text/javascript">
+	$(document).ready(function(){
+		getdata();
+	});
+	function getdata(){
+		$.ajax({
+			url:"/HDB2/user/selectAllusers",
+			type:"post",
+			data:{},
+			cache:false,
+			asyc:false,
+			dataType:"json",
+			success:successfunction,
+			error:errorfunction
+		});
+		
+		function successfunction(data){
+			layer.msg("请求数据成功",{
+				icon:1
+			});	
+			console.info(data);
+			if(data.result.length==0){
+				$("#userList").html('');
+				td="";
+				return;
+			}			
+			var td="";
+			$.each(data.result,function(index,item){
+				td+="<tr>"+
+				    "<td>"+(index+1)+"</td>"+
+				    "<td>"+item.uRealname+"</td>";
+				    if(item.uSex=="0"){
+				    	td+="<td>"+"男"+"</td>";
+				    }else{
+				    	td+="<td>"+"女"+"</td>";
+				    }	    
+				    td+= "<td>"+item.uNickname+"</td>"+
+				         "<td>"+item.uId+"</td>"+
+				         "<td>"+item.uAddress+"</td>";
+				    td+="</tr>";
+			})
+			console.log(td);
+			$("#userList").html('');
+			$("#userList").html(td);
+			td="";
+		}
+		
+		function errorfunction(){
+			console.log("请求失败",{
+				icon:2
+			});
+		}
+	}
+	
+	function register(){
+		location.href="../user/register.html";
+	}
+	
+	function login(){
+		location.href="../user/login.html";
+	}
+</script>
+</head>
+<body>
+<div>
+	<button id="register" type="button" value="注册" onclick="register();">注册</button>
+	<button id="getPassword" type="button" value="忘记密码">忘记密码</button>
+	<button id="login" type="button" value="登陆" onclick="login();">登陆</button>
+</div>
+<div>
+	<table>
+		<thead>
+			<tr>
+			    <th>序号</th>
+				<th>姓名</th>
+				<th>性别</th>
+				<th>登录名</th>
+				<th>登陆Id号</th>				
+				<th>家庭地址</th>
+				<th>注册时间</th>
+			</tr>
+		</thead>
+		<tbody id="userList">
+		</tbody>
+	</table>
+</div>
+</body>
+</html>

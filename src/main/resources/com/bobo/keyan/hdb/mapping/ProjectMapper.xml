@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bobo.keyan.hdb.mapper.ProjectMapper" >
+  <resultMap id="BaseResultMap" type="com.bobo.keyan.hdb.model.Project" >
+    <id column="p_id" property="pId" jdbcType="INTEGER" />
+    <result column="p_name" property="pName" jdbcType="VARCHAR" />
+    <result column="p_type" property="pType" jdbcType="CHAR" />
+    <result column="p_amount" property="pAmount" jdbcType="DECIMAL" />
+    <result column="p_invest_amount" property="pInvestAmount" jdbcType="DECIMAL" />
+    <result column="p_introduction" property="pIntroduction" jdbcType="VARCHAR" />
+    <result column="p_date_investfirst" property="pDateInvestfirst" jdbcType="TIMESTAMP" />
+    <result column="p_state" property="pState" jdbcType="CHAR" />
+    <result column="p_date_investend" property="pDateInvestend" jdbcType="TIMESTAMP" />
+    <result column="p_dateline" property="pDateline" jdbcType="TIMESTAMP" />
+    <result column="p_borrower_id" property="pBorrowerId" jdbcType="INTEGER" />
+    <result column="p_rate" property="pRate" jdbcType="VARCHAR" />
+    <result column="p_auditor_id" property="pAuditorId" jdbcType="INTEGER" />
+    <result column="p_creator_id" property="pCreatorId" jdbcType="INTEGER" />
+    <result column="p_examine_content" property="pExamineContent" jdbcType="VARCHAR" />
+    <result column="p_content" property="pContent" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    p_id, p_name, p_type, p_amount, p_invest_amount, p_introduction, p_date_investfirst, 
+    p_state, p_date_investend, p_dateline, p_borrower_id, p_rate, p_auditor_id, p_creator_id, 
+    p_examine_content, p_content
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bobo.keyan.hdb.model.ProjectExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from project
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from project
+    where p_id = #{pId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from project
+    where p_id = #{pId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bobo.keyan.hdb.model.ProjectExample" >
+    delete from project
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bobo.keyan.hdb.model.Project" >
+    insert into project (p_id, p_name, p_type, 
+      p_amount, p_invest_amount, p_introduction, 
+      p_date_investfirst, p_state, p_date_investend, 
+      p_dateline, p_borrower_id, p_rate, 
+      p_auditor_id, p_creator_id, p_examine_content, 
+      p_content)
+    values (#{pId,jdbcType=INTEGER}, #{pName,jdbcType=VARCHAR}, #{pType,jdbcType=CHAR}, 
+      #{pAmount,jdbcType=DECIMAL}, #{pInvestAmount,jdbcType=DECIMAL}, #{pIntroduction,jdbcType=VARCHAR}, 
+      #{pDateInvestfirst,jdbcType=TIMESTAMP}, #{pState,jdbcType=CHAR}, #{pDateInvestend,jdbcType=TIMESTAMP}, 
+      #{pDateline,jdbcType=TIMESTAMP}, #{pBorrowerId,jdbcType=INTEGER}, #{pRate,jdbcType=VARCHAR}, 
+      #{pAuditorId,jdbcType=INTEGER}, #{pCreatorId,jdbcType=INTEGER}, #{pExamineContent,jdbcType=VARCHAR}, 
+      #{pContent,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bobo.keyan.hdb.model.Project" >
+    insert into project
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pId != null" >
+        p_id,
+      </if>
+      <if test="pName != null" >
+        p_name,
+      </if>
+      <if test="pType != null" >
+        p_type,
+      </if>
+      <if test="pAmount != null" >
+        p_amount,
+      </if>
+      <if test="pInvestAmount != null" >
+        p_invest_amount,
+      </if>
+      <if test="pIntroduction != null" >
+        p_introduction,
+      </if>
+      <if test="pDateInvestfirst != null" >
+        p_date_investfirst,
+      </if>
+      <if test="pState != null" >
+        p_state,
+      </if>
+      <if test="pDateInvestend != null" >
+        p_date_investend,
+      </if>
+      <if test="pDateline != null" >
+        p_dateline,
+      </if>
+      <if test="pBorrowerId != null" >
+        p_borrower_id,
+      </if>
+      <if test="pRate != null" >
+        p_rate,
+      </if>
+      <if test="pAuditorId != null" >
+        p_auditor_id,
+      </if>
+      <if test="pCreatorId != null" >
+        p_creator_id,
+      </if>
+      <if test="pExamineContent != null" >
+        p_examine_content,
+      </if>
+      <if test="pContent != null" >
+        p_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pId != null" >
+        #{pId,jdbcType=INTEGER},
+      </if>
+      <if test="pName != null" >
+        #{pName,jdbcType=VARCHAR},
+      </if>
+      <if test="pType != null" >
+        #{pType,jdbcType=CHAR},
+      </if>
+      <if test="pAmount != null" >
+        #{pAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="pInvestAmount != null" >
+        #{pInvestAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="pIntroduction != null" >
+        #{pIntroduction,jdbcType=VARCHAR},
+      </if>
+      <if test="pDateInvestfirst != null" >
+        #{pDateInvestfirst,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pState != null" >
+        #{pState,jdbcType=CHAR},
+      </if>
+      <if test="pDateInvestend != null" >
+        #{pDateInvestend,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pDateline != null" >
+        #{pDateline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pBorrowerId != null" >
+        #{pBorrowerId,jdbcType=INTEGER},
+      </if>
+      <if test="pRate != null" >
+        #{pRate,jdbcType=VARCHAR},
+      </if>
+      <if test="pAuditorId != null" >
+        #{pAuditorId,jdbcType=INTEGER},
+      </if>
+      <if test="pCreatorId != null" >
+        #{pCreatorId,jdbcType=INTEGER},
+      </if>
+      <if test="pExamineContent != null" >
+        #{pExamineContent,jdbcType=VARCHAR},
+      </if>
+      <if test="pContent != null" >
+        #{pContent,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bobo.keyan.hdb.model.ProjectExample" resultType="java.lang.Integer" >
+    select count(*) from project
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update project
+    <set >
+      <if test="record.pId != null" >
+        p_id = #{record.pId,jdbcType=INTEGER},
+      </if>
+      <if test="record.pName != null" >
+        p_name = #{record.pName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pType != null" >
+        p_type = #{record.pType,jdbcType=CHAR},
+      </if>
+      <if test="record.pAmount != null" >
+        p_amount = #{record.pAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.pInvestAmount != null" >
+        p_invest_amount = #{record.pInvestAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.pIntroduction != null" >
+        p_introduction = #{record.pIntroduction,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pDateInvestfirst != null" >
+        p_date_investfirst = #{record.pDateInvestfirst,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.pState != null" >
+        p_state = #{record.pState,jdbcType=CHAR},
+      </if>
+      <if test="record.pDateInvestend != null" >
+        p_date_investend = #{record.pDateInvestend,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.pDateline != null" >
+        p_dateline = #{record.pDateline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.pBorrowerId != null" >
+        p_borrower_id = #{record.pBorrowerId,jdbcType=INTEGER},
+      </if>
+      <if test="record.pRate != null" >
+        p_rate = #{record.pRate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pAuditorId != null" >
+        p_auditor_id = #{record.pAuditorId,jdbcType=INTEGER},
+      </if>
+      <if test="record.pCreatorId != null" >
+        p_creator_id = #{record.pCreatorId,jdbcType=INTEGER},
+      </if>
+      <if test="record.pExamineContent != null" >
+        p_examine_content = #{record.pExamineContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pContent != null" >
+        p_content = #{record.pContent,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update project
+    set p_id = #{record.pId,jdbcType=INTEGER},
+      p_name = #{record.pName,jdbcType=VARCHAR},
+      p_type = #{record.pType,jdbcType=CHAR},
+      p_amount = #{record.pAmount,jdbcType=DECIMAL},
+      p_invest_amount = #{record.pInvestAmount,jdbcType=DECIMAL},
+      p_introduction = #{record.pIntroduction,jdbcType=VARCHAR},
+      p_date_investfirst = #{record.pDateInvestfirst,jdbcType=TIMESTAMP},
+      p_state = #{record.pState,jdbcType=CHAR},
+      p_date_investend = #{record.pDateInvestend,jdbcType=TIMESTAMP},
+      p_dateline = #{record.pDateline,jdbcType=TIMESTAMP},
+      p_borrower_id = #{record.pBorrowerId,jdbcType=INTEGER},
+      p_rate = #{record.pRate,jdbcType=VARCHAR},
+      p_auditor_id = #{record.pAuditorId,jdbcType=INTEGER},
+      p_creator_id = #{record.pCreatorId,jdbcType=INTEGER},
+      p_examine_content = #{record.pExamineContent,jdbcType=VARCHAR},
+      p_content = #{record.pContent,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bobo.keyan.hdb.model.Project" >
+    update project
+    <set >
+      <if test="pName != null" >
+        p_name = #{pName,jdbcType=VARCHAR},
+      </if>
+      <if test="pType != null" >
+        p_type = #{pType,jdbcType=CHAR},
+      </if>
+      <if test="pAmount != null" >
+        p_amount = #{pAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="pInvestAmount != null" >
+        p_invest_amount = #{pInvestAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="pIntroduction != null" >
+        p_introduction = #{pIntroduction,jdbcType=VARCHAR},
+      </if>
+      <if test="pDateInvestfirst != null" >
+        p_date_investfirst = #{pDateInvestfirst,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pState != null" >
+        p_state = #{pState,jdbcType=CHAR},
+      </if>
+      <if test="pDateInvestend != null" >
+        p_date_investend = #{pDateInvestend,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pDateline != null" >
+        p_dateline = #{pDateline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pBorrowerId != null" >
+        p_borrower_id = #{pBorrowerId,jdbcType=INTEGER},
+      </if>
+      <if test="pRate != null" >
+        p_rate = #{pRate,jdbcType=VARCHAR},
+      </if>
+      <if test="pAuditorId != null" >
+        p_auditor_id = #{pAuditorId,jdbcType=INTEGER},
+      </if>
+      <if test="pCreatorId != null" >
+        p_creator_id = #{pCreatorId,jdbcType=INTEGER},
+      </if>
+      <if test="pExamineContent != null" >
+        p_examine_content = #{pExamineContent,jdbcType=VARCHAR},
+      </if>
+      <if test="pContent != null" >
+        p_content = #{pContent,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where p_id = #{pId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bobo.keyan.hdb.model.Project" >
+    update project
+    set p_name = #{pName,jdbcType=VARCHAR},
+      p_type = #{pType,jdbcType=CHAR},
+      p_amount = #{pAmount,jdbcType=DECIMAL},
+      p_invest_amount = #{pInvestAmount,jdbcType=DECIMAL},
+      p_introduction = #{pIntroduction,jdbcType=VARCHAR},
+      p_date_investfirst = #{pDateInvestfirst,jdbcType=TIMESTAMP},
+      p_state = #{pState,jdbcType=CHAR},
+      p_date_investend = #{pDateInvestend,jdbcType=TIMESTAMP},
+      p_dateline = #{pDateline,jdbcType=TIMESTAMP},
+      p_borrower_id = #{pBorrowerId,jdbcType=INTEGER},
+      p_rate = #{pRate,jdbcType=VARCHAR},
+      p_auditor_id = #{pAuditorId,jdbcType=INTEGER},
+      p_creator_id = #{pCreatorId,jdbcType=INTEGER},
+      p_examine_content = #{pExamineContent,jdbcType=VARCHAR},
+      p_content = #{pContent,jdbcType=VARCHAR}
+    where p_id = #{pId,jdbcType=INTEGER}
+  </update>
+</mapper>

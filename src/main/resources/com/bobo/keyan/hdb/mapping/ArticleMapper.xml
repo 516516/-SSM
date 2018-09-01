@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bobo.keyan.hdb.mapper.ArticleMapper" >
+  <resultMap id="BaseResultMap" type="com.bobo.keyan.hdb.model.Article" >
+    <id column="atc_id" property="atcId" jdbcType="INTEGER" />
+    <result column="atc_type" property="atcType" jdbcType="CHAR" />
+    <result column="atc_num1" property="atcNum1" jdbcType="INTEGER" />
+    <result column="atc_num2" property="atcNum2" jdbcType="INTEGER" />
+    <result column="atc_publishtime" property="atcPublishtime" jdbcType="TIMESTAMP" />
+    <result column="atc_name" property="atcName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.bobo.keyan.hdb.model.ArticleWithBLOBs" extends="BaseResultMap" >
+    <result column="atc_content" property="atcContent" jdbcType="LONGVARCHAR" />
+    <result column="atc_introduction" property="atcIntroduction" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    atc_id, atc_type, atc_num1, atc_num2, atc_publishtime, atc_name
+  </sql>
+  <sql id="Blob_Column_List" >
+    atc_content, atc_introduction
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.bobo.keyan.hdb.model.ArticleExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from article
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bobo.keyan.hdb.model.ArticleExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from article
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from article
+    where atc_id = #{atcId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from article
+    where atc_id = #{atcId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bobo.keyan.hdb.model.ArticleExample" >
+    delete from article
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bobo.keyan.hdb.model.ArticleWithBLOBs" >
+    insert into article (atc_id, atc_type, atc_num1, 
+      atc_num2, atc_publishtime, atc_name, 
+      atc_content, atc_introduction)
+    values (#{atcId,jdbcType=INTEGER}, #{atcType,jdbcType=CHAR}, #{atcNum1,jdbcType=INTEGER}, 
+      #{atcNum2,jdbcType=INTEGER}, #{atcPublishtime,jdbcType=TIMESTAMP}, #{atcName,jdbcType=VARCHAR}, 
+      #{atcContent,jdbcType=LONGVARCHAR}, #{atcIntroduction,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bobo.keyan.hdb.model.ArticleWithBLOBs" >
+    insert into article
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="atcId != null" >
+        atc_id,
+      </if>
+      <if test="atcType != null" >
+        atc_type,
+      </if>
+      <if test="atcNum1 != null" >
+        atc_num1,
+      </if>
+      <if test="atcNum2 != null" >
+        atc_num2,
+      </if>
+      <if test="atcPublishtime != null" >
+        atc_publishtime,
+      </if>
+      <if test="atcName != null" >
+        atc_name,
+      </if>
+      <if test="atcContent != null" >
+        atc_content,
+      </if>
+      <if test="atcIntroduction != null" >
+        atc_introduction,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="atcId != null" >
+        #{atcId,jdbcType=INTEGER},
+      </if>
+      <if test="atcType != null" >
+        #{atcType,jdbcType=CHAR},
+      </if>
+      <if test="atcNum1 != null" >
+        #{atcNum1,jdbcType=INTEGER},
+      </if>
+      <if test="atcNum2 != null" >
+        #{atcNum2,jdbcType=INTEGER},
+      </if>
+      <if test="atcPublishtime != null" >
+        #{atcPublishtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="atcName != null" >
+        #{atcName,jdbcType=VARCHAR},
+      </if>
+      <if test="atcContent != null" >
+        #{atcContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="atcIntroduction != null" >
+        #{atcIntroduction,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bobo.keyan.hdb.model.ArticleExample" resultType="java.lang.Integer" >
+    select count(*) from article
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update article
+    <set >
+      <if test="record.atcId != null" >
+        atc_id = #{record.atcId,jdbcType=INTEGER},
+      </if>
+      <if test="record.atcType != null" >
+        atc_type = #{record.atcType,jdbcType=CHAR},
+      </if>
+      <if test="record.atcNum1 != null" >
+        atc_num1 = #{record.atcNum1,jdbcType=INTEGER},
+      </if>
+      <if test="record.atcNum2 != null" >
+        atc_num2 = #{record.atcNum2,jdbcType=INTEGER},
+      </if>
+      <if test="record.atcPublishtime != null" >
+        atc_publishtime = #{record.atcPublishtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.atcName != null" >
+        atc_name = #{record.atcName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.atcContent != null" >
+        atc_content = #{record.atcContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.atcIntroduction != null" >
+        atc_introduction = #{record.atcIntroduction,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update article
+    set atc_id = #{record.atcId,jdbcType=INTEGER},
+      atc_type = #{record.atcType,jdbcType=CHAR},
+      atc_num1 = #{record.atcNum1,jdbcType=INTEGER},
+      atc_num2 = #{record.atcNum2,jdbcType=INTEGER},
+      atc_publishtime = #{record.atcPublishtime,jdbcType=TIMESTAMP},
+      atc_name = #{record.atcName,jdbcType=VARCHAR},
+      atc_content = #{record.atcContent,jdbcType=LONGVARCHAR},
+      atc_introduction = #{record.atcIntroduction,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update article
+    set atc_id = #{record.atcId,jdbcType=INTEGER},
+      atc_type = #{record.atcType,jdbcType=CHAR},
+      atc_num1 = #{record.atcNum1,jdbcType=INTEGER},
+      atc_num2 = #{record.atcNum2,jdbcType=INTEGER},
+      atc_publishtime = #{record.atcPublishtime,jdbcType=TIMESTAMP},
+      atc_name = #{record.atcName,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bobo.keyan.hdb.model.ArticleWithBLOBs" >
+    update article
+    <set >
+      <if test="atcType != null" >
+        atc_type = #{atcType,jdbcType=CHAR},
+      </if>
+      <if test="atcNum1 != null" >
+        atc_num1 = #{atcNum1,jdbcType=INTEGER},
+      </if>
+      <if test="atcNum2 != null" >
+        atc_num2 = #{atcNum2,jdbcType=INTEGER},
+      </if>
+      <if test="atcPublishtime != null" >
+        atc_publishtime = #{atcPublishtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="atcName != null" >
+        atc_name = #{atcName,jdbcType=VARCHAR},
+      </if>
+      <if test="atcContent != null" >
+        atc_content = #{atcContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="atcIntroduction != null" >
+        atc_introduction = #{atcIntroduction,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where atc_id = #{atcId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bobo.keyan.hdb.model.ArticleWithBLOBs" >
+    update article
+    set atc_type = #{atcType,jdbcType=CHAR},
+      atc_num1 = #{atcNum1,jdbcType=INTEGER},
+      atc_num2 = #{atcNum2,jdbcType=INTEGER},
+      atc_publishtime = #{atcPublishtime,jdbcType=TIMESTAMP},
+      atc_name = #{atcName,jdbcType=VARCHAR},
+      atc_content = #{atcContent,jdbcType=LONGVARCHAR},
+      atc_introduction = #{atcIntroduction,jdbcType=LONGVARCHAR}
+    where atc_id = #{atcId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bobo.keyan.hdb.model.Article" >
+    update article
+    set atc_type = #{atcType,jdbcType=CHAR},
+      atc_num1 = #{atcNum1,jdbcType=INTEGER},
+      atc_num2 = #{atcNum2,jdbcType=INTEGER},
+      atc_publishtime = #{atcPublishtime,jdbcType=TIMESTAMP},
+      atc_name = #{atcName,jdbcType=VARCHAR}
+    where atc_id = #{atcId,jdbcType=INTEGER}
+  </update>
+</mapper>

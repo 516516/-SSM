@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<link href="../../css/font-awesome-4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet" />
+<link href="../../js/bootstrap-datetimepicker-master/sample in bootstrap v3/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+<link href="../../js/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" type="text/css" rel="stylesheet" />
+
+<script type="text/javascript" src="../../js/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../js/layer/layer.js"></script>
+<script type="text/javascript" src="../../js/bootstrap-datetimepicker-master/sample in bootstrap v3/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="../../js/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+	    $('.form_datetime').datetimepicker({    	
+	    	format:'yyyy-mm-dd hh:mm:ss',  //格式：
+	    	weekStart: 1,	               //0-6  周日-周六
+	        language:  'zh-CN',            //语言
+	        //startDate:new Date('2018-8-7'),                   //开始时间
+	        //endDate:                     //结束时间
+	        daysOfWeekDisabled:[0,6],      //一周禁止使用的日期
+	        autoclose:1,                   //选择完日期后自动关闭视图
+	        startView:2,                   //0-4  、时、日、月、年、十年
+	        minView:0,                 	   //控制最小显示到哪一级
+	        maxView:4,	                   //控制最大显示到哪一级
+	        todayBtn:1,         	       //组件下方是否显示今天的日期			
+			todayHighlight:1,              //高亮显示今天的日期      
+			forceParse:1,                  //选中日期后按format强制解析日期
+			pickerPosition:'bottom-left',  //时间选择器的位置
+	        showMeridian:1
+	    });
+	    
+		
+	});	
+	
+	function addproject(){
+	    var itemvalue=sessionStorage.getItem("userId1");
+		console.log("session:"+itemvalue);
+		$.ajax({
+			url:"/HDB2/project/addproject",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+			type:"post",//规定请求的类型（GET 或 POST）。
+			data:{
+				
+				"projectname":$("#projectname").val(),
+				"projectamount":$("#projectamount").val(),
+				"projectrate":$("#projectrate").val(),
+				"projectfirstdate":$("#projectfirstdate").val(),
+				"projectenddate":$("#projectenddate").val(),
+				"projectdateline":$("#projectdateline").val(),
+				"projectintroduct":$("#projectintroduct").val(),
+				"userId":itemvalue
+				
+			},//规定要发送到服务器的数据。
+			async:false,//是否异步处理
+			cache:false,//浏览器是否缓存被请求页面
+			dataType:"json",//预期的服务器响应的数据类型。
+			success:function(data){//当请求成功时运行的函数。
+				if(data.result==1){
+					layer.msg("添加成功",{
+						icon:1
+					});
+				}else{
+					layer.msg("添加失败",{
+						icon:1
+					});
+				}
+
+			},
+			error:function(data){// 如果请求失败要运行的函数。
+				layer.msg("请求失败",{
+					icon:1
+				});
+			}
+		});
+	}
+	
+	function reset(){
+	}
+	
+	function test(){
+		alert($("#projectfirstdate").val());
+	}
+	
+	function returnMain(){
+		location.href="../main/main.html";
+	}
+	
+</script>
+</head>
+
+<body>
+<div align="center">
+<h1>addproject</h1>
+</div>
+<div class="container">
+    <form action="" class="form-horizontal"  role="form" style="margin-left: 26%">
+    
+    		<div class="form-group">
+    			<label class="control-label col-sm-3" for="projectname">项目名：</label>
+    			<div class="col-sm-4">
+    				<input type="text" class="form-control" id="projectname">
+    			</div>
+    		</div>
+    		<div class="form-group">
+    			<label class="control-label col-sm-3" for="projectamount">项目所需金额：</label>
+    			<div class="col-sm-4">
+    				<input type="text" class="form-control" id="projectamount">
+    			</div>
+    		</div>
+    		<div class="form-group">
+    			<label class="control-label col-sm-3" for="projectrate">项目利率：</label>
+    			<div class="col-sm-4">
+    				<input type="text" class="form-control" id="projectrate">
+    			</div>
+    		</div>
+
+    		  		
+            <div class="form-group">
+                <label for="dtp_input1" class="col-md-3 control-label">项目开始集资时间：</label>
+                <div class="input-group date form_datetime col-md-3" data-date="1979-09-16">
+                    <input class="form-control" size="10" type="text" value="" readonly id="projectfirstdate">
+					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="dtp_input1" class="col-md-3 control-label">预计结束集资时间：</label>
+                <div class="input-group date form_datetime col-md-3" data-date="1979-09-16">
+                    <input class="form-control" size="10" type="text" value="" readonly id="projectenddate">
+					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="dtp_input1" class="col-md-3 control-label">项目结束时间：</label>
+                <div class="input-group date form_datetime col-md-3" data-date="1979-09-16">
+                    <input class="form-control" size="10" type="text" value="" readonly id="projectdateline">
+					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+    		
+    		<div class="form-group">
+    			<label class="control-label col-sm-3" for="projectintroduct">项目简介：</label>
+    			<div class="col-sm-4">
+    				<textarea class="form-control" id="projectintroduct"></textarea>
+    			</div>
+    		</div>  	            
+    </form>
+    <div align="center">
+    		<button type="button" onclick="addproject();">添加项目</button>
+			<button type="button" onclick="reset();">清空</button>
+			<button type="button" onclick="returnMain();">返回主页</button>
+    </div>
+</div>
+
+</body>
+</html>
