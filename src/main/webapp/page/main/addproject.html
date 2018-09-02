@@ -17,26 +17,7 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){
-	    $('.form_datetime').datetimepicker({    	
-	    	format:'yyyy-mm-dd hh:mm:ss',  //格式：
-	    	weekStart: 1,	               //0-6  周日-周六
-	        language:  'zh-CN',            //语言
-	        //startDate:new Date('2018-8-7'),                   //开始时间
-	        //endDate:                     //结束时间
-	        daysOfWeekDisabled:[0,6],      //一周禁止使用的日期
-	        autoclose:1,                   //选择完日期后自动关闭视图
-	        startView:2,                   //0-4  、时、日、月、年、十年
-	        minView:0,                 	   //控制最小显示到哪一级
-	        maxView:4,	                   //控制最大显示到哪一级
-	        todayBtn:1,         	       //组件下方是否显示今天的日期			
-			todayHighlight:1,              //高亮显示今天的日期      
-			forceParse:1,                  //选中日期后按format强制解析日期
-			pickerPosition:'bottom-left',  //时间选择器的位置
-	        showMeridian:1
-	    });
-	    
 	});	
-	
 	function addproject(){
 	    var itemvalue=sessionStorage.getItem("userId1");
 		console.log("session:"+itemvalue);

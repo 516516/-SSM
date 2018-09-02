@@ -10,15 +10,13 @@
 
 	$(document).ready(function(){
 		getAllProject();
-		getCookiesss();
+		getsession();
 		var itemvalue=sessionStorage.getItem("userId1");
 		console.log("session:"+itemvalue);
 	});
 	
-	function getCookiesss(){
-		var userId=getCookie("userId");
+	function getsession(){
 		var idvalue=sessionStorage.getItem("userId1");
-		console.log("getcookie:"+userId);
 		console.log("session:"+idvalue);
 	}
 	
@@ -105,7 +103,7 @@
 		location.href="../main/invest.html";
 	}
 	function borrow(){
-		location.href="../main/borrow.html";
+		location.href="../audite/borrow.html";
 	}
 	function myAccount(){
 		location.href="../main/myaccount.html";
@@ -113,16 +111,16 @@
 	function examineproject(){
 		location.href="../main/examineproject.html";
 	}
-	
+
 </script>
 </head>
 <body>
 <div>
 	<button type="button" id="addproject" onclick="addproject();">添加投资项目_后期管理员的职能</button>
-	<button type="button" onclick="examineproject();">项目审核</button>
+	<button type="button" onclick="examineproject();">公司项目审核_后期管理员的职能</button>
 	<button type="button" id="invest" onclick="invest();">我要投资</button>
-	<button type="button" id="borrow" onclick="borrow();">我要借款</button>
-	<button type="button" id="myAccount" onclick="myAccount();">我的账户</button>	
+	<button type="button" id="borrow" onclick="borrow();">我要借款_用户</button>
+	<button type="button" id="myAccount" onclick="myAccount();">我的账户—用户</button>	
 </div>
 <div>
 	<table border="1">

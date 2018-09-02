@@ -35,17 +35,14 @@
 				layer.msg("登录成功,3秒后将跳转到主界面",{
 					icon:1
 				});
-				console.log(data.result);
-				
-				setCookie("userId",data.result,7);
+				console.log(data.result);;
 				
 				/* 设置session值 */
 				sessionStorage.setItem("userId1",data.result);
 				var itemvalue=sessionStorage.getItem("userId1");
 				
 				console.log("session:"+itemvalue);
-				var userId=getCookie("userId");
-				console.log("getcookie:"+userId);
+				
 				setTimeout(() => {
 					location.href="../main/main.html";
 				}, 3000);

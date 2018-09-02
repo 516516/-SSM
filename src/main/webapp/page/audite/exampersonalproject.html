@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="../../js/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../js/layer/layer.js"></script>
+<script type="text/javascript"> 
+	
+	$(document).ready(function(){
+		getData();
+		$("#examine").hide();	
+	});
+	
+	function getFormatDate(mills){
+		var d=new Date(mills);
+		var year=d.getFullYear();
+		var day=d.getDate();
+		var month=+d.getMonth()+1;
+		var hour=d.getHours();
+		var minute=d.getMinutes();
+		var second=d.getSeconds();
+		var misec=d.getMilliseconds();
+		var f=year+"-"+formate(month)+"-"+formate(day)+" "+formate(hour)+":"+formate(minute)+":"+formate(second);
+		return f;
+		}
+		function formate(d){
+		return d>9?d:'0'+d;
+	}
+	
+	function getData(){
+		
+		$.ajax({
+			url:"/HDB2/audite/getAllaudite",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+			type:"post",//规定请求的类型（GET 或 POST）。
+			data:{},//规定要发送到服务器的数据。
+			async:false,//是否异步处理
+			cache:false,//浏览器是否缓存被请求页面
+			dataType:"json",//预期的服务器响应的数据类型。
+			success:function(data){//当请求成功时运行的函数。
+				layer.msg("请求数据成功",{
+					icon:1
+				});
+				console.info(data.result);
+				var td="";
+				if(data.result.length==0){
+					$("#tablelist").html('');
+					td="";
+					return;
+				}
+				$.each(data.result,function(index,item){
+					td+="<tr>";
+					td+="<td>"+(index+1)+"</td>"+
+					     "<td>"+item.aUserid+ "</td>"+
+					     "<td>"+item.aAmount+ "</td>"+
+					     "<td>"+item.aDateline+ "</td>"+
+					     "<td>"+item.aInterest+ "</td>"+
+					     "<td>"+getFormatDate(item.aApplytime)+ "</td>";
+					     var exam="<a href='javascript:void(0)'  onclick=\"exam('"+item.aId+"')\">【风险审核】</a>";
+						  td+="<td>"+exam+"</td>"; 
+					td+="</tr>";
+				});
+				$("#tablelist").html('');
+				$("#tablelist").append(td);
+				td="";
+			},
+			error:function(data){// 如果请求失败要运行的函数。
+				layer.msg("请求失败",{
+					icon:1
+				});
+			}
+		});
+	}
+	
+	var projectId=0;
+	function exam(aId){
+		$("#content1").val('');
+		$("#content2").val('');
+		projectId=aId;
+		$("#examine").show();	
+	}
+	
+	function passed(){
+		$.ajax({
+			url:"/HDB2/audite/projectPassed",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+			type:"post",//规定请求的类型（GET 或 POST）。
+			data:{
+				"content1":$("#content1").val(),
+				"content2":$("#content2").val(),
+				"projectId":projectId,
+				"exampersonId":sessionStorage.getItem("userId1")
+			},//规定要发送到服务器的数据。
+			async:false,//是否异步处理
+			cache:false,//浏览器是否缓存被请求页面
+			dataType:"json",//预期的服务器响应的数据类型。
+			success:function(data){//当请求成功时运行的函数。
+				if(0==data.result){
+					layer.msg("请求成功,添加到project数据表中失败",{
+						icon:1
+					});
+					getData();
+					$("#examine").hide();
+				}
+				if(1==data.result){
+					layer.msg("请求成功,添加成功，更新成功",{
+						icon:1
+					});
+					getData();
+					$("#examine").hide();
+				}
+				if(2==data.result){
+					layer.msg("请求成功,更新个人表状态失败",{
+						icon:1
+					});
+					getData();
+					$("#examine").hide();
+				}
+			},
+			error:function(data){// 如果请求失败要运行的函数。
+				layer.msg("请求失败",{
+					icon:1
+				});
+				getData();
+				$("#examine").hide();
+			}
+		});
+	}
+	
+	function notPassed(){
+		$.ajax({
+			url:"/HDB2/audite/projectNotPassed",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+			type:"post",//规定请求的类型（GET 或 POST）。
+			data:{
+				"content1":$("#content1").val(),
+				"content2":$("#content2").val(),
+				"projectId":projectId,
+				"exampersonId":sessionStorage.getItem("userId1")
+			},//规定要发送到服务器的数据。
+			async:false,//是否异步处理
+			cache:false,//浏览器是否缓存被请求页面
+			dataType:"json",//预期的服务器响应的数据类型。
+			success:function(data){//当请求成功时运行的函数。
+				if(0==data.result){
+					layer.msg("请求成功,添加到project数据表中失败",{
+						icon:1
+					});
+					getData();
+					$("#examine").hide();
+				}
+				if(1==data.result){
+					layer.msg("请求成功,添加成功，更新成功",{
+						icon:1
+					});
+					getData();
+					$("#examine").hide();
+				}
+				if(2==data.result){
+					layer.msg("请求成功,更新个人表状态失败",{
+						icon:1
+					});
+					getData();
+					$("#examine").hide();
+				}
+			},
+			error:function(data){// 如果请求失败要运行的函数。
+				layer.msg("请求失败",{
+					icon:1
+				});
+				getData();
+				$("#examine").hide();
+			}
+		});
+	}
+</script>
+</head>
+<body>
+<div>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>借款人Id</th>
+				<th>借款人姓名</th>
+				<th>借款借款金额</th>
+				<th>借款期限</th>
+				<th>借款利息</th>
+				<th>申请时间</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody id="tablelist">
+		</tbody>
+	</table>
+</div>
+
+<div id="examine">
+	审核结果：<br><textarea rows="5" cols="100" id="content1"></textarea><br>
+	审核意见：<br><textarea rows="5" cols="100" id="content2"></textarea><br>
+	<button type="button" onclick="passed();">通过</button>
+	<button type="button" onclick="notPassed();">不通过</button>
+</div>
+
+</body>
+</html>

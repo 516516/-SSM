@@ -1,5 +1,6 @@
 package com.bobo.keyan.hdb.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -235,52 +236,52 @@ public class AuditeExample {
             return (Criteria) this;
         }
 
-        public Criteria andAAmountEqualTo(Long value) {
+        public Criteria andAAmountEqualTo(BigDecimal value) {
             addCriterion("a_amount =", value, "aAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAAmountNotEqualTo(Long value) {
+        public Criteria andAAmountNotEqualTo(BigDecimal value) {
             addCriterion("a_amount <>", value, "aAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAAmountGreaterThan(Long value) {
+        public Criteria andAAmountGreaterThan(BigDecimal value) {
             addCriterion("a_amount >", value, "aAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAAmountGreaterThanOrEqualTo(Long value) {
+        public Criteria andAAmountGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("a_amount >=", value, "aAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAAmountLessThan(Long value) {
+        public Criteria andAAmountLessThan(BigDecimal value) {
             addCriterion("a_amount <", value, "aAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAAmountLessThanOrEqualTo(Long value) {
+        public Criteria andAAmountLessThanOrEqualTo(BigDecimal value) {
             addCriterion("a_amount <=", value, "aAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAAmountIn(List<Long> values) {
+        public Criteria andAAmountIn(List<BigDecimal> values) {
             addCriterion("a_amount in", values, "aAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAAmountNotIn(List<Long> values) {
+        public Criteria andAAmountNotIn(List<BigDecimal> values) {
             addCriterion("a_amount not in", values, "aAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAAmountBetween(Long value1, Long value2) {
+        public Criteria andAAmountBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("a_amount between", value1, value2, "aAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAAmountNotBetween(Long value1, Long value2) {
+        public Criteria andAAmountNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("a_amount not between", value1, value2, "aAmount");
             return (Criteria) this;
         }
@@ -355,52 +356,62 @@ public class AuditeExample {
             return (Criteria) this;
         }
 
-        public Criteria andAInterestEqualTo(Long value) {
+        public Criteria andAInterestEqualTo(String value) {
             addCriterion("a_interest =", value, "aInterest");
             return (Criteria) this;
         }
 
-        public Criteria andAInterestNotEqualTo(Long value) {
+        public Criteria andAInterestNotEqualTo(String value) {
             addCriterion("a_interest <>", value, "aInterest");
             return (Criteria) this;
         }
 
-        public Criteria andAInterestGreaterThan(Long value) {
+        public Criteria andAInterestGreaterThan(String value) {
             addCriterion("a_interest >", value, "aInterest");
             return (Criteria) this;
         }
 
-        public Criteria andAInterestGreaterThanOrEqualTo(Long value) {
+        public Criteria andAInterestGreaterThanOrEqualTo(String value) {
             addCriterion("a_interest >=", value, "aInterest");
             return (Criteria) this;
         }
 
-        public Criteria andAInterestLessThan(Long value) {
+        public Criteria andAInterestLessThan(String value) {
             addCriterion("a_interest <", value, "aInterest");
             return (Criteria) this;
         }
 
-        public Criteria andAInterestLessThanOrEqualTo(Long value) {
+        public Criteria andAInterestLessThanOrEqualTo(String value) {
             addCriterion("a_interest <=", value, "aInterest");
             return (Criteria) this;
         }
 
-        public Criteria andAInterestIn(List<Long> values) {
+        public Criteria andAInterestLike(String value) {
+            addCriterion("a_interest like", value, "aInterest");
+            return (Criteria) this;
+        }
+
+        public Criteria andAInterestNotLike(String value) {
+            addCriterion("a_interest not like", value, "aInterest");
+            return (Criteria) this;
+        }
+
+        public Criteria andAInterestIn(List<String> values) {
             addCriterion("a_interest in", values, "aInterest");
             return (Criteria) this;
         }
 
-        public Criteria andAInterestNotIn(List<Long> values) {
+        public Criteria andAInterestNotIn(List<String> values) {
             addCriterion("a_interest not in", values, "aInterest");
             return (Criteria) this;
         }
 
-        public Criteria andAInterestBetween(Long value1, Long value2) {
+        public Criteria andAInterestBetween(String value1, String value2) {
             addCriterion("a_interest between", value1, value2, "aInterest");
             return (Criteria) this;
         }
 
-        public Criteria andAInterestNotBetween(Long value1, Long value2) {
+        public Criteria andAInterestNotBetween(String value1, String value2) {
             addCriterion("a_interest not between", value1, value2, "aInterest");
             return (Criteria) this;
         }

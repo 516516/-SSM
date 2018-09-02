@@ -1,5 +1,6 @@
 package com.bobo.keyan.hdb.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Audite {
@@ -7,11 +8,11 @@ public class Audite {
 
     private Integer aUserid;
 
-    private Long aAmount;
+    private BigDecimal aAmount;
 
     private Integer aDateline;
 
-    private Long aInterest;
+    private String aInterest;
 
     private Date aApplytime;
 
@@ -33,11 +34,11 @@ public class Audite {
         this.aUserid = aUserid;
     }
 
-    public Long getaAmount() {
+    public BigDecimal getaAmount() {
         return aAmount;
     }
 
-    public void setaAmount(Long aAmount) {
+    public void setaAmount(BigDecimal aAmount) {
         this.aAmount = aAmount;
     }
 
@@ -49,12 +50,12 @@ public class Audite {
         this.aDateline = aDateline;
     }
 
-    public Long getaInterest() {
+    public String getaInterest() {
         return aInterest;
     }
 
-    public void setaInterest(Long aInterest) {
-        this.aInterest = aInterest;
+    public void setaInterest(String aInterest) {
+        this.aInterest = aInterest == null ? null : aInterest.trim();
     }
 
     public Date getaApplytime() {

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="../../js/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../js/layer/layer.js"></script>
+<script type="text/javascript" >
+	$(document).ready(function(){
+	});
+	function getDate(){
+ 		if($("#moneyamount").val()==null||$("#moneyamount").val()==""){
+			layer.alert("金额不能为空");
+			return;
+		}
+		if($("#dateline").val()==null||$("#dateline").val()==""){
+			layer.alert("借款期限不能为空");
+			return;
+		}
+		$.ajax({
+			url:"/HDB2/audite/addaudite",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+			type:"post",//规定请求的类型（GET 或 POST）。
+			data:{
+				"moneyamount":$("#moneyamount").val(),
+				"dateline":$("#dateline").val(),
+				"userId":sessionStorage.getItem("userId1"),
+				"rate":$("#rate").val()
+			},//规定要发送到服务器的数据。
+			async:false,//是否异步处理
+			cache:false,//浏览器是否缓存被请求页面
+			dataType:"json",//预期的服务器响应的数据类型。
+			success:function(data){//当请求成功时运行的函数。
+				if(data.result==1){
+					layer.msg("添加成功",{
+						icon:1
+					});
+				}else{
+					layer.msg("添加失败",{
+						icon:1
+					});
+				}
+			},
+			error:function(data){// 如果请求失败要运行的函数。
+				layer.msg("请求失败",{
+					icon:1
+				});
+			}
+		});
+	}
+	function reset(){
+		$("#moneyamount").val('');
+		$("#dateline").val('');
+	}
+	function exampersonalproject(){
+		location.href="../audite/exampersonalproject.html";
+	}
+	function lookmyownproject(){
+		location.href="../audite/lookmyownproject.html";
+	}
+	
+	</script>
+</head>
+<body>
+<div>
+<h1>borrow</h1>
+</div>
+<button type="button" onclick="exampersonalproject();">审核个人借款—后台管理</button>
+<button type="button" onclick="lookmyownproject();">查看本人借款项</button>
+<div>
+ 	借款金额：<input type="text" id="moneyamount"><br>
+ 	借款期限：<input type="text" id="dateline"><br>
+ 	借款利息：<input type="text" id="rate" value="0.3" readonly="readonly"><br>
+ 	<button type="button" onclick="getDate();">申请</button>
+ 	<button type="button" onclick="reset();">取消</button>
+</div>
+</body>
+</html>

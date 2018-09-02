@@ -74,6 +74,7 @@ public class UserController {
 		 user.setuSex(sex);
 		 user.setuNickname(nickname);
 		 user.setuPhone(phonenumber);
+		 user.setuCreditworth(10);
 		 
 		 Date now=new Date();
 		 user.setuRegistime(now);

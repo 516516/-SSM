@@ -49,6 +49,7 @@ public class ProjectController {
 		 project.setpCreatorId(userId);
 		 project.setpAddtime(addtime);
 		 project.setpDateline(dateline);
+		 project.setpType("1");
 		 
 		 int flag=projectService.insertSelective(project);
 		 if(1==flag) {
