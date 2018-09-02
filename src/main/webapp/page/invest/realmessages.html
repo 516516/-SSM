@@ -9,6 +9,10 @@
 	$(document).ready(function(){
 	});
 	function getData(){
+		var message=check();
+		if(0==message){
+			return ;
+		}
 		$.ajax({
 			url:"/HDB2/user/realmessages",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
 			type:"post",//规定请求的类型（GET 或 POST）。
@@ -41,11 +45,31 @@
 			}
 		});
 	}
+	
 	function reset(){
 		$("#realname").val('');	
 		$("#investPassword").val('');	
 		$("#idcardnum").val('');	
 		$("#realaddress").val('');	
+	}
+	
+	function check(){
+		var realname=$("#realname").val();
+		var idcardnum=$("#idcardnum").val();
+		
+		var regName =/^[\u4e00-\u9fa5]{2,4}$/;
+		if(!regName.test(realname)){
+			layer.alert("真实姓名填写有误");
+		    return 0;
+		}
+		
+		var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/; 
+		if(!reg.test(idcardnum)) 
+		{ 
+			layer.alert("身份证输入不合法");
+		    return 0; 
+		 } 
+		return 1;
 	}
 </script>
 </head>
