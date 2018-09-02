@@ -38,6 +38,8 @@ public class User {
 
     private String uSex;
 
+    private String uRealaddress;
+
     public Integer getuId() {
         return uId;
     }
@@ -172,5 +174,13 @@ public class User {
 
     public void setuSex(String uSex) {
         this.uSex = uSex == null ? null : uSex.trim();
+    }
+
+    public String getuRealaddress() {
+        return uRealaddress;
+    }
+
+    public void setuRealaddress(String uRealaddress) {
+        this.uRealaddress = uRealaddress == null ? null : uRealaddress.trim();
     }
 }

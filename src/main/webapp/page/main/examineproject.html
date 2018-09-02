@@ -67,14 +67,12 @@
 				$("#tablelist").append(td);
 				td="";
 			},
-			
 			error:function(data){// 如果请求失败要运行的函数。
 				layer.msg("请求失败",{
 					icon:1
 				});
 			}
 		});
-		
 	}
 	
 	function getFormatDate(mills){
@@ -92,9 +90,8 @@
 		function formate(d){
 		return d>9?d:'0'+d;
 	}
-	
+		
 	var projectId=0;
-	
 	function exam(pId){
 		$("#content1").val('');
 		$("#content2").val('');

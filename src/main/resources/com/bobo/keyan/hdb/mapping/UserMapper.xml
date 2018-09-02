@@ -19,6 +19,7 @@
     <result column="u_creditworth" property="uCreditworth" jdbcType="INTEGER" />
     <result column="u_realname" property="uRealname" jdbcType="VARCHAR" />
     <result column="u_sex" property="uSex" jdbcType="CHAR" />
+    <result column="u_realaddress" property="uRealaddress" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -81,7 +82,7 @@
   <sql id="Base_Column_List" >
     u_id, u_name, u_loginpassword, u_nickname, u_phone, u_lastlogintime, u_registime, 
     u_state, u_balance, u_principal, u_interest, u_address, u_idcard, u_paypassword, 
-    u_creditworth, u_realname, u_sex
+    u_creditworth, u_realname, u_sex, u_realaddress
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bobo.keyan.hdb.model.UserExample" >
     select
@@ -119,13 +120,15 @@
       u_registime, u_state, u_balance, 
       u_principal, u_interest, u_address, 
       u_idcard, u_paypassword, u_creditworth, 
-      u_realname, u_sex)
+      u_realname, u_sex, u_realaddress
+      )
     values (#{uId,jdbcType=INTEGER}, #{uName,jdbcType=VARCHAR}, #{uLoginpassword,jdbcType=VARCHAR}, 
       #{uNickname,jdbcType=VARCHAR}, #{uPhone,jdbcType=VARCHAR}, #{uLastlogintime,jdbcType=TIMESTAMP}, 
       #{uRegistime,jdbcType=TIMESTAMP}, #{uState,jdbcType=CHAR}, #{uBalance,jdbcType=DECIMAL}, 
       #{uPrincipal,jdbcType=DECIMAL}, #{uInterest,jdbcType=DECIMAL}, #{uAddress,jdbcType=VARCHAR}, 
       #{uIdcard,jdbcType=VARCHAR}, #{uPaypassword,jdbcType=VARCHAR}, #{uCreditworth,jdbcType=INTEGER}, 
-      #{uRealname,jdbcType=VARCHAR}, #{uSex,jdbcType=CHAR})
+      #{uRealname,jdbcType=VARCHAR}, #{uSex,jdbcType=CHAR}, #{uRealaddress,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.bobo.keyan.hdb.model.User" >
     insert into user
@@ -181,6 +184,9 @@
       <if test="uSex != null" >
         u_sex,
       </if>
+      <if test="uRealaddress != null" >
+        u_realaddress,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="uId != null" >
@@ -233,6 +239,9 @@
       </if>
       <if test="uSex != null" >
         #{uSex,jdbcType=CHAR},
+      </if>
+      <if test="uRealaddress != null" >
+        #{uRealaddress,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -296,6 +305,9 @@
       <if test="record.uSex != null" >
         u_sex = #{record.uSex,jdbcType=CHAR},
       </if>
+      <if test="record.uRealaddress != null" >
+        u_realaddress = #{record.uRealaddress,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -319,7 +331,8 @@
       u_paypassword = #{record.uPaypassword,jdbcType=VARCHAR},
       u_creditworth = #{record.uCreditworth,jdbcType=INTEGER},
       u_realname = #{record.uRealname,jdbcType=VARCHAR},
-      u_sex = #{record.uSex,jdbcType=CHAR}
+      u_sex = #{record.uSex,jdbcType=CHAR},
+      u_realaddress = #{record.uRealaddress,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -375,6 +388,9 @@
       <if test="uSex != null" >
         u_sex = #{uSex,jdbcType=CHAR},
       </if>
+      <if test="uRealaddress != null" >
+        u_realaddress = #{uRealaddress,jdbcType=VARCHAR},
+      </if>
     </set>
     where u_id = #{uId,jdbcType=INTEGER}
   </update>
@@ -395,7 +411,8 @@
       u_paypassword = #{uPaypassword,jdbcType=VARCHAR},
       u_creditworth = #{uCreditworth,jdbcType=INTEGER},
       u_realname = #{uRealname,jdbcType=VARCHAR},
-      u_sex = #{uSex,jdbcType=CHAR}
+      u_sex = #{uSex,jdbcType=CHAR},
+      u_realaddress = #{uRealaddress,jdbcType=VARCHAR}
     where u_id = #{uId,jdbcType=INTEGER}
   </update>
 </mapper>

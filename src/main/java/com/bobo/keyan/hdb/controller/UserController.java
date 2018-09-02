@@ -54,7 +54,6 @@ public class UserController {
 		 return resultMap;		 
 	}
 	
-	
 	@ResponseBody
     @RequestMapping("/registers")
 	public Map<String, Object> registers(HttpServletResponse response, HttpServletRequest request) throws Exception {	
@@ -121,9 +120,30 @@ public class UserController {
 	}
 	
 	@ResponseBody
-    @RequestMapping("/deleteUser")
-	public Map<String, Object> deleteUser(HttpServletResponse response, HttpServletRequest request) throws Exception {		
+    @RequestMapping("/realmessages")
+	public Map<String, Object> setRealMessages(HttpServletResponse response, HttpServletRequest request) throws Exception {		
 		 Map<String, Object> resultMap = new ConcurrentHashMap<String,Object>();
+		 
+		 String realname=request.getParameter("realname");
+		 String investPassword=request.getParameter("investPassword");
+		 String idcardnum=request.getParameter("idcardnum");
+		 String realaddress=request.getParameter("realaddress");
+		 Integer userId=Integer.parseInt(request.getParameter("userId"));
+		 
+		 User user=new User();
+		 user.setuId(userId);
+		 user.setuPaypassword(investPassword);
+		 user.setuRealname(realname);
+		 user.setuRealaddress(realaddress);
+		 user.setuIdcard(idcardnum);
+		 
+		 int insert=userService.updateByPrimaryKeySelective(user);
+		 
+		 if(0==insert) {
+			 resultMap.put("result", 0);
+		 }else {
+			 resultMap.put("result", 1);
+		 }
 		 return resultMap;		 
 	}
 	

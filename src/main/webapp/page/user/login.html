@@ -36,13 +36,10 @@
 					icon:1
 				});
 				console.log(data.result);;
-				
 				/* 设置session值 */
 				sessionStorage.setItem("userId1",data.result);
 				var itemvalue=sessionStorage.getItem("userId1");
-				
 				console.log("session:"+itemvalue);
-				
 				setTimeout(() => {
 					location.href="../main/main.html";
 				}, 3000);
@@ -61,12 +58,11 @@
 	
 </script>
 </head>
-
+	
 <body>
 <div>
 	用户名：<input type="text" id="loginname"><br>
 	密码：<input type="password" id="password"><br>
-	
 	<button type="button" id="submit" onclick="submit();">提交</button>
 	<button type="button" id="reset" onclick="reset();">重置</button>
 </div>

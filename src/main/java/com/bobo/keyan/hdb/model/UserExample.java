@@ -1225,6 +1225,76 @@ public class UserExample {
             addCriterion("u_sex not between", value1, value2, "uSex");
             return (Criteria) this;
         }
+
+        public Criteria andURealaddressIsNull() {
+            addCriterion("u_realaddress is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andURealaddressIsNotNull() {
+            addCriterion("u_realaddress is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andURealaddressEqualTo(String value) {
+            addCriterion("u_realaddress =", value, "uRealaddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andURealaddressNotEqualTo(String value) {
+            addCriterion("u_realaddress <>", value, "uRealaddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andURealaddressGreaterThan(String value) {
+            addCriterion("u_realaddress >", value, "uRealaddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andURealaddressGreaterThanOrEqualTo(String value) {
+            addCriterion("u_realaddress >=", value, "uRealaddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andURealaddressLessThan(String value) {
+            addCriterion("u_realaddress <", value, "uRealaddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andURealaddressLessThanOrEqualTo(String value) {
+            addCriterion("u_realaddress <=", value, "uRealaddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andURealaddressLike(String value) {
+            addCriterion("u_realaddress like", value, "uRealaddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andURealaddressNotLike(String value) {
+            addCriterion("u_realaddress not like", value, "uRealaddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andURealaddressIn(List<String> values) {
+            addCriterion("u_realaddress in", values, "uRealaddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andURealaddressNotIn(List<String> values) {
+            addCriterion("u_realaddress not in", values, "uRealaddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andURealaddressBetween(String value1, String value2) {
+            addCriterion("u_realaddress between", value1, value2, "uRealaddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andURealaddressNotBetween(String value1, String value2) {
+            addCriterion("u_realaddress not between", value1, value2, "uRealaddress");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

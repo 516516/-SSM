@@ -43,7 +43,8 @@
 				    }	    
 				    td+= "<td>"+item.uNickname+"</td>"+
 				         "<td>"+item.uId+"</td>"+
-				         "<td>"+item.uAddress+"</td>";
+				         "<td>"+item.uAddress+"</td>"+
+				         "<td>"+getFormatDate(item.uRegistime)+"</td>";
 				    td+="</tr>";
 			})
 			console.log(td);
@@ -66,6 +67,22 @@
 	function login(){
 		location.href="../user/login.html";
 	}
+	
+	function getFormatDate(mills){
+		var d=new Date(mills);
+		var year=d.getFullYear();
+		var day=d.getDate();
+		var month=+d.getMonth()+1;
+		var hour=d.getHours();
+		var minute=d.getMinutes();
+		var second=d.getSeconds();
+		var misec=d.getMilliseconds();
+		var f=year+"-"+formate(month)+"-"+formate(day)+" "+formate(hour)+":"+formate(minute)+":"+formate(second);
+		return f;
+		}
+		function formate(d){
+		return d>9?d:'0'+d;
+	}
 </script>
 </head>
 <body>
@@ -75,7 +92,7 @@
 	<button id="login" type="button" value="登陆" onclick="login();">登陆</button>
 </div>
 <div>
-	<table>
+	<table border="1">
 		<thead>
 			<tr>
 			    <th>序号</th>
