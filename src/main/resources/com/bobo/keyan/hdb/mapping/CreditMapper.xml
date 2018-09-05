@@ -3,13 +3,14 @@
 <mapper namespace="com.bobo.keyan.hdb.mapper.CreditMapper" >
   <resultMap id="BaseResultMap" type="com.bobo.keyan.hdb.model.Credit" >
     <id column="c_id" property="cId" jdbcType="INTEGER" />
-    <result column="c_cardnum" property="cCardnum" jdbcType="VARCHAR" />
     <result column="c_userid" property="cUserid" jdbcType="INTEGER" />
-    <result column="c_paypassword" property="cPaypassword" jdbcType="VARCHAR" />
-    <result column="c_bankname" property="cBankname" jdbcType="VARCHAR" />
     <result column="c_province" property="cProvince" jdbcType="VARCHAR" />
-    <result column="c_phone" property="cPhone" jdbcType="VARCHAR" />
     <result column="c_bankadress" property="cBankadress" jdbcType="VARCHAR" />
+    <result column="c_bankname" property="cBankname" jdbcType="VARCHAR" />
+    <result column="c_cardnum" property="cCardnum" jdbcType="VARCHAR" />
+    <result column="c_paypassword" property="cPaypassword" jdbcType="VARCHAR" />
+    <result column="c_phone" property="cPhone" jdbcType="VARCHAR" />
+    <result column="c_urealname" property="cUrealname" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -70,7 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    c_id, c_cardnum, c_userid, c_paypassword, c_bankname, c_province, c_phone, c_bankadress
+    c_id, c_userid, c_province, c_bankadress, c_bankname, c_cardnum, c_paypassword, c_phone, 
+    c_urealname
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bobo.keyan.hdb.model.CreditExample" >
     select
@@ -103,12 +105,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.bobo.keyan.hdb.model.Credit" >
-    insert into credit (c_id, c_cardnum, c_userid, 
-      c_paypassword, c_bankname, c_province, 
-      c_phone, c_bankadress)
-    values (#{cId,jdbcType=INTEGER}, #{cCardnum,jdbcType=VARCHAR}, #{cUserid,jdbcType=INTEGER}, 
-      #{cPaypassword,jdbcType=VARCHAR}, #{cBankname,jdbcType=VARCHAR}, #{cProvince,jdbcType=VARCHAR}, 
-      #{cPhone,jdbcType=VARCHAR}, #{cBankadress,jdbcType=VARCHAR})
+    insert into credit (c_id, c_userid, c_province, 
+      c_bankadress, c_bankname, c_cardnum, 
+      c_paypassword, c_phone, c_urealname
+      )
+    values (#{cId,jdbcType=INTEGER}, #{cUserid,jdbcType=INTEGER}, #{cProvince,jdbcType=VARCHAR}, 
+      #{cBankadress,jdbcType=VARCHAR}, #{cBankname,jdbcType=VARCHAR}, #{cCardnum,jdbcType=VARCHAR}, 
+      #{cPaypassword,jdbcType=VARCHAR}, #{cPhone,jdbcType=VARCHAR}, #{cUrealname,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.bobo.keyan.hdb.model.Credit" >
     insert into credit
@@ -116,52 +120,58 @@
       <if test="cId != null" >
         c_id,
       </if>
-      <if test="cCardnum != null" >
-        c_cardnum,
-      </if>
       <if test="cUserid != null" >
         c_userid,
-      </if>
-      <if test="cPaypassword != null" >
-        c_paypassword,
-      </if>
-      <if test="cBankname != null" >
-        c_bankname,
       </if>
       <if test="cProvince != null" >
         c_province,
       </if>
+      <if test="cBankadress != null" >
+        c_bankadress,
+      </if>
+      <if test="cBankname != null" >
+        c_bankname,
+      </if>
+      <if test="cCardnum != null" >
+        c_cardnum,
+      </if>
+      <if test="cPaypassword != null" >
+        c_paypassword,
+      </if>
       <if test="cPhone != null" >
         c_phone,
       </if>
-      <if test="cBankadress != null" >
-        c_bankadress,
+      <if test="cUrealname != null" >
+        c_urealname,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="cId != null" >
         #{cId,jdbcType=INTEGER},
       </if>
-      <if test="cCardnum != null" >
-        #{cCardnum,jdbcType=VARCHAR},
-      </if>
       <if test="cUserid != null" >
         #{cUserid,jdbcType=INTEGER},
-      </if>
-      <if test="cPaypassword != null" >
-        #{cPaypassword,jdbcType=VARCHAR},
-      </if>
-      <if test="cBankname != null" >
-        #{cBankname,jdbcType=VARCHAR},
       </if>
       <if test="cProvince != null" >
         #{cProvince,jdbcType=VARCHAR},
       </if>
+      <if test="cBankadress != null" >
+        #{cBankadress,jdbcType=VARCHAR},
+      </if>
+      <if test="cBankname != null" >
+        #{cBankname,jdbcType=VARCHAR},
+      </if>
+      <if test="cCardnum != null" >
+        #{cCardnum,jdbcType=VARCHAR},
+      </if>
+      <if test="cPaypassword != null" >
+        #{cPaypassword,jdbcType=VARCHAR},
+      </if>
       <if test="cPhone != null" >
         #{cPhone,jdbcType=VARCHAR},
       </if>
-      <if test="cBankadress != null" >
-        #{cBankadress,jdbcType=VARCHAR},
+      <if test="cUrealname != null" >
+        #{cUrealname,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -177,26 +187,29 @@
       <if test="record.cId != null" >
         c_id = #{record.cId,jdbcType=INTEGER},
       </if>
-      <if test="record.cCardnum != null" >
-        c_cardnum = #{record.cCardnum,jdbcType=VARCHAR},
-      </if>
       <if test="record.cUserid != null" >
         c_userid = #{record.cUserid,jdbcType=INTEGER},
-      </if>
-      <if test="record.cPaypassword != null" >
-        c_paypassword = #{record.cPaypassword,jdbcType=VARCHAR},
-      </if>
-      <if test="record.cBankname != null" >
-        c_bankname = #{record.cBankname,jdbcType=VARCHAR},
       </if>
       <if test="record.cProvince != null" >
         c_province = #{record.cProvince,jdbcType=VARCHAR},
       </if>
+      <if test="record.cBankadress != null" >
+        c_bankadress = #{record.cBankadress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cBankname != null" >
+        c_bankname = #{record.cBankname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cCardnum != null" >
+        c_cardnum = #{record.cCardnum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cPaypassword != null" >
+        c_paypassword = #{record.cPaypassword,jdbcType=VARCHAR},
+      </if>
       <if test="record.cPhone != null" >
         c_phone = #{record.cPhone,jdbcType=VARCHAR},
       </if>
-      <if test="record.cBankadress != null" >
-        c_bankadress = #{record.cBankadress,jdbcType=VARCHAR},
+      <if test="record.cUrealname != null" >
+        c_urealname = #{record.cUrealname,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -206,13 +219,14 @@
   <update id="updateByExample" parameterType="map" >
     update credit
     set c_id = #{record.cId,jdbcType=INTEGER},
-      c_cardnum = #{record.cCardnum,jdbcType=VARCHAR},
       c_userid = #{record.cUserid,jdbcType=INTEGER},
-      c_paypassword = #{record.cPaypassword,jdbcType=VARCHAR},
-      c_bankname = #{record.cBankname,jdbcType=VARCHAR},
       c_province = #{record.cProvince,jdbcType=VARCHAR},
+      c_bankadress = #{record.cBankadress,jdbcType=VARCHAR},
+      c_bankname = #{record.cBankname,jdbcType=VARCHAR},
+      c_cardnum = #{record.cCardnum,jdbcType=VARCHAR},
+      c_paypassword = #{record.cPaypassword,jdbcType=VARCHAR},
       c_phone = #{record.cPhone,jdbcType=VARCHAR},
-      c_bankadress = #{record.cBankadress,jdbcType=VARCHAR}
+      c_urealname = #{record.cUrealname,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -220,39 +234,43 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bobo.keyan.hdb.model.Credit" >
     update credit
     <set >
-      <if test="cCardnum != null" >
-        c_cardnum = #{cCardnum,jdbcType=VARCHAR},
-      </if>
       <if test="cUserid != null" >
         c_userid = #{cUserid,jdbcType=INTEGER},
-      </if>
-      <if test="cPaypassword != null" >
-        c_paypassword = #{cPaypassword,jdbcType=VARCHAR},
-      </if>
-      <if test="cBankname != null" >
-        c_bankname = #{cBankname,jdbcType=VARCHAR},
       </if>
       <if test="cProvince != null" >
         c_province = #{cProvince,jdbcType=VARCHAR},
       </if>
+      <if test="cBankadress != null" >
+        c_bankadress = #{cBankadress,jdbcType=VARCHAR},
+      </if>
+      <if test="cBankname != null" >
+        c_bankname = #{cBankname,jdbcType=VARCHAR},
+      </if>
+      <if test="cCardnum != null" >
+        c_cardnum = #{cCardnum,jdbcType=VARCHAR},
+      </if>
+      <if test="cPaypassword != null" >
+        c_paypassword = #{cPaypassword,jdbcType=VARCHAR},
+      </if>
       <if test="cPhone != null" >
         c_phone = #{cPhone,jdbcType=VARCHAR},
       </if>
-      <if test="cBankadress != null" >
-        c_bankadress = #{cBankadress,jdbcType=VARCHAR},
+      <if test="cUrealname != null" >
+        c_urealname = #{cUrealname,jdbcType=VARCHAR},
       </if>
     </set>
     where c_id = #{cId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.bobo.keyan.hdb.model.Credit" >
     update credit
-    set c_cardnum = #{cCardnum,jdbcType=VARCHAR},
-      c_userid = #{cUserid,jdbcType=INTEGER},
-      c_paypassword = #{cPaypassword,jdbcType=VARCHAR},
-      c_bankname = #{cBankname,jdbcType=VARCHAR},
+    set c_userid = #{cUserid,jdbcType=INTEGER},
       c_province = #{cProvince,jdbcType=VARCHAR},
+      c_bankadress = #{cBankadress,jdbcType=VARCHAR},
+      c_bankname = #{cBankname,jdbcType=VARCHAR},
+      c_cardnum = #{cCardnum,jdbcType=VARCHAR},
+      c_paypassword = #{cPaypassword,jdbcType=VARCHAR},
       c_phone = #{cPhone,jdbcType=VARCHAR},
-      c_bankadress = #{cBankadress,jdbcType=VARCHAR}
+      c_urealname = #{cUrealname,jdbcType=VARCHAR}
     where c_id = #{cId,jdbcType=INTEGER}
   </update>
 </mapper>
