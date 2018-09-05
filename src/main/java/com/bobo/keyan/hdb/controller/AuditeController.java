@@ -165,4 +165,19 @@ public class AuditeController {
 		 }
 		 return resultMap;
 	}
+	
+	@ResponseBody
+    @RequestMapping("/getMyselfAudite")
+	public Map<String, Object> getMyselfAudites(HttpServletResponse response, HttpServletRequest request) throws Exception {		
+		 Map<String, Object> resultMap = new ConcurrentHashMap<String,Object>();	
+		 Integer userId=Integer.parseInt(request.getParameter("userId"));
+		 AuditeExample auditeExample=new AuditeExample();
+		 Criteria criteria=auditeExample.createCriteria();
+		 criteria.andAUseridEqualTo(userId);
+		 
+		 List<Audite> auditelist=auditeService.selectByExample(auditeExample);
+		 resultMap.put("result",auditelist);
+		 return resultMap;		 
+	}
+	
 }
