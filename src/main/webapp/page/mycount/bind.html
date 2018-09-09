@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="../../js/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../js/layer/layer.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		console.log("创建测试用例");
+	});
+	function getData(){
+		$.ajax({
+			url:"/HDB2/credit/insertNewCredit",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+			type:"post",//规定请求的类型（GET 或 POST）。
+			data:{
+				"c_province":$("#c_province").val(),
+				"c_bankadress":$("#c_bankadress").val(),
+				"c_bankname":$("#c_bankname").val(),
+				"c_urealname":$("#c_urealname").val(),
+				"c_cardnum":$("#c_cardnum").val(),
+				"c_paypassword":$("#c_paypassword").val(),
+				"c_phone":$("#c_phone").val(),
+				"userid":sessionStorage.getItem("userId1")	
+			},//规定要发送到服务器的数据。
+			async:false,//是否异步处理。
+			cache:false,//浏览器是否缓存被请求页面
+			dataType:"json",//预期的服务器响应的数据类型。
+			success:function(data){//当请求成功时运行的函数。
+				if(data.result==1){
+					layer.msg("请求成功,插入成功",{
+						icon:1
+					});
+				}
+				if(data.result==2){
+					layer.msg("请求成功,插入失败",{
+						icon:1
+					});
+				}
+				if(data.result==0){
+					layer.msg("请求成功,已经绑定",{
+						icon:1
+					});
+				}
+			},
+			error:function(data){// 如果请求失败要运行的函数。
+				layer.msg("请求失败",{
+					icon:1
+				});
+			}
+		});
+	}
+</script>
+</head>
+<body>
+<h1>myaccount 绑卡/解绑</h1>
+<div>
+	省份:<input type="text" id="c_province"><br>
+	开户支行地址：<input type="text" id="c_bankadress"><br>
+	开户支行名称：<input type="text" id="c_bankname"><br>
+	卡号：<input type="text" id="c_cardnum"><br>
+	真实姓名：<input type="text" id="c_urealname"><br>
+	支付密码：<input type="text" id="c_paypassword"><br>
+	银行预留手机号 ：<input type="text" id="c_phone"><br>
+	<button type="button" onclick="getData()">测试添加数据</button>
+</div>
+</body>
+</html>

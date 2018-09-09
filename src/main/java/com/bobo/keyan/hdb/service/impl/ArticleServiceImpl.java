@@ -20,7 +20,7 @@ public class ArticleServiceImpl implements ArticleService {
 	public int countByExample(ArticleExample example) {
 		return articleMapper.countByExample(example);
 	}
-
+	
 	@Override
 	public int deleteByExample(ArticleExample example) {
 		return articleMapper.deleteByExample(example);

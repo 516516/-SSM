@@ -5,11 +5,118 @@
 <title>Insert title here</title>
 <script type="text/javascript" src="../../js/jquery/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="../../js/layer/layer.js"></script>
+
 <script type="text/javascript">
-	
+	$(document).ready(function(){
+		getData();
+	});
+	function getData(){
+		$.ajax({
+			url:"/HDB2/credit/selectAllCounts",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+			type:"post",//规定请求的类型（GET 或 POST）。
+			data:{
+				"userid":sessionStorage.getItem("userId1")	
+			},//规定要发送到服务器的数据。
+			async:false,//是否异步处理。
+			cache:false,//浏览器是否缓存被请求页面
+			dataType:"json",//预期的服务器响应的数据类型。
+			success:function(data){//当请求成功时运行的函数。
+				console.info(data.result);
+				if(data.result==1){
+					layer.msg("请求成功,插入成功",{
+						icon:1
+					});
+				}
+				var td="";
+				if(0==data.result.length){
+					$("#tablelist").html("");
+					td="";
+					return ;
+				}
+				$.each(data.result,function(index,item){
+					td+="<tr>";
+					td+="<td>"+(index+1)+"</td>";
+ 					td+="<td>"+item.cProvince+"</td>";
+					td+="<td>"+item.cBankadress+"</td>";
+					td+="<td>"+item.cBankname+"</td>";
+					td+="<td>"+item.cCardnum+"</td>";
+					td+="<td>"+item.cUrealname+"</td>";
+					
+					var exam="<a href='javascript:void(0)'  onclick=\"exam('"+item.cId+"')\">【解绑】</a>";
+					var exam1="<a href='javascript:void(0)'  onclick=\"exam1('"+item.cId+"')\">【转账】</a>";
+					td+="<td>"+exam+exam1+"</td>";
+					td+="</tr>";
+				})
+				$("#tablelist").html("");
+				$("#tablelist").html(td);
+				td="";
+			},
+			error:function(data){// 如果请求失败要运行的函数。
+				layer.msg("请求失败",{
+					icon:1
+				});
+			}
+		});
+	}
+	function exam(cId){
+		$.ajax({
+			url:"/HDB2/credit/delectAcount",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+			type:"post",//规定请求的类型（GET 或 POST）。
+			data:{
+				"cid":cId
+			},//规定要发送到服务器的数据。
+			async:false,//是否异步处理。
+			cache:false,//浏览器是否缓存被请求页面
+			dataType:"json",//预期的服务器响应的数据类型。
+			success:function(data){//当请求成功时运行的函数。
+				console.info(data.result);
+				if(data.result==1){
+					layer.msg("请求成功,解绑成功",{
+						icon:1
+					});
+					getData();
+				}
+				if(data.result==0){
+					layer.msg("请求成功,解绑失败",{
+						icon:1
+					});
+				}
+			},
+			error:function(data){// 如果请求失败要运行的函数。
+				layer.msg("请求失败",{
+					icon:1
+				});
+			}
+		});
+	}
+	function exam1(cId){
+	}
+	function bindcard(){
+		location.href="../mycount/bind.html";
+	}
 </script>
 </head>
 <body>
-<h1>myaccount</h1>
+<h3>我的银行卡</h3>
+<div>
+	<button type="button" onclick="bindcard();">添加银行卡</button>
+</div>
+<div>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>序号</th>
+				<th>开户省份</th>
+				<th>开户地址</th>
+				<th>开户行名称</th>
+				<th>卡号</th>
+				<th>持卡人姓名</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody id="tablelist">
+		</tbody>
+	</table>
+</div>
 </body>
 </html>
