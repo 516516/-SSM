@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<!-- Bootstrap Styles-->
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="layer/layer.js"></script>
+<script src="assets/js/easypiechart.js"></script>
+<script src="assets/js/easypiechart-data.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		checkLogin();
+		queryData();
+	})
+</script>
+
+<script type="text/javascript">
+
+	function login() {
+		$("#unBindModal").modal('show');
+	}
+	
+	function register() {
+		$("#registModal").modal('show');
+// 		location.href="register.html";
+	}
+	
+	function logout() {
+		//location.href="manger.html";
+		sessionStorage.setItem("userId1",null);
+		location.href="main.html";
+	}
+	
+	function shouye() {
+		location.href="main.html";
+	}
+	function houtai(){
+		location.href="manger.html";
+	}
+	function bindorunbind() {
+		//alert("绑卡解绑");
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+			location.href="myaccount.html";
+		}
+	}
+	
+	function personalAcount() {
+		//alert("个人账户");
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+			location.href="personalAccount.html";
+		}
+	}
+	
+    function investproject2(){
+    	//location.href="invest.html";
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+    		location.href="invest.html";
+		}
+    }
+    
+	function borrow() {
+		//alert("我要借款");
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+			location.href="borrow.html";
+		}
+	}
+	
+	function help() {
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+			alert("帮助中心");
+		}
+	}
+	
+	function share() {
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+			location.href="allarticle.html";
+		}
+	}
+	
+	function companyProject(){
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+		location.href = "invest.html";
+		}
+	}
+	
+	function lookusers() {
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+		location.href = "../page/user/alluser.html";
+		}
+	}
+	
+	function realmessage() {
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+			location.href = "realmessages.html";
+		}
+	}
+	function checkLogin(){
+		
+		var userid=JSON.parse(sessionStorage.getItem("userId1"));
+		console.log(typeof(userid));
+		console.log(typeof(null));
+		console.log("userid:"+userid);	
+		if(!userid && typeof(userid)!="undefined" && userid!=0){
+			$("#loginButton").show();
+			$("#registButton").show();
+			$("#unameSpan").hide();
+			return 0;
+		}else{
+			console.log("执行此处");
+			$("#loginButton").hide();
+			$("#registButton").hide();
+			$("#unameSpan").show();
+			
+			$.ajax({
+				url:"/HDB2/user/getOneUser",
+				type:"post",
+				data:{
+					"userid":sessionStorage.getItem("userId1")
+				},
+				cache:false,
+				asyc:false,
+				dataType:"json",
+				success:successfunction,
+				error:errorfunction
+			});
+			function successfunction(data){
+				layer.msg("请求数据成功",{
+					icon:1
+				});	
+				console.log(data);
+				if(data.result.uSex=='0'){
+					console.log(0);
+					var username="欢迎您："+data.result.uName+"先生";
+				}else{
+					var username="欢迎您："+data.result.uName+"女士";
+				}
+					$("#usernameSpan").html(username);
+			}
+			function errorfunction(){
+				console.log("请求失败",{
+					icon:1
+				});
+			}
+			return 1;
+		}
+	}
+</script>
+
+<!-- 登录 -->
+<script type="text/javascript">
+function submit(){
+	$.ajax({
+		url:"/HDB2/user/logins",
+		type:"post",
+		data:{
+			"loginname":$("#loginname").val(),
+			"password":$("#password").val()
+		},
+		cache:false,
+		asyc:false,
+		dataType:"json",
+		success:successfunction,
+		error:errorfunction
+	});
+	function successfunction(data){
+		layer.msg("请求数据成功");	
+		console.log(data.result);
+		if(data.result==0){
+			layer.msg("该用户名还未被注册",{
+				icon:1
+			});
+		}else if(data.result==2){
+			layer.msg("密码输入有误，请重新输入",{
+				icon:1
+			});
+		}else{
+			layer.msg("登录成功",{
+				icon:1
+			});
+			console.log(data.result);;
+			/* 设置session值 */
+			sessionStorage.setItem("userId1",data.result);
+			var itemvalue=sessionStorage.getItem("userId1");
+			console.log("session:"+itemvalue);
+			setTimeout(() => {
+				location.href="main.html";
+			}, 1000);
+			$("#loginButton").hide();	
+		}
+	}
+	function errorfunction(){
+		console.log("请求失败");
+	}	
+}
+function reset(){
+	//layer.msg("执行reset()函数");
+	$("#loginname").val('');
+	$("#password").val('');
+}
+
+function hideunBindModal(){
+	reset();
+	$("#unBindModal").modal('hide');
+};
+</script>
+
+<!-- 注册 -->
+<script type="text/javascript">
+function regist(){
+	if(1==check()){
+		console.log(check());
+		var sex=document.getElementsByName("sex");
+		var sex1="";
+		for(var i=0;i<sex.length;i++){
+			if(sex[i].checked){
+				sex1=sex[i].value;
+				break;
+			}			
+		}						
+		$.ajax({
+			url:"/HDB2/user/registers",
+			type:"post",
+			data:{
+				"loginname":$("#loginname1").val(),
+				"nickname":$("#nickname").val(),
+				"password1":$("#password1").val(),
+				"phonenumber":$("#phonenumber").val(),
+				"address":$("#address").val(),
+				"sex":sex1
+			},
+			cache:false,
+			asyc:false,
+			dataType:"json",
+			success:successfunction,
+			error:errorfunction
+		});
+		
+		function successfunction(data){
+			console.log("result"+data.result);
+			if(0==data.result){
+				layer.msg("注册失败",{
+					icon:1,
+					time:2000
+				});
+			}else{
+				layer.msg("注册成功",{
+					icon:1,
+					time:2000
+				});
+				$("#registModal").modal('hide');
+			}				
+		}
+		
+		function errorfunction(){
+			console.log("请求失败");
+		}
+		
+	}
+}
+function registerModal(){
+	$("#loginname1").val("");
+	$("#nickname").val("");
+	$("#password1").val("");
+	$("#password2").val("");
+	$("#phonenumber").val("");
+	$("#address").val("");
+	
+	$("#loginname1Info").html("");
+	$("#nicknameInfo").html("");
+	$("#password1Info").html("");
+	$("#password2Info").html("");
+	$("#phonenumberInfo").html("");
+	$("#addressInfo").html("");
+	$("#sexInfo").html("");
+	
+	var sexs=document.getElementsByName("sex");
+	for(var i=0;i<sexs.length;i++){
+		sexs[i].checked=false;
+	}	
+	$("#registModal").modal('hide');
+}
+function check(){
+	var loginname=$("#loginname1").val();
+	if(loginname==null||loginname==""){
+		$("#loginname1Info").html("用户名为空");
+		return 0;
+	}else{
+		$("#loginname1Info").html("");
+	}
+	console.log(loginname);
+	var nickname=$("#nickname").val();
+	if(nickname==null||nickname==""){
+		$("#nicknameInfo").html("昵称为空");
+		return 0;
+	}else{
+		$("#nicknameInfo").html("");
+	}	
+	
+	console.log(nickname);
+	var password1=$("#password1").val();
+	if(password1==null||password1==""){
+		$("#password1Info").html("密码不能为空");
+		return 0;
+	}else{
+		$("#password1Info").html("");
+	}
+	var password2=$("#password2").val();
+	if(password2==null||password2==""){
+		$("#password2Info").html("密码不能为空");
+		return 0;
+	}else{
+		$("#password2Info").html("");
+	}
+	
+	if(password1!=password2){
+		$("#password2Info").html("两次密码不一致");
+		return 0;
+	}else{
+		$("#password2Info").html("");
+	}
+	
+	console.log(password1);
+	var phonenumber=$("#phonenumber").val();
+	var isPhone = /^[1][3,4,5,7,8][0-9]{9}$/;
+	
+	if(!isPhone.test(phonenumber)||phonenumber==null||phonenumber==""){
+		$("#phonenumberInfo").html("电话号码输入有误");
+		return 0;
+	}else{
+		$("#phonenumberInfo").html("");
+	}
+	console.log(phonenumber);
+
+	var sex=document.getElementsByName("sex");
+	var flag=0;
+	var sex1="";
+	for(var i=0;i<sex.length;i++){
+		if(sex[i].checked){
+			flag=1;
+			sex1=sex[i].value;
+			break;
+		}			
+	}
+	if(0==flag){
+		$("#sexInfo").html("性别为空");
+		return 0;
+	}
+	console.log(sex1);
+	return 1;
+}
+
+function userNameChanged(){
+	console.log("执行userNameChanged函数");
+	$.ajax({
+		url:"/HDB2/user/getUserByLoginName",
+		type:"post",
+		data:{
+			"loginname":$("#loginname1").val()
+		},
+		cache:false,
+		asyc:false,
+		dataType:"json",
+		success:successfunction,
+		error:errorfunction
+	});	
+	function successfunction(data){
+		console.log("result"+data.result);
+		$("#loginname1Info").html("");
+		if(0==data.result){
+		}else{
+			$("#loginname1Info").html("该用户名已被注册");
+		}				
+	}
+	function errorfunction(){
+		console.log("请求失败");
+	}
+}
+</script>
+<script type="text/javascript">
+
+function getFormatDate(mills){
+	var d=new Date(mills);
+	var year=d.getFullYear();
+	var day=d.getDate();
+	var month=+d.getMonth()+1;
+	var hour=d.getHours();
+	var minute=d.getMinutes();
+	var second=d.getSeconds();
+	var misec=d.getMilliseconds();
+	var f=year+"-"+formate(month)+"-"+formate(day)+" "+formate(hour)+":"+formate(minute)+":"+formate(second);
+	return f;
+	}
+	function formate(d){
+	return d>9?d:'0'+d;
+}
+	function amountNum(num1,num2){
+		var amount1=parseInt(num1);
+		var amount2=parseInt(num2);
+		return amount1-amount2;
+	}
+	function getRate(rate1){
+		var rate=parseFloat(rate1);
+		return rate+"%";
+	}
+	function getDate(date){
+		var date1=parseInt(date);
+		return 30*date1;
+	}
+	
+	function invest(pid){
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+			var userid=sessionStorage.getItem("userId1");
+			location.href="invest2.html?pid="+pid+"&userid="+userid;
+		}
+	}	
+	
+function queryData(){
+	$.ajax({
+		url:"/HDB2/project/getAllporjects",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+		type:"post",//规定请求的类型（GET 或 POST）。
+		data:{
+			startRow:1,
+			projectName:null,
+			projectRate:null,
+			projectDateline:null,
+			pageSize:10
+		},//规定要发送到服务器的数据。
+		async:false,//是否异步处理。
+		cache:false,//浏览器是否缓存被请求页面
+		dataType:"json",//预期的服务器响应的数据类型。
+		success:function(data){//当请求成功时运行的函数。
+			layer.msg("请求成功",{
+				icon:1
+			});
+		    console.info(data);
+		    var td="";
+		    if(data.result.length==0){
+		    	$("#tablelist").html('');
+		    	td="";
+		    	$('#page').empty();
+		    	return;
+		    }
+			$.each(data.result,function(index,item){
+				
+				td+="<div class=\"col-md-12 column\">"+
+							"<div class=\"panel panel-default\">"+
+								"<div class=\"row clearfix\" style=\"margin-left: 2px; margin-right: 3px;\">";
+									
+				td+="<div class=\"col-md-3 column\">"+
+				       "<div style=\"text-align: center;\">"+
+							"<h4>"+item.pName+"</h4>"+
+							"<h6>上线时间"+getFormatDate(item.pExamineDate)+"</h6>"+
+					    "</div>"+ 
+					 "</div>"; 
+					 
+				td+="<div class=\"col-md-2 column\">"+
+				       "<div style=\"text-align: center;\">"+
+							"<h4>"+item.pAmount+"</h4>"+
+							"<h6>借款金额</h6>"+
+					    "</div>"+ 
+					 "</div>"; 
+					 
+				td+="<div class=\"col-md-3 column\">"+
+				       "<div style=\"text-align: center;\">"+
+							"<h4>"+getDate(item.pDateline)+"天</h4>"+
+							"<h6>借款期限</h6>"+
+					    "</div>"+ 
+					 "</div>"; 
+					 
+				td+="<div class=\"col-md-2 column\">"+
+				       "<div style=\"text-align: center;\">"+
+							"<h4>"+getRate(item.pRate)+"</h4>"+
+							"<h6>年化利率</h6>"+
+					    "</div>"+ 
+					 "</div>"; 
+					 
+				td+="<div class=\"col-md-2 column\">"+
+						"<div style=\"text-align: center;\">"+
+						    "<h5>剩余可投"+amountNum(item.pAmount,item.pInvestAmount)+"</h5>"+
+							"<button type=\"button\" class=\"btn btn-default btn-xs btn-block\" onclick=\"invest("+item.pId+")\">一键投标</button>"+
+						"</div>"+
+					"</div>";
+				
+			   td+="</div></div></div>";
+			})
+			$("#tablelist").html('');
+			$("#tablelist").append(td);
+			td="";
+		},
+		error:function(data){// 如果请求失败要运行的函数。
+			layer.msg("请求失败",{
+				icon:1
+			});
+		}
+	});
+}
+</script>
+</head>
+<body>
+	<div class="jumbotron text-center" style="margin-bottom: 0">
+		<div class="col-md-12 column" style="margin-top: 5px;">
+			<div class="carousel slide" id="carousel-728860">
+				<ol class="carousel-indicators">
+					<li class="active" data-slide-to="0" data-target="#carousel-728860">
+					</li>
+					<li data-slide-to="1" data-target="#carousel-728860"></li>
+					<li data-slide-to="2" data-target="#carousel-728860"></li>
+				</ol>
+				<div class="carousel-inner">
+					<div class="item active" style="text-align: center;">
+						<img alt="" src="999.png"/>
+						<div class="carousel-caption">
+<!-- 							<h4>First Thumbnail label</h4>
+							<p>Cras justo odio, dapibus ac facilisis in, egestas eget
+								quam. Donec id elit non mi porta gravida at eget metus. Nullam
+								id dolor id nibh ultricies vehicula ut id elit.</p> -->
+						</div>
+					</div>
+					<div class="item">
+						<img alt="" src="777.png" />
+						<div class="carousel-caption">
+<!-- 							<h4>Second Thumbnail label</h4>
+							<p>Cras justo odio, dapibus ac facilisis in, egestas eget
+								quam. Donec id elit non mi porta gravida at eget metus. Nullam
+								id dolor id nibh ultricies vehicula ut id elit.</p> -->
+						</div>
+					</div>
+					<div class="item">
+						<img alt="100%" src="888.png"/>
+						<div class="carousel-caption">
+<!-- 							<h4>Third Thumbnail label</h4>
+							<p>Cras justo odio, dapibus ac facilisis in, egestas eget
+								quam. Donec id elit non mi porta gravida at eget metus. Nullam
+								id dolor id nibh ultricies vehicula ut id elit.</p> -->
+						</div>
+					</div>
+				</div>
+				<a class="left carousel-control" href="#carousel-728860"
+					data-slide="prev"> <span
+					class="glyphicon glyphicon-chevron-left"></span></a> <a
+					class="right carousel-control" href="#carousel-728860"
+					data-slide="next"> <span
+					class="glyphicon glyphicon-chevron-right"></span></a>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<nav class="navbar navbar-default navbar-fixed-top"
+					role="navigation">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse"
+							data-target="#bs-example-navbar-collapse-1">
+							<span class="sr-only">Toggle navigation</span> <span
+								class="icon-bar"></span> <span class="icon-bar"></span> <span
+								class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="#">HDB互联网金融平台</a>
+					</div>
+
+					<div class="collapse navbar-collapse"
+						id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav " style="margin-left: 20%;">
+							<li class=""><a href="javascript:void(0)"
+								onclick="shouye();">首页</a></li>
+<!-- 							<li><a href="javascript:void(0)" onclick="lookusers();">查看用户</a></li> -->
+							<li class="dropdown"><a href="#" class="dropdown-toggle"
+								data-toggle="dropdown">个人中心<strong class="caret"></strong></a>
+								<ul class="dropdown-menu">
+									<li><a href="javascript:void(0)"onclick="realmessage();">实名认证</a></li>
+									<li><a href="javascript:void(0)" onclick="bindorunbind();">绑卡/解绑</a></li>
+									<li><a href="javascript:void(0)"onclick="personalAcount();">个人账户</a></li>
+								</ul></li>
+							<li><a href="javascript:void(0)" onclick="investproject2();">我要投资</a></li>
+							<li><a href="javascript:void(0)" onclick="borrow();">我要借款</a></li>
+							<li><a href="javascript:void(0)" onclick="help();">帮助中心</a></li>
+							<li><a href="javascript:void(0)" onclick="share();">经验分享</a></li>
+							<li><a href="javascript:void(0)" onclick="houtai();">后台</a></li>
+						</ul>
+
+						<ul class="nav navbar-nav navbar-right" style="margin-right: 1%;">
+							<li id="loginButton"><a href="javascript:void(0)" onclick="login();">登录</a></li>
+							<li id="registButton"><a href="javascript:void(0)" onclick="register();">注册</a></li>
+							<li id="unameSpan" style="margin-top: 15px;"><span id="usernameSpan" ></span></li>
+							<li><a href="javascript:void(0)" onclick="logout();">退出</a></li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+		</div>
+
+		<div class="row clearfix" style="margin-top: 2%;">
+			<div class="col-md-12 column">
+				<ul class="nav nav-tabs nav-justified">
+					<li class=""><a data-toggle="tab" href="#table_pal1"><h4>平台简介</h4></a></li>
+					<li><a data-toggle="tab" href="#table_pal2"><h4>首推项目</h4></a></li>
+					<li class=""><a data-toggle="tab" href="#table_pal3"><h4>待用</h4></a></li>
+				</ul>
+				<div id="tabs" class="tab-content" style="padding-top: 10px">
+					<div id="table_pal1" class="tab-pane active">
+						<div id="">
+						<div class="row clearfix" id=""> 
+						</div>
+							<div class="row clearfix">
+								<div class="col-md-12 column">
+									<div class="row">
+										<div class="col-md-4" onclick="help();">
+											<div class="thumbnail">
+												<img alt="300x200" src="secend.jpg" />
+												<div class="caption">
+													<h3>我们是做什么的？</h3>
+													<p>提供一个个性化的投资理财的平台。 可以在这里进行投资获取收益，平台提供不同的两种项目供大家选择。
+														更可以在必要是进行借贷周转资金。</p>
+													<p>
+														<a class="btn" href="#">View details »</a>
+													</p>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-4" onclick="help();">
+											<div class="thumbnail">
+												<img alt="300x200" src="first.png" />
+												<div class="caption">
+													<h3>我们的优势是什么？</h3>
+													<p>
+														隐私保障：用户资料加密存储、交换资料签署协议<br> 数据保障：网络保障、数据加密、内流控制<br>
+														资金保障：初审、风审、实时监控
+													</p>
+													<p>
+														<a class="btn" href="#">View details »</a>
+													</p>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-4" onclick="help();">
+											<div class="thumbnail">
+												<img alt="300x200" src="thired.jpg" />
+												<div class="caption">
+													<h3>我们的成长经历</h3>
+													<p>在小组成员的不懈努力下，经历了数次技术的革新，引用先进的消息队列机制，
+														2018年9月15日平台正式落地, 后期将上线，并且持续维护。
+													<p>
+														<a class="btn" href="#">View details »</a>
+													</p>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div id="table_pal2" class="tab-pane ">
+						<div class="row clearfix" id="tablelist"> 
+						</div>
+					</div>
+					<div id="table_pal3" class="tab-pane ">
+						<div id="">afoashf</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row clearfix" style="margin-top: 2%;">
+			<div class="col-md-12 column">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">投资流程</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-xs-6 col-md-3" onclick="login();">
+								<div class="panel panel-default">
+									<div class="panel-body ">
+										<h4 class="center">注册/登录</h4>
+										<div class="easypiechart" id="easypiechart-blue"
+											data-percent="25">
+											<span class="percent">25%</span>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xs-6 col-md-3" onclick="personalAcount();">
+								<div class="panel panel-default">
+									<div class="panel-body ">
+										<h4>实名认证</h4>
+										<div class="easypiechart" id="easypiechart-orange"
+											data-percent="50">
+											<span class="percent">50%</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6 col-md-3" onclick="personalAcount();">
+								<div class="panel panel-default">
+									<div class="panel-body easypiechart-panel">
+										<h4>账户充值</h4>
+										<div class="easypiechart" id="easypiechart-teal"
+											data-percent="75">
+											<span class="percent">75%</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6 col-md-3" onclick="companyProject();">
+								<div class="panel panel-default">
+									<div class="panel-body ">
+										<h4>进行投资</h4>
+										<div class="easypiechart" id="easypiechart-red"
+											data-percent="100">
+											<span class="percent">100%</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row clearfix"></div>
+	</div>
+	
+	<div class="jumbotron text-center" style="margin-bottom: 0">
+		<hr>
+		<p>我是也是有底线的</p>
+	</div>
+	
+ 	<!-- 登录模态框（Modal） -->
+	<div class="modal fade" id="unBindModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">输入登录信息</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form">
+						<div class="form-group">
+							<label for="loginname" class="col-sm-3 control-label">用户名：</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="loginname" style="width: 200px;">
+								<span id="loginnameInfo" style="color: red"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="password" class="col-sm-3 control-label">密码：</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="password" style="width: 200px;">
+								<span id="passwordInfo" style="color: red"></span>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" onclick="submit()">登录</button>
+					<button type="button" class="btn btn-default" onclick="hideunBindModal()">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	<!-- 注册模态框（Modal） -->
+	<div class="modal fade" id="registModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">输入注册信息</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form">
+						<div class="form-group">
+							<label for="loginname1" class="col-sm-3 control-label">用户名：</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="loginname1" onchange="userNameChanged();" style="width: 200px;">
+								<span id="loginname1Info" style="color: red"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="nickname" class="col-sm-3 control-label">昵称：</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="nickname" style="width: 200px;">
+								<span id="nicknameInfo" style="color: red"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="password1" class="col-sm-3 control-label">密码：</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="password1" style="width: 200px;">
+								<span id="password1Info" style="color: red"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="password2" class="col-sm-3 control-label">重复密码：</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="password2" style="width: 200px;">
+								<span id="password2Info" style="color: red"></span>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="phonenumber" class="col-sm-3 control-label">电话号码：</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="phonenumber" style="width: 200px;">
+								<span id="phonenumberInfo" style="color: red"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="phonenumber" class="col-sm-3 control-label">性别：</label>
+							<div class="col-sm-9">
+							    <label class="radio-inline">
+        							<input type="radio" name="sex" id="sex" value="0" checked> 男
+   							 	</label>
+    							<label class="radio-inline">
+        							<input type="radio" name="sex" id="sex1"  value="1"> 女
+        							<span id="sexInfo" style="color: red"></span>
+    							</label>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" onclick="regist()">注册</button>
+					<button type="button" class="btn btn-default" onclick="registerModal()">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

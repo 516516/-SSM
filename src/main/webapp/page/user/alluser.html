@@ -44,7 +44,8 @@
 				    td+= "<td>"+item.uNickname+"</td>"+
 				         "<td>"+item.uId+"</td>"+
 				         "<td>"+item.uAddress+"</td>"+
-				         "<td>"+getFormatDate(item.uRegistime)+"</td>";
+				         "<td>"+getFormatDate(item.uRegistime)+"</td>"+
+				         "<td>"+item.uBalance+"</td>";
 				    td+="</tr>";
 			})
 			console.log(td);
@@ -102,6 +103,7 @@
 				<th>登陆Id号</th>				
 				<th>家庭地址</th>
 				<th>注册时间</th>
+				<th>账户余额</th>
 			</tr>
 		</thead>
 		<tbody id="userList">

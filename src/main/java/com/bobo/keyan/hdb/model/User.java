@@ -40,6 +40,14 @@ public class User {
 
     private String uRealaddress;
 
+    private String uEmail;
+
+    private Integer isActive;
+
+    private String activationCode;
+
+    private String activationCodeTime;
+
     public Integer getuId() {
         return uId;
     }
@@ -182,5 +190,37 @@ public class User {
 
     public void setuRealaddress(String uRealaddress) {
         this.uRealaddress = uRealaddress == null ? null : uRealaddress.trim();
+    }
+
+    public String getuEmail() {
+        return uEmail;
+    }
+
+    public void setuEmail(String uEmail) {
+        this.uEmail = uEmail == null ? null : uEmail.trim();
+    }
+
+    public Integer getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Integer isActive) {
+        this.isActive = isActive;
+    }
+
+    public String getActivationCode() {
+        return activationCode;
+    }
+
+    public void setActivationCode(String activationCode) {
+        this.activationCode = activationCode == null ? null : activationCode.trim();
+    }
+
+    public String getActivationCodeTime() {
+        return activationCodeTime;
+    }
+
+    public void setActivationCodeTime(String activationCodeTime) {
+        this.activationCodeTime = activationCodeTime == null ? null : activationCodeTime.trim();
     }
 }

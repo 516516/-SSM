@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<!-- Bootstrap Styles-->
+<link rel="stylesheet"
+	href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="../js/layer/layer.js"></script>
+<script
+	src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+	var value = 1;
+	$(document).ready(function() {
+		getdata();
+	});
+	
+	function getdata() {
+		sessionStorage.setItem("manager", 5);
+		$.ajax({
+			url : "/HDB2/article/selectAtcByState",
+			type : "post",
+			data : {
+				"name":$("#find").val(),
+				"value" : value
+			},
+			cache : false,
+			asyc : false,
+			dataType : "json",
+			success : successfunction,
+			error : errorfunction
+		});
+		function successfunction(data) {
+			layer.msg("请求数据成功");
+			console.info(data);
+			if (data.result.length == 0) {
+				$("#articleList").html('');
+				td = "";
+				return;
+			}
+			var td = "";
+			$("#articleList").html('');
+			$
+					.each(
+							data.result,
+							function(index, item) {
+								td += "<tr>" + "<td>" + item.atcId + "</td>"
+										+ "<td>" + item.atcName + "</td>"
+										+ "<td>" + item.atcType + "</td>";
+								td += "<td>" + item.atcNum1 + "</td>" + "<td>"
+										+ item.atcNum2 + "</td>" + "<td>"
+										+ getFormatDate(item.atcPublishtime)
+										+ "</td>" + "<td>"
+										+ item.atcIntroduction + "</td>";
+								var exam = "<a href='javascript:void(0)'  onclick=\"deletearticle('"
+										+ item.atcId + "')\">【删除】</a>";
+								var pass = "<a href='javascript:void(0)'  onclick=\"passarticle('"
+										+ item.atcId
+										+ "','"
+										+ sessionStorage.getItem("manager")
+										+ "')\">【发表】</a>";
+								var nopass = "<a href='javascript:void(0)'  onclick=\"nopassarticle('"
+										+ item.atcId
+										+ "','"
+										+ sessionStorage.getItem("manager")
+										+ "')\">【不予发表】</a>"
+								if (item.atcState == '1') {
+									td += "<td>" + item.atcScrutid + "</td>"
+											+ "<td>" + exam + "</td>" + "</tr>";
+									$("#articleList").append(td);
+								}
+								if (item.atcState == '0') {
+									td += "<td>未审核</td>" + "<td>" + exam
+											+ "&nbsp" + pass + "&nbsp" + nopass
+											+ "</td></tr>";
+
+									$("#articleList").append(td);
+
+								}
+								if (item.atcState == '2') {
+									td += "<td>" + item.atcScrutid + "</td>"
+											+ "<td>" + exam + "</td>" + "</tr>";
+									$("#articleList").append(td);
+
+								}
+								td = "";
+							})
+		}
+		function errorfunction() {
+			console.log("请求失败");
+		}
+	}
+
+	function checkboxc() {
+		if ($("#permit").prop("checked") == true
+				&& $("#wait").prop("checked") == true
+				&& $("#unpermit").prop("checked") == true) {
+			value = 1;
+		}
+		if ($("#permit").prop("checked") == true
+				&& $("#wait").prop("checked") == true
+				&& $("#unpermit").prop("checked") == false) {
+			value = 2;
+		}
+		if ($("#permit").prop("checked") == true
+				&& $("#wait").prop("checked") == false
+				&& $("#unpermit").prop("checked") == true) {
+			value = 3;
+		}
+		if ($("#permit").prop("checked") == true
+				&& $("#wait").prop("checked") == false
+				&& $("#unpermit").prop("checked") == false) {
+			value = 4;
+		}
+		if ($("#permit").prop("checked") == false
+				&& $("#wait").prop("checked") == true
+				&& $("#unpermit").prop("checked") == true) {
+			value = 5;
+		}
+		if ($("#permit").prop("checked") == false
+				&& $("#wait").prop("checked") == true
+				&& $("#unpermit").prop("checked") == false) {
+			value = 6;
+		}
+		if ($("#permit").prop("checked") == false
+				&& $("#wait").prop("checked") == false
+				&& $("#unpermit").prop("checked") == true) {
+			value = 7;
+		}
+		if ($("#permit").prop("checked") == false
+				&& $("#wait").prop("checked") == false
+				&& $("#unpermit").prop("checked") == false) {
+			value = 1;
+		}
+		getdata();
+	}
+
+	function passarticle(atcid, mid) {
+
+		//更新文章状态，将atcid和managerid传给passArticle进行update
+		console.log("atcid:" + atcid);
+		console.log("mid:" + mid);
+
+		$.ajax({
+			url : "/HDB2/article/passArticle",
+			type : "post",
+			data : {
+				"atcid" : atcid,
+				"mid" : mid
+			},
+			cache : false,
+			asyc : false,
+			dataType : "json",
+			success : passsuccessfunction,
+			error : passerrorfunction
+		});
+		function passsuccessfunction() {
+			layer.msg("发表成功", {
+				icon : 1,
+				time : 2000
+			});
+			window.location.reload();
+		}
+		function passerrorfunction() {
+			layer.msg("发表失败", {
+				icon : 2,
+				time : 2000
+			});
+		}
+	}
+
+	function nopassarticle(atcid, mid) {
+		$.ajax({
+			url : "/HDB2/article/nopassArticle",
+			type : "post",
+			data : {
+				"atcid" : atcid,
+				"mid" : mid
+			},
+			cache : false,
+			asyc : false,
+			dataType : "json",
+			success : nopasssuccessfunction,
+			error : nopasserrorfunction
+		});
+		function nopasssuccessfunction() {
+			layer.msg("审核成功", {
+				icon : 1,
+				time : 2000
+			});
+			window.location.reload();
+		}
+		function nopasserrorfunction() {
+			layer.msg("审核失败", {
+				icon : 2,
+				time : 2000
+			});
+		}
+	}
+
+	function deletearticle(id) {
+		$.ajax({
+			url : "/HDB2/article/deleteArticle",
+			type : "post",
+			data : {
+				"articleId" : id
+			},
+			cache : false,
+			asyc : false,
+			dataType : "json",
+			success : deletesuccessfunction,
+			error : deleteerrorfunction
+		});
+		function deletesuccessfunction() {
+			layer.msg("删除成功", {
+				icon : 1,
+				time : 2000
+			});
+			window.location.reload();//刷新网页重新显示文章列表
+		}
+		function deleteerrorfunction() {
+			layer.msg("删除失败", {
+				icon : 2,
+				time : 2000
+			});
+		}
+	}
+
+	function getFormatDate(mills) {
+		var d = new Date(mills);
+		var year = d.getFullYear();
+		var day = d.getDate();
+		var month = +d.getMonth() + 1;
+		var hour = d.getHours();
+		var minute = d.getMinutes();
+		var second = d.getSeconds();
+		var misec = d.getMilliseconds();
+		var f = year + "-" + formate(month) + "-" + formate(day) + " "
+				+ formate(hour) + ":" + formate(minute) + ":" + formate(second);
+		return f;
+	}
+	function formate(d) {
+		return d > 9 ? d : '0' + d;
+	}
+
+	function login() {
+		alert("登录");
+	}
+	function register() {
+		alert("注册");
+	}
+	function logout() {
+		alert("退出");
+	}
+	function shouye() {
+		alert("文章管理");
+	}
+	function prosonalproject() {
+		alert("个人项目");
+	}
+	function conpanyproject() {
+		alert("公司项目");
+	}
+	function prosonalProject() {
+		alert("个人项目");
+	}
+	function companyProject() {
+		alert("公司项目");
+	}
+	function borrow() {
+		alert("我要借款");
+	}
+	function help() {
+		alert("帮助中心");
+	}
+	function lookusers() {
+		location.href = "../page/user/alluser.html";
+	}
+</script>
+
+</head>
+<body>
+	<div class="container">
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<nav class="navbar navbar-default navbar-fixed-top"
+					role="navigation">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse"
+							data-target="#bs-example-navbar-collapse-1">
+							<span class="sr-only">Toggle navigation</span> <span
+								class="icon-bar"></span> <span class="icon-bar"></span> <span
+								class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="#">HDB互联网金融平台</a>
+					</div>
+
+					<div class="collapse navbar-collapse"
+						id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav " style="margin-left: 20%;">
+							<li class=""><a href="javascript:void(0)"
+								onclick="shouye();">文章管理</a></li>
+							<li><a href="javascript:void(0)" onclick="lookusers();">用户管理</a></li>
+							<li class="dropdown"><a href="#" class="dropdown-toggle"
+								data-toggle="dropdown">项目审核<strong class="caret"></strong></a>
+								<ul class="dropdown-menu">
+									<li><a href="javascript:void(0)"
+										onclick="prosonalproject();">个人项目</a></li>
+									<li><a href="javascript:void(0)"
+										onclick="conpanyproject();">公司项目</a></li>
+								</ul></li>
+						</ul>
+
+						<ul class="nav navbar-nav navbar-right" style="margin-right: 1%;">
+							<li><a href="javascript:void(0)" onclick="logout();">退出</a></li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+		</div>
+
+
+		<div class="row clearfix" style="margin-top: 5%;">
+			<div class="col-md-12 column">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">查询条件</h3>
+					</div>
+					<div class="panel-body">
+						<div class="col-lg-6">
+							<div class="input-group">
+								<input type="text" class="form-control" id="find">
+							</div>
+							<!-- /input-group -->
+							<div class="row clearfix">
+								<div class="col-md-12 column">
+									<button type="button" class="btn btn-primary btn-default"
+										onclick="getdata()">搜索</button>
+								</div>
+							</div>
+						</div>
+						<!-- /.col-lg-6 -->
+						<label class="checkbox-inline"> <input type="checkbox"
+							id="permit" value="permit" onchange="checkboxc()"> 已发表
+						</label> <label class="checkbox-inline"> <input type="checkbox"
+							id="wait" value="wait" onchange="checkboxc()"> 待审核
+						</label> <label class="checkbox-inline"> <input type="checkbox"
+							id="unpermit" value="unpermit" onchange="checkboxc()">
+							未通过
+						</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row clearfix" style="margin-top: 2px;">
+			<div class="col-md-12 column">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">查询结果，地处也可放按钮</h3>
+					</div>
+					<table class="table table-bordered table-hover">
+						<thead>
+							<tr>
+								<th>文章ID</th>
+								<th>文章名</th>
+								<th>文章类型</th>
+								<th>点赞人数</th>
+								<th>踩人数</th>
+								<th>发布时间</th>
+								<th>简介</th>
+								<th>审核人</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody id="articleList">
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

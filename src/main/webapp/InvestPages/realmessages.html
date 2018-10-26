@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="layer/layer.js"></script>
+<script src="js/distpicker.data.js"></script>
+<script src="js/distpicker.js"></script>
+<script src="js/main.js"></script>
+
+<!-- <script type="text/javascript">
+
+	function login() {
+		//alert("登录");
+		location.href="login.html";
+	}
+	
+	function register() {
+		//alert("注册");
+		location.href="register.html";
+	}
+	
+	function logout() {
+		location.href="manger.html";
+	}
+	
+	function shouye() {
+		location.href="main.html";
+	}
+	
+	function bindorunbind() {
+		//alert("绑卡解绑");
+		location.href="myaccount.html";
+	}
+	
+	function personalAcount() {
+		//alert("个人账户");
+		location.href="personalAccount.html";
+	}
+	
+    function investproject2(){
+    	//location.href="invest.html";
+    	location.href="invest.html";
+    }
+    
+	function borrow() {
+		//alert("我要借款");
+		location.href="borrow.html";
+	}
+	
+	function help() {
+		alert("帮助中心");
+	}
+	
+	function share() {
+// 		alert("帮助中心");
+		location.href="allarticle.html";
+	}
+	
+	function companyProject(){
+		alert("进行投资");
+	}
+	
+	function lookusers() {
+		location.href = "../page/user/alluser.html";
+	}
+	
+	function realmessage() {
+		location.href = "realmessages.html";
+	}
+	
+</script> -->
+<script type="text/javascript">
+	$(document).ready(function(){
+		checkLogin();
+	})
+</script>
+<script type="text/javascript">
+
+	function login() {
+		$("#unBindModal").modal('show');
+	}
+	
+	function register() {
+		$("#registModal").modal('show');
+// 		location.href="register.html";
+	}
+	
+	function logout() {
+		//location.href="manger.html";
+		sessionStorage.setItem("userId1",null);
+		location.href="main.html";
+	}
+	
+	function shouye() {
+		location.href="main.html";
+	}
+	
+	function bindorunbind() {
+		//alert("绑卡解绑");
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+			location.href="myaccount.html";
+		}
+	}
+	
+	function personalAcount() {
+		//alert("个人账户");
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+			location.href="personalAccount.html";
+		}
+	}
+	
+    function investproject2(){
+    	//location.href="invest.html";
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+    		location.href="invest.html";
+		}
+    }
+    
+	function borrow() {
+		//alert("我要借款");
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+			location.href="borrow.html";
+		}
+	}
+	
+	function help() {
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+			alert("帮助中心");
+		}
+	}
+	
+	function share() {
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+			location.href="allarticle.html";
+		}
+	}
+	
+	function companyProject(){
+		alert("进行投资");
+	}
+	
+	function lookusers() {
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+		location.href = "../page/user/alluser.html";
+		}
+	}
+	
+	function realmessage() {
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+			location.href = "realmessages.html";
+		}
+	}
+	function checkLogin(){
+		
+		var userid=JSON.parse(sessionStorage.getItem("userId1"));
+		console.log(typeof(userid));
+		console.log(typeof(null));
+		console.log("userid:"+userid);	
+		if(!userid && typeof(userid)!="undefined" && userid!=0){
+			$("#loginButton").show();
+			$("#registButton").show();
+			$("#unameSpan").hide();
+			return 0;
+		}else{
+			console.log("执行此处");
+			$("#loginButton").hide();
+			$("#registButton").hide();
+			$("#unameSpan").show();
+			
+			$.ajax({
+				url:"/HDB2/user/getOneUser",
+				type:"post",
+				data:{
+					"userid":sessionStorage.getItem("userId1")
+				},
+				cache:false,
+				asyc:false,
+				dataType:"json",
+				success:successfunction,
+				error:errorfunction
+			});
+			function successfunction(data){
+				layer.msg("请求数据成功",{
+					icon:1
+				});	
+				console.log(data);
+				if(data.result.uSex=='0'){
+					console.log(0);
+					var username="欢迎您："+data.result.uName+"先生";
+				}else{
+					var username="欢迎您："+data.result.uName+"女士";
+				}
+					$("#usernameSpan").html(username);
+			}
+			function errorfunction(){
+				console.log("请求失败",{
+					icon:1
+				});
+			}
+			return 1;
+		}
+	}
+</script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#show2").hide();
+		$("#show1").hide();
+		getUser();
+	});
+	function getFormatDate(mills) {
+		var d = new Date(mills);
+		var year = d.getFullYear();
+		var day = d.getDate();
+		var month = +d.getMonth() + 1;
+		var hour = d.getHours();
+		var minute = d.getMinutes();
+		var second = d.getSeconds();
+		var misec = d.getMilliseconds();
+		var f = year + "-" + formate(month) + "-" + formate(day) + " "
+				+ formate(hour) + ":" + formate(minute) + ":" + formate(second);
+		return f;
+	}
+	function formate(d) {
+		return d > 9 ? d : '0' + d;
+	}
+
+	function check() {
+		var u_realname = $("#u_realname").val();
+		var u_idcard = $("#u_idcard").val();
+		var u_paypassword = $("#u_paypassword1").val();
+
+		var regName = /^[\u4e00-\u9fa5]{2,4}$/;
+		if (!regName.test(u_realname)) {
+			$("#u_realnameInfo").html("姓名填写有误");
+			return 0;
+		} else {
+			$("#u_realnameInfo").html("");
+		}
+
+		var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+		if (!reg.test(u_idcard)) {
+			$("#u_idcardInfo").html("身份证输入有误");
+			return 0;
+		} else {
+			$("#u_idcardInfo").html("");
+		}
+		console.log("u_paypassword:" + u_paypassword);
+		if (u_paypassword == "" || u_paypassword == null) {
+			$("#u_paypasswordInfo").html("密码不能为空");
+			return 0;
+		} else {
+			$("#u_paypasswordInfo").html("");
+		}
+		console.log(1);
+		return 1;
+	}
+
+	function getData() {
+		var message = check();
+		if (0 == message) {
+			return;
+		}
+		var hukouAddress = $("#province4").val() + $("#city4").val()
+				+ $("#district4").val();
+		var nowAddress = $("#province3").val() + $("#city3").val()
+				+ $("#district3").val();
+		console.log("hukouAddress:" + hukouAddress);
+		console.log("nowAddress:" + nowAddress);
+		$.ajax({
+			url : "/HDB2/user/realmessages",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+			type : "post",//规定请求的类型（GET 或 POST）。
+			data : {
+				"u_realname" : $("#u_realname").val(),
+				"u_idcard" : $("#u_idcard").val(),
+				"u_paypassword" : $("#u_paypassword1").val(),
+				"hukouAddress" : hukouAddress,
+				"nowAddress" : nowAddress,
+				"userId" : sessionStorage.getItem("userId1")
+			},//规定要发送到服务器的数据。
+			async : false,//是否异步处理
+			cache : false,//浏览器是否缓存被请求页面
+			dataType : "json",//预期的服务器响应的数据类型。
+			success : function(data) {//当请求成功时运行的函数。
+				if (0 == data.result) {
+					layer.msg("请求成功,认证失败", {
+						icon : 1
+					});
+				}
+				if (1 == data.result) {
+					layer.msg("请求成功,认证成功", {
+						icon : 1
+					});
+					getUser();
+				}
+			},
+			error : function(data) {// 如果请求失败要运行的函数。
+				layer.msg("请求失败", {
+					icon : 1
+				});
+			}
+		});
+	}
+
+	function getUser() {
+		$.ajax({
+			url : "/HDB2/user/getOneUser",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+			type : "post",//规定请求的类型（GET 或 POST）。
+			data : {
+				"userid" : sessionStorage.getItem("userId1")
+			},//规定要发送到服务器的数据。
+			async : false,//是否异步处理
+			cache : false,//浏览器是否缓存被请求页面
+			dataType : "json",//预期的服务器响应的数据类型。
+			success : function(data) {//当请求成功时运行的函数。
+				layer.msg("请求成功", {
+					icon : 1
+				});
+				console.info(data);
+				$("#u_name").html(data.result.uName);
+				$("#u_sex").html(data.result.uSex);
+				$("#u_nickname").html(data.result.uNickname);
+				$("#u_phone").html(data.result.uPhone);
+				$("#u_registime").html(getFormatDate(data.result.uRegistime));
+				$("#u_lastlogintime").html(
+						getFormatDate(data.result.uLastlogintime));
+				if (data.result.uState == "0") {
+					$("#u_state").html("待实名认证");
+					$("#show1").hide();
+					$("#show2").show();
+					show2.style.display = '';
+					show1.style.display = 'none';
+				} else if (data.result.uState == "1") {
+					$("#u_state").html("通过实名认证");
+					$("#show2").hide();
+					$("#show1").show();
+					$("#u_realname1").html(data.result.uRealname);
+					$("#u_idcard1").html(data.result.uIdcard);
+					$("#u_paypassword").html(data.result.uPaypassword);
+					$("#hukouAddress").html(data.result.uRealaddress);
+					$("#nowAddress").html(data.result.uAddress);
+				}
+				$("#u_creditworth").html(data.result.uCreditworth);
+			},
+
+			error : function(data) {// 如果请求失败要运行的函数。
+				layer.msg("请求失败", {
+					icon : 1
+				});
+			}
+		});
+	}
+
+	function hidemodel() {
+		$("#u_realname").val("");
+		$("#u_idcard").val("");
+		$("#u_paypassword1").val("");
+		$("#u_paypasswordInfo").html("");
+		$("#u_idcardInfo").html("");
+		$("#u_realnameInfo").html("");
+
+	}
+</script>
+</head>
+<body>
+
+	<div class="container" style="margin-top: 5%">
+<!-- 		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<nav class="navbar navbar-default navbar-fixed-top"
+					role="navigation">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse"
+							data-target="#bs-example-navbar-collapse-1">
+							<span class="sr-only">Toggle navigation</span> <span
+								class="icon-bar"></span> <span class="icon-bar"></span> <span
+								class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="#">HDB互联网金融平台</a>
+					</div>
+
+					<div class="collapse navbar-collapse"
+						id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav " style="margin-left: 20%;">
+							<li class=""><a href="javascript:void(0)"
+								onclick="shouye();">首页</a></li>
+							<li><a href="javascript:void(0)" onclick="lookusers();">查看用户</a></li>
+							<li class="dropdown"><a href="#" class="dropdown-toggle"
+								data-toggle="dropdown">个人中心<strong class="caret"></strong></a>
+								<ul class="dropdown-menu">
+									<li><a href="javascript:void(0)" onclick="bindorunbind();">绑卡/解绑</a></li>
+									<li><a href="javascript:void(0)"
+										onclick="personalAcount();">个人账户</a></li>
+									<li><a href="javascript:void(0)" onclick="realmessage();">实名认证</a></li>
+								</ul></li>
+							<li><a href="javascript:void(0)" onclick="investproject2();">我要投资</a></li>
+							<li><a href="javascript:void(0)" onclick="borrow();">我要借款</a></li>
+							<li><a href="javascript:void(0)" onclick="help();">帮助中心</a></li>
+							<li><a href="javascript:void(0)" onclick="share();">经验分享</a></li>
+						</ul>
+
+						<ul class="nav navbar-nav navbar-right" style="margin-right: 1%;">
+							<li><a href="javascript:void(0)" onclick="login();">登录</a></li>
+							<li><a href="javascript:void(0)" onclick="register();">注册</a></li>
+							<li><a href="javascript:void(0)" onclick="logout();">退出</a></li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+		</div> -->
+		
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<nav class="navbar navbar-default navbar-fixed-top"
+					role="navigation">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse"
+							data-target="#bs-example-navbar-collapse-1">
+							<span class="sr-only">Toggle navigation</span> <span
+								class="icon-bar"></span> <span class="icon-bar"></span> <span
+								class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="#">HDB互联网金融平台</a>
+					</div>
+					
+					<div class="collapse navbar-collapse"
+						id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav " style="margin-left: 20%;">
+							<li class=""><a href="javascript:void(0)"
+								onclick="shouye();">首页</a></li>
+<!-- 							<li><a href="javascript:void(0)" onclick="lookusers();">查看用户</a></li> -->
+							<li class="dropdown"><a href="#" class="dropdown-toggle"
+								data-toggle="dropdown">个人中心<strong class="caret"></strong></a>
+								<ul class="dropdown-menu">
+									<li><a href="javascript:void(0)"onclick="realmessage();">实名认证</a></li>
+									<li><a href="javascript:void(0)" onclick="bindorunbind();">绑卡/解绑</a></li>
+									<li><a href="javascript:void(0)"onclick="personalAcount();">个人账户</a></li>
+								</ul></li>
+							<li><a href="javascript:void(0)" onclick="investproject2();">我要投资</a></li>
+							<li><a href="javascript:void(0)" onclick="borrow();">我要借款</a></li>
+							<li><a href="javascript:void(0)" onclick="help();">帮助中心</a></li>
+							<li><a href="javascript:void(0)" onclick="share();">经验分享</a></li>
+						</ul>
+
+						<ul class="nav navbar-nav navbar-right" style="margin-right: 1%;">
+							<li id="loginButton"><a href="javascript:void(0)" onclick="login();">登录</a></li>
+							<li id="registButton"><a href="javascript:void(0)" onclick="register();">注册</a></li>
+							<li id="unameSpan" style="margin-top: 15px;"><span id="usernameSpan" ></span></li>
+							<li><a href="javascript:void(0)" onclick="logout();">退出</a></li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+		</div>
+		
+		<div class="row clearfix">
+			<div class="col-md-6 column">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">个人基本信息</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row clearfix" style="margin-left: 10px;">
+							<div class="col-md-3 column" style="text-align: center;">
+								<p>用户名：</p>
+							</div>
+							<div class="col-md-9 column" style="text-align: left;">
+								<p id="u_name">
+									是一个分布式的版本控制系统，最初由 <strong>Linus Torvalds</strong>
+									编写，用作Linux内核代码的管理。在推出后，Git在其它项目中也取得了很大成功，尤其是在 <small>Ruby</small>
+									社区中。
+								</p>
+							</div>
+						</div>
+						<div class="row clearfix" style="margin-left: 10px;">
+							<div class="col-md-3 column" style="text-align: center;">
+								<p>性别：</p>
+							</div>
+							<div class="col-md-9 column" style="text-align: left;">
+								<p id="u_sex">
+									是一个分布式的版本控制系统，最初由 <strong>Linus Torvalds</strong>
+									编写，用作Linux内核代码的管理。在推出后，Git在其它项目中也取得了很大成功，尤其是在 <small>Ruby</small>
+									社区中。
+								</p>
+							</div>
+						</div>
+						<div class="row clearfix" style="margin-left: 10px;">
+							<div class="col-md-3 column" style="text-align: center;">
+								<p>昵称：</p>
+							</div>
+							<div class="col-md-9 column" style="text-align: left;">
+								<p id="u_nickname">
+									是一个分布式的版本控制系统，最初由 <strong>Linus Torvalds</strong>
+									编写，用作Linux内核代码的管理。在推出后，Git在其它项目中也取得了很大成功，尤其是在 <small>Ruby</small>
+									社区中。
+								</p>
+							</div>
+						</div>
+						<div class="row clearfix" style="margin-left: 10px;">
+							<div class="col-md-3 column" style="text-align: center;">
+								<p>电话号码：</p>
+							</div>
+							<div class="col-md-9 column" style="text-align: left;">
+								<p id="u_phone">
+									是一个分布式的版本控制系统，最初由 <strong>Linus Torvalds</strong>
+									编写，用作Linux内核代码的管理。在推出后，Git在其它项目中也取得了很大成功，尤其是在 <small>Ruby</small>
+									社区中。
+								</p>
+							</div>
+						</div>
+						<div class="row clearfix" style="margin-left: 10px;">
+							<div class="col-md-3 column" style="text-align: center;">
+								<p>注册时间：</p>
+							</div>
+							<div class="col-md-9 column" style="text-align: left;">
+								<p id="u_registime">
+									是一个分布式的版本控制系统，最初由 <strong>Linus Torvalds</strong>
+									编写，用作Linux内核代码的管理。在推出后，Git在其它项目中也取得了很大成功，尤其是在 <small>Ruby</small>
+									社区中。
+								</p>
+							</div>
+						</div>
+						<div class="row clearfix" style="margin-left: 10px;">
+							<div class="col-md-3 column" style="text-align: center;">
+								<p>最后登录时间：</p>
+							</div>
+							<div class="col-md-9 column" style="text-align: left;">
+								<p id="u_lastlogintime">
+									是一个分布式的版本控制系统，最初由 <strong>Linus Torvalds</strong>
+									编写，用作Linux内核代码的管理。在推出后，Git在其它项目中也取得了很大成功，尤其是在 <small>Ruby</small>
+									社区中。
+								</p>
+							</div>
+						</div>
+						<div class="row clearfix" style="margin-left: 10px;">
+							<div class="col-md-3 column" style="text-align: center;">
+								<p>状态：</p>
+							</div>
+							<div class="col-md-9 column" style="text-align: left;">
+								<p id="u_state">
+									是一个分布式的版本控制系统，最初由 <strong>Linus Torvalds</strong>
+									编写，用作Linux内核代码的管理。在推出后，Git在其它项目中也取得了很大成功，尤其是在 <small>Ruby</small>
+									社区中。
+								</p>
+							</div>
+						</div>
+						<div class="row clearfix" style="margin-left: 10px;">
+							<div class="col-md-3 column" style="text-align: center;">
+								<p>信誉度：</p>
+							</div>
+							<div class="col-md-9 column" style="text-align: left;">
+								<p id="u_creditworth">
+									是一个分布式的版本控制系统，最初由 <strong>Linus Torvalds</strong>
+									编写，用作Linux内核代码的管理。在推出后，Git在其它项目中也取得了很大成功，尤其是在 <small>Ruby</small>
+									社区中。
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 column" id="show1">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">已通过实名认证</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row clearfix" style="margin-left: 10px;">
+							<div class="col-md-3 column" style="text-align: center;">
+								<p>真实姓名：</p>
+							</div>
+							<div class="col-md-9 column" style="text-align: left;">
+								<p id="u_realname1">
+									是一个分布式的版本控制系统，最初由 <strong>Linus Torvalds</strong>
+									编写，用作Linux内核代码的管理。在推出后，Git在其它项目中也取得了很大成功，尤其是在 <small>Ruby</small>
+									社区中。
+								</p>
+							</div>
+						</div>
+						<div class="row clearfix" style="margin-left: 10px;">
+							<div class="col-md-3 column" style="text-align: center;">
+								<p>身份证号：</p>
+							</div>
+							<div class="col-md-9 column" style="text-align: left;">
+								<p id="u_idcard1">
+									是一个分布式的版本控制系统，最初由 <strong>Linus Torvalds</strong>
+									编写，用作Linux内核代码的管理。在推出后，Git在其它项目中也取得了很大成功，尤其是在 <small>Ruby</small>
+									社区中。
+								</p>
+							</div>
+						</div>
+						<div class="row clearfix" style="margin-left: 10px;">
+							<div class="col-md-3 column" style="text-align: center;">
+								<p>支付密码：</p>
+							</div>
+							<div class="col-md-9 column" style="text-align: left;">
+								<p id="u_paypassword">
+									是一个分布式的版本控制系统，最初由 <strong>Linus Torvalds</strong>
+									编写，用作Linux内核代码的管理。在推出后，Git在其它项目中也取得了很大成功，尤其是在 <small>Ruby</small>
+									社区中。
+								</p>
+							</div>
+						</div>
+						<div class="row clearfix" style="margin-left: 10px;">
+							<div class="col-md-3 column" style="text-align: center;">
+								<p>户口所在地：</p>
+							</div>
+							<div class="col-md-9 column" style="text-align: left;">
+								<p id="hukouAddress">
+									是一个分布式的版本控制系统，最初由 <strong>Linus Torvalds</strong>
+									编写，用作Linux内核代码的管理。在推出后，Git在其它项目中也取得了很大成功，尤其是在 <small>Ruby</small>
+									社区中。
+								</p>
+							</div>
+						</div>
+						<div class="row clearfix" style="margin-left: 10px;">
+							<div class="col-md-3 column" style="text-align: center;">
+								<p>现居住地址：</p>
+							</div>
+							<div class="col-md-9 column" style="text-align: left;">
+								<p id="nowAddress">
+									是一个分布式的版本控制系统，最初由 <strong>Linus Torvalds</strong>
+									编写，用作Linux内核代码的管理。在推出后，Git在其它项目中也取得了很大成功，尤其是在 <small>Ruby</small>
+									社区中。
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 column" id="show2">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">实名认证信息</h3>
+					</div>
+					<div class="panel-body">
+						<form class="form-horizontal" role="form">
+							<div class="form-group">
+								<label for="u_realname" class="col-sm-3 control-label">真实姓名</label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control" id="u_realname"
+										style="width: 200px;"> <span id="u_realnameInfo"
+										style="color: red"></span>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="u_idcard" class="col-sm-3 control-label">身份证号</label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control" id="u_idcard"
+										style="width: 200px;"> <span id="u_idcardInfo"
+										style="color: red"></span>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="u_paypassword" class="col-sm-3 control-label">支付密码</label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control" id="u_paypassword1"
+										style="width: 200px;"> <span id="u_paypasswordInfo"
+										style="color: red"></span>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="c_province" class="col-sm-3 control-label">户口所在地</label>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-12">
+									<div class="form-inline" style="margin-left: 10%;">
+										<div id="distpicker4">
+											<div class="form-group">
+												<label class="sr-only" for="province4">Province</label> <select
+													class="form-control" name="Employee[province]"
+													id="province4"></select>
+											</div>
+											<div class="form-group" style="margin-left: 3%">
+												<label class="sr-only" for="city4">City</label> <select
+													class="form-control" name="Employee[city]" id="city4"></select>
+											</div>
+											<div class="form-group" style="margin-left: 3%;">
+												<label class="sr-only" for="district4">District</label> <select
+													class="form-control" name="Employee[district]"
+													id="district4"></select>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="c_province" class="col-sm-3 control-label">现居住地址</label>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-12">
+									<div class="form-inline" style="margin-left: 10%;">
+										<div id="distpicker3">
+											<div class="form-group">
+												<label class="sr-only" for="province3">Province</label> <select
+													class="form-control" name="Employee[province]"
+													id="province3"></select>
+											</div>
+											<div class="form-group" style="margin-left: 3%">
+												<label class="sr-only" for="city3">City</label> <select
+													class="form-control" name="Employee[city]" id="city3"></select>
+											</div>
+											<div class="form-group" style="margin-left: 3%;">
+												<label class="sr-only" for="district3">District</label> <select
+													class="form-control" name="Employee[district]"
+													id="district3"></select>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group" style="text-align: center;">
+								<button type="button" class="btn btn-primary"
+									onclick="getData()">认证</button>
+								<button type="button" class="btn btn-default"
+									onclick="hidemodel()">取消</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

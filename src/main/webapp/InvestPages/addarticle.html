@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>用户编写文章</title>
+
+<script type="text/javascript" src="../js/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../js/layer/layer.js"></script> 
+<link rel="stylesheet" type="text/css"  href="../easyui/css/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../easyui/css/themes/icon.css">
+<script type="text/javascript" src="../easyui/js/jquery.min.js"></script>
+<script type="text/javascript" src="../easyui/js/jquery.easyui.min.js"></script>
+
+<script type="text/javascript">
+function submit(){
+// 	sessionStorage.setItem("userId1",5);
+	if(check()==1){
+	$.ajax({
+		url:"/HDB2/article/addarticle",
+	    type:"post",
+	    data:{
+	    	"name":$("#name").val(),
+	    	"type":$("#type").val(),
+	        "introduction":$("#introduction").val(),
+	        "content":$("#content").val(),
+	        "userid":sessionStorage.getItem("userId1")
+	    },
+	    cache:false,
+		asyc:false,
+		dataType:"json",
+		success:successfunction,
+		error:errorfunction
+	});
+	
+	function successfunction(){
+		layer.msg("提交成功，请等待审核",{
+			icon:1,
+			time:2000
+		});
+		location.href="allarticle.html";
+	}
+	function errorfunction(){
+		layer.msg("提交失败",{
+			icon:2,
+			time:2000
+		});
+	}
+	}
+	function check(){
+		if($("#name").val()==null || $("#name").val()==""){
+			layer.msg("文章名为空",{
+				icon:2
+			});
+			return 0;
+		}
+		if($("#type").val()=='4' || $("#type").val()==""){
+			layer.msg("未选择文章类型",{
+				icon:2
+			});
+			return 0;
+		}
+		if($("#introduction").val()==null || $("#introduction").val()==""){
+			layer.msg("未填写文章简介",{
+				icon:2
+			});
+			return 0;
+		}
+		if($("#content").val()==null || $("#content").val()==""){
+			layer.msg("未编辑文章内容",{
+				icon:2
+			});
+			return 0;
+		}
+		return 1;
+	}
+}
+</script>
+</head>
+<body>
+<div>
+<table style="width:100%;text-align:center;" bgcolor="PaleTurquoise" rules="all" cellpadding="10px">
+<tr>
+<td width="20%">文章名</td>
+<td width="80%" align="left"><input type="text" id="name" style="width:500px"></td>
+</tr>
+<tr>
+<td>分类:</td>
+<td align="left"><select id="type">
+<option value="4">--请选择--</option>
+<option value="0">股票</option>
+<option value="1">期货</option>
+<option value="2">借贷</option>
+<option value="3">项目投资</option>
+</select></td>
+</tr>
+<tr>
+<td>文章简介</td>
+<td>
+<textarea rows="" cols="" id="introduction"></textarea>
+</td>
+</tr>
+<tr>
+<td>文章内容</td>
+<td>
+<textarea rows="" cols="" id="content"></textarea>
+</td>
+</tr>
+</table>
+<button type="button" onclick="submit()">发表文章</button>
+</div>
+</body>
+</html>

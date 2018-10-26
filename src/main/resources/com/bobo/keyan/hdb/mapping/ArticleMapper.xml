@@ -8,6 +8,9 @@
     <result column="atc_num2" property="atcNum2" jdbcType="INTEGER" />
     <result column="atc_publishtime" property="atcPublishtime" jdbcType="TIMESTAMP" />
     <result column="atc_name" property="atcName" jdbcType="VARCHAR" />
+    <result column="atc_authorid" property="atcAuthorid" jdbcType="INTEGER" />
+    <result column="atc_scrutid" property="atcScrutid" jdbcType="INTEGER" />
+    <result column="atc_state" property="atcState" jdbcType="CHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.bobo.keyan.hdb.model.ArticleWithBLOBs" extends="BaseResultMap" >
     <result column="atc_content" property="atcContent" jdbcType="LONGVARCHAR" />
@@ -72,7 +75,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    atc_id, atc_type, atc_num1, atc_num2, atc_publishtime, atc_name
+    atc_id, atc_type, atc_num1, atc_num2, atc_publishtime, atc_name, atc_authorid, atc_scrutid, 
+    atc_state
   </sql>
   <sql id="Blob_Column_List" >
     atc_content, atc_introduction
@@ -128,9 +132,11 @@
   <insert id="insert" parameterType="com.bobo.keyan.hdb.model.ArticleWithBLOBs" >
     insert into article (atc_id, atc_type, atc_num1, 
       atc_num2, atc_publishtime, atc_name, 
+      atc_authorid, atc_scrutid, atc_state, 
       atc_content, atc_introduction)
     values (#{atcId,jdbcType=INTEGER}, #{atcType,jdbcType=CHAR}, #{atcNum1,jdbcType=INTEGER}, 
       #{atcNum2,jdbcType=INTEGER}, #{atcPublishtime,jdbcType=TIMESTAMP}, #{atcName,jdbcType=VARCHAR}, 
+      #{atcAuthorid,jdbcType=INTEGER}, #{atcScrutid,jdbcType=INTEGER}, #{atcState,jdbcType=CHAR}, 
       #{atcContent,jdbcType=LONGVARCHAR}, #{atcIntroduction,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.bobo.keyan.hdb.model.ArticleWithBLOBs" >
@@ -153,6 +159,15 @@
       </if>
       <if test="atcName != null" >
         atc_name,
+      </if>
+      <if test="atcAuthorid != null" >
+        atc_authorid,
+      </if>
+      <if test="atcScrutid != null" >
+        atc_scrutid,
+      </if>
+      <if test="atcState != null" >
+        atc_state,
       </if>
       <if test="atcContent != null" >
         atc_content,
@@ -179,6 +194,15 @@
       </if>
       <if test="atcName != null" >
         #{atcName,jdbcType=VARCHAR},
+      </if>
+      <if test="atcAuthorid != null" >
+        #{atcAuthorid,jdbcType=INTEGER},
+      </if>
+      <if test="atcScrutid != null" >
+        #{atcScrutid,jdbcType=INTEGER},
+      </if>
+      <if test="atcState != null" >
+        #{atcState,jdbcType=CHAR},
       </if>
       <if test="atcContent != null" >
         #{atcContent,jdbcType=LONGVARCHAR},
@@ -215,6 +239,15 @@
       <if test="record.atcName != null" >
         atc_name = #{record.atcName,jdbcType=VARCHAR},
       </if>
+      <if test="record.atcAuthorid != null" >
+        atc_authorid = #{record.atcAuthorid,jdbcType=INTEGER},
+      </if>
+      <if test="record.atcScrutid != null" >
+        atc_scrutid = #{record.atcScrutid,jdbcType=INTEGER},
+      </if>
+      <if test="record.atcState != null" >
+        atc_state = #{record.atcState,jdbcType=CHAR},
+      </if>
       <if test="record.atcContent != null" >
         atc_content = #{record.atcContent,jdbcType=LONGVARCHAR},
       </if>
@@ -234,6 +267,9 @@
       atc_num2 = #{record.atcNum2,jdbcType=INTEGER},
       atc_publishtime = #{record.atcPublishtime,jdbcType=TIMESTAMP},
       atc_name = #{record.atcName,jdbcType=VARCHAR},
+      atc_authorid = #{record.atcAuthorid,jdbcType=INTEGER},
+      atc_scrutid = #{record.atcScrutid,jdbcType=INTEGER},
+      atc_state = #{record.atcState,jdbcType=CHAR},
       atc_content = #{record.atcContent,jdbcType=LONGVARCHAR},
       atc_introduction = #{record.atcIntroduction,jdbcType=LONGVARCHAR}
     <if test="_parameter != null" >
@@ -247,7 +283,10 @@
       atc_num1 = #{record.atcNum1,jdbcType=INTEGER},
       atc_num2 = #{record.atcNum2,jdbcType=INTEGER},
       atc_publishtime = #{record.atcPublishtime,jdbcType=TIMESTAMP},
-      atc_name = #{record.atcName,jdbcType=VARCHAR}
+      atc_name = #{record.atcName,jdbcType=VARCHAR},
+      atc_authorid = #{record.atcAuthorid,jdbcType=INTEGER},
+      atc_scrutid = #{record.atcScrutid,jdbcType=INTEGER},
+      atc_state = #{record.atcState,jdbcType=CHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -270,6 +309,15 @@
       <if test="atcName != null" >
         atc_name = #{atcName,jdbcType=VARCHAR},
       </if>
+      <if test="atcAuthorid != null" >
+        atc_authorid = #{atcAuthorid,jdbcType=INTEGER},
+      </if>
+      <if test="atcScrutid != null" >
+        atc_scrutid = #{atcScrutid,jdbcType=INTEGER},
+      </if>
+      <if test="atcState != null" >
+        atc_state = #{atcState,jdbcType=CHAR},
+      </if>
       <if test="atcContent != null" >
         atc_content = #{atcContent,jdbcType=LONGVARCHAR},
       </if>
@@ -286,6 +334,9 @@
       atc_num2 = #{atcNum2,jdbcType=INTEGER},
       atc_publishtime = #{atcPublishtime,jdbcType=TIMESTAMP},
       atc_name = #{atcName,jdbcType=VARCHAR},
+      atc_authorid = #{atcAuthorid,jdbcType=INTEGER},
+      atc_scrutid = #{atcScrutid,jdbcType=INTEGER},
+      atc_state = #{atcState,jdbcType=CHAR},
       atc_content = #{atcContent,jdbcType=LONGVARCHAR},
       atc_introduction = #{atcIntroduction,jdbcType=LONGVARCHAR}
     where atc_id = #{atcId,jdbcType=INTEGER}
@@ -296,7 +347,10 @@
       atc_num1 = #{atcNum1,jdbcType=INTEGER},
       atc_num2 = #{atcNum2,jdbcType=INTEGER},
       atc_publishtime = #{atcPublishtime,jdbcType=TIMESTAMP},
-      atc_name = #{atcName,jdbcType=VARCHAR}
+      atc_name = #{atcName,jdbcType=VARCHAR},
+      atc_authorid = #{atcAuthorid,jdbcType=INTEGER},
+      atc_scrutid = #{atcScrutid,jdbcType=INTEGER},
+      atc_state = #{atcState,jdbcType=CHAR}
     where atc_id = #{atcId,jdbcType=INTEGER}
   </update>
 </mapper>

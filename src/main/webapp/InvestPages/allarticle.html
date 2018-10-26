@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>文章主页面用户用</title>
+<script type="text/javascript" src="../js/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../js/layer/layer.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	getdata();
+});
+function getdata(){
+	$.ajax({
+		url:"/HDB2/article/selectAllarticle",
+		type:"post",
+		data:{},
+		cache:false,
+		asyc:false,
+		dataType:"json",
+		success:successfunction,
+		error:errorfunction
+	});
+	function successfunction(data){
+		layer.msg("请求数据成功");	
+		if(data.result.length==0){
+			$("#articleList").html('');
+			td="";
+			return;
+		}			
+		var td="";
+		$.each(data.result,function(index,item){
+			td+="<tr>"+
+			    "<td>"+(index+1)+"</td>"+
+			    "<td>"+item.atcId+"</td>"+
+			    "<td>"+item.atcName+"</td>"+
+			    "<td>"+item.atcType+"</td>";
+			    td+= "<td>"+item.atcNum1+"</td>"+
+			         "<td>"+item.atcNum2+"</td>"+
+			         "<td>"+getFormatDate(item.atcPublishtime)+"</td>"+
+			         "<td>"+item.atcIntroduction+"</td>";
+			         var praise="<a href='javascript:void(0)'  onclick=\"patc('"+item.atcId+"','"+item.atcNum1+"')\">【点赞】</a>";
+			         var criticism=exam="<a href='javascript:void(0)'  onclick=\"catc('"+item.atcId+"','"+item.atcNum2+"')\">【踩】</a>";
+			         td+="<td>"+praise+"</td>"+"<td>"+criticism+"</td>";
+			     td+="</tr>";
+		})
+			$("#articleList").html('');
+			$("#articleList").html(td);
+			td="";
+	}
+	function errorfunction(){
+		console.log("请求失败");
+	}
+}
+function patc(atcid,num){
+	$.ajax({
+		url:"/HDB2/article/praiseAtc",
+		type:"post",
+		data:{
+			"atcid":atcid,
+			"num1":num
+		},
+		cache:false,
+		asyc:false,
+		dataType:"json",
+		success:praisesuccessfunction,
+		error:praiseerrorfunction
+	});
+	function praisesuccessfunction(){
+		layer.msg("点赞成功",{
+			icon:1,
+			time:2000
+		});
+		window.location.reload();
+	}
+	function praiseerrorfunction(){
+		layer.msg("点赞失败",{
+			icon:2,
+			time:2000
+		});
+	}
+}
+function catc(atcid,num){
+	$.ajax({
+		url:"/HDB2/article/criAtc",
+		type:"post",
+		data:{
+			"atcid":atcid,
+			"num2":num
+		},
+		cache:false,
+		asyc:false,
+		dataType:"json",
+		success:crisuccessfunction,
+		error:crierrorfunction
+	});
+	function crisuccessfunction(){
+		layer.msg("踩成功",{
+			icon:1,
+			time:2000
+		});
+		window.location.reload();
+	}
+	function crierrorfunction(){
+		layer.msg("踩失败",{
+			icon:2,
+			time:2000
+		});
+	}
+}
+function getFormatDate(mills){
+	var d=new Date(mills);
+	var year=d.getFullYear();
+	var day=d.getDate();
+	var month=+d.getMonth()+1;
+	var hour=d.getHours();
+	var minute=d.getMinutes();
+	var second=d.getSeconds();
+	var misec=d.getMilliseconds();
+	var f=year+"-"+formate(month)+"-"+formate(day)+" "+formate(hour)+":"+formate(minute)+":"+formate(second);
+	return f;
+	}
+	function formate(d){
+	return d>9?d:'0'+d;
+}
+	function addarticle(){
+		location.href="addarticle.html";
+	}
+</script>
+</head>
+<body>
+<div>
+<button type="button" onclick="addarticle()">发表文章</button>
+</div>
+<div>
+<table>
+<thead>
+			<tr>
+			    <th>序号</th>
+			    <th>文章ID</th>
+			    <th>文章名</th>
+				<th>文章类型</th>
+				<th>点赞人数</th>
+				<th>踩人数</th>
+				<th>发布时间</th>				
+				<th>简介</th>
+				<th>点赞</th>
+				<th>不喜欢</th>		
+			</tr>
+		</thead>
+		<tbody id="articleList">
+		
+		</tbody>
+</table>
+</div>
+</body>
+</html>

@@ -20,6 +20,10 @@
     <result column="u_realname" property="uRealname" jdbcType="VARCHAR" />
     <result column="u_sex" property="uSex" jdbcType="CHAR" />
     <result column="u_realaddress" property="uRealaddress" jdbcType="VARCHAR" />
+    <result column="u_email" property="uEmail" jdbcType="VARCHAR" />
+    <result column="is_active" property="isActive" jdbcType="INTEGER" />
+    <result column="activation_code" property="activationCode" jdbcType="VARCHAR" />
+    <result column="activation_code_time" property="activationCodeTime" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -82,7 +86,8 @@
   <sql id="Base_Column_List" >
     u_id, u_name, u_loginpassword, u_nickname, u_phone, u_lastlogintime, u_registime, 
     u_state, u_balance, u_principal, u_interest, u_address, u_idcard, u_paypassword, 
-    u_creditworth, u_realname, u_sex, u_realaddress
+    u_creditworth, u_realname, u_sex, u_realaddress, u_email, is_active, activation_code, 
+    activation_code_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bobo.keyan.hdb.model.UserExample" >
     select
@@ -97,6 +102,11 @@
     <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
+    <!--     添加分页 胡波 2018-10-05 -->
+    <if test="startRow != null and pageSize != null and pageSize != 0">
+    	limit #{startRow},#{pageSize}
+	</if>
+<!-- 	添加分页结束 -->
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -120,15 +130,17 @@
       u_registime, u_state, u_balance, 
       u_principal, u_interest, u_address, 
       u_idcard, u_paypassword, u_creditworth, 
-      u_realname, u_sex, u_realaddress
-      )
+      u_realname, u_sex, u_realaddress, 
+      u_email, is_active, activation_code, 
+      activation_code_time)
     values (#{uId,jdbcType=INTEGER}, #{uName,jdbcType=VARCHAR}, #{uLoginpassword,jdbcType=VARCHAR}, 
       #{uNickname,jdbcType=VARCHAR}, #{uPhone,jdbcType=VARCHAR}, #{uLastlogintime,jdbcType=TIMESTAMP}, 
       #{uRegistime,jdbcType=TIMESTAMP}, #{uState,jdbcType=CHAR}, #{uBalance,jdbcType=DECIMAL}, 
       #{uPrincipal,jdbcType=DECIMAL}, #{uInterest,jdbcType=DECIMAL}, #{uAddress,jdbcType=VARCHAR}, 
       #{uIdcard,jdbcType=VARCHAR}, #{uPaypassword,jdbcType=VARCHAR}, #{uCreditworth,jdbcType=INTEGER}, 
-      #{uRealname,jdbcType=VARCHAR}, #{uSex,jdbcType=CHAR}, #{uRealaddress,jdbcType=VARCHAR}
-      )
+      #{uRealname,jdbcType=VARCHAR}, #{uSex,jdbcType=CHAR}, #{uRealaddress,jdbcType=VARCHAR}, 
+      #{uEmail,jdbcType=VARCHAR}, #{isActive,jdbcType=INTEGER}, #{activationCode,jdbcType=VARCHAR}, 
+      #{activationCodeTime,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.bobo.keyan.hdb.model.User" >
     insert into user
@@ -187,6 +199,18 @@
       <if test="uRealaddress != null" >
         u_realaddress,
       </if>
+      <if test="uEmail != null" >
+        u_email,
+      </if>
+      <if test="isActive != null" >
+        is_active,
+      </if>
+      <if test="activationCode != null" >
+        activation_code,
+      </if>
+      <if test="activationCodeTime != null" >
+        activation_code_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="uId != null" >
@@ -242,6 +266,18 @@
       </if>
       <if test="uRealaddress != null" >
         #{uRealaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="uEmail != null" >
+        #{uEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="isActive != null" >
+        #{isActive,jdbcType=INTEGER},
+      </if>
+      <if test="activationCode != null" >
+        #{activationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="activationCodeTime != null" >
+        #{activationCodeTime,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -308,6 +344,18 @@
       <if test="record.uRealaddress != null" >
         u_realaddress = #{record.uRealaddress,jdbcType=VARCHAR},
       </if>
+      <if test="record.uEmail != null" >
+        u_email = #{record.uEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isActive != null" >
+        is_active = #{record.isActive,jdbcType=INTEGER},
+      </if>
+      <if test="record.activationCode != null" >
+        activation_code = #{record.activationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activationCodeTime != null" >
+        activation_code_time = #{record.activationCodeTime,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -332,7 +380,11 @@
       u_creditworth = #{record.uCreditworth,jdbcType=INTEGER},
       u_realname = #{record.uRealname,jdbcType=VARCHAR},
       u_sex = #{record.uSex,jdbcType=CHAR},
-      u_realaddress = #{record.uRealaddress,jdbcType=VARCHAR}
+      u_realaddress = #{record.uRealaddress,jdbcType=VARCHAR},
+      u_email = #{record.uEmail,jdbcType=VARCHAR},
+      is_active = #{record.isActive,jdbcType=INTEGER},
+      activation_code = #{record.activationCode,jdbcType=VARCHAR},
+      activation_code_time = #{record.activationCodeTime,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -391,6 +443,18 @@
       <if test="uRealaddress != null" >
         u_realaddress = #{uRealaddress,jdbcType=VARCHAR},
       </if>
+      <if test="uEmail != null" >
+        u_email = #{uEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="isActive != null" >
+        is_active = #{isActive,jdbcType=INTEGER},
+      </if>
+      <if test="activationCode != null" >
+        activation_code = #{activationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="activationCodeTime != null" >
+        activation_code_time = #{activationCodeTime,jdbcType=VARCHAR},
+      </if>
     </set>
     where u_id = #{uId,jdbcType=INTEGER}
   </update>
@@ -412,7 +476,11 @@
       u_creditworth = #{uCreditworth,jdbcType=INTEGER},
       u_realname = #{uRealname,jdbcType=VARCHAR},
       u_sex = #{uSex,jdbcType=CHAR},
-      u_realaddress = #{uRealaddress,jdbcType=VARCHAR}
+      u_realaddress = #{uRealaddress,jdbcType=VARCHAR},
+      u_email = #{uEmail,jdbcType=VARCHAR},
+      is_active = #{isActive,jdbcType=INTEGER},
+      activation_code = #{activationCode,jdbcType=VARCHAR},
+      activation_code_time = #{activationCodeTime,jdbcType=VARCHAR}
     where u_id = #{uId,jdbcType=INTEGER}
   </update>
 </mapper>

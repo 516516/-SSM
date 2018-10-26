@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="layer/layer.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		getDate();
+	});
+	function getFormatDate(mills){
+		var d=new Date(mills);
+		var year=d.getFullYear();
+		var day=d.getDate();
+		var month=+d.getMonth()+1;
+		var hour=d.getHours();
+		var minute=d.getMinutes();
+		var second=d.getSeconds();
+		var misec=d.getMilliseconds();
+		var f=year+"-"+formate(month)+"-"+formate(day)+" "+formate(hour)+":"+formate(minute)+":"+formate(second);
+		return f;
+		}
+		function formate(d){
+		return d>9?d:'0'+d;
+	}
+		
+	function getDate(){
+		$.ajax({
+			url:"/HDB2/audite/getMyselfAudite",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+			type:"post",//规定请求的类型（GET 或 POST）。
+			data:{
+				"userId":sessionStorage.getItem("userId1")
+			},//规定要发送到服务器的数据。
+			async:false,//是否异步处理
+			cache:false,//浏览器是否缓存被请求页面
+			dataType:"json",//预期的服务器响应的数据类型。
+			success:function(data){//当请求成功时运行的函数。
+				console.info(data.result);
+				var td="";
+			    if(0==data.result.length){
+			    	$("#tablelist").html('');
+			    	td="";
+			    	return ;
+			    }
+			    $.each(data.result,function(index,item){
+			    	td+="<tr>";
+			    	td+="<td>"+(index+1)+"</td>";
+			    	td+="<td>"+item.aAmount+"</td>";
+			    	td+="<td>"+getFormatDate(item.aApplytime)+"</td>";
+			    	td+="<td>"+item.aDateline+"</td>";
+			    	td+="<td>"+item.aId+"</td>";
+			    	td+="<td>"+item.aInterest+"</td>";
+			    	if("0"===item.aState){
+			    		td+="<td>"+"待审核"+"</td>";
+			    	}else if("1"===item.aState){
+			    		td+="<td>"+"筹款"+"</td>";
+			    	}else if("2"===item.aState){
+			    		td+="<td>"+"还款"+"</td>";
+			    	}else if("3"===item.aState){
+			    		td+="<td>"+"完成"+"</td>";
+			    	}else if("4"===item.aState){
+			    		td+="<td>"+"审核未通过"+"</td>";
+			    	}
+			    	td+="</tr>"
+			    });
+		    	$("#tablelist").html('');
+		    	$("#tablelist").append(td);
+		    	td="";
+				if(0==data.result){
+					layer.msg("请求成功,添加到project数据表中失败",{
+						icon:1
+					});
+				}
+			},
+			error:function(data){// 如果请求失败要运行的函数。
+				layer.msg("请求失败",{
+					icon:1
+				});
+			}
+		});
+	}
+</script>
+</head>
+<body>
+
+<div>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>序号</th>
+				<th>借款借款金额</th>
+				<th>申请时间</th>
+				<th>借款期限</th>
+				<th>借款ID</th>
+				<th>借款利息</th>
+				<th>状态</th>
+			</tr>
+		</thead>
+		<tbody id="tablelist">
+		</tbody>
+	</table>
+</div>
+
+</body>
+</html>

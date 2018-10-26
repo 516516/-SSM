@@ -8,6 +8,8 @@
     <result column="i_datetime" property="iDatetime" jdbcType="TIMESTAMP" />
     <result column="i_amount" property="iAmount" jdbcType="DECIMAL" />
     <result column="i_state" property="iState" jdbcType="CHAR" />
+    <result column="i_interest" property="iInterest" jdbcType="VARCHAR" />
+    <result column="i_message" property="iMessage" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -68,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    i_id, i_userid, i_projectid, i_datetime, i_amount, i_state
+    i_id, i_userid, i_projectid, i_datetime, i_amount, i_state, i_interest, i_message
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bobo.keyan.hdb.model.InvestExample" >
     select
@@ -83,6 +85,11 @@
     <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
+    <!--     添加分页 胡波 2018-10-05 -->
+    <if test="startRow != null and pageSize != null and pageSize != 0">
+    	limit #{startRow},#{pageSize}
+	</if>
+<!-- 	添加分页结束 -->
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -102,11 +109,11 @@
   </delete>
   <insert id="insert" parameterType="com.bobo.keyan.hdb.model.Invest" >
     insert into invest (i_id, i_userid, i_projectid, 
-      i_datetime, i_amount, i_state
-      )
+      i_datetime, i_amount, i_state, 
+      i_interest, i_message)
     values (#{iId,jdbcType=INTEGER}, #{iUserid,jdbcType=INTEGER}, #{iProjectid,jdbcType=INTEGER}, 
-      #{iDatetime,jdbcType=TIMESTAMP}, #{iAmount,jdbcType=DECIMAL}, #{iState,jdbcType=CHAR}
-      )
+      #{iDatetime,jdbcType=TIMESTAMP}, #{iAmount,jdbcType=DECIMAL}, #{iState,jdbcType=CHAR}, 
+      #{iInterest,jdbcType=VARCHAR}, #{iMessage,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.bobo.keyan.hdb.model.Invest" >
     insert into invest
@@ -129,6 +136,12 @@
       <if test="iState != null" >
         i_state,
       </if>
+      <if test="iInterest != null" >
+        i_interest,
+      </if>
+      <if test="iMessage != null" >
+        i_message,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="iId != null" >
@@ -148,6 +161,12 @@
       </if>
       <if test="iState != null" >
         #{iState,jdbcType=CHAR},
+      </if>
+      <if test="iInterest != null" >
+        #{iInterest,jdbcType=VARCHAR},
+      </if>
+      <if test="iMessage != null" >
+        #{iMessage,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -178,6 +197,12 @@
       <if test="record.iState != null" >
         i_state = #{record.iState,jdbcType=CHAR},
       </if>
+      <if test="record.iInterest != null" >
+        i_interest = #{record.iInterest,jdbcType=VARCHAR},
+      </if>
+      <if test="record.iMessage != null" >
+        i_message = #{record.iMessage,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -190,7 +215,9 @@
       i_projectid = #{record.iProjectid,jdbcType=INTEGER},
       i_datetime = #{record.iDatetime,jdbcType=TIMESTAMP},
       i_amount = #{record.iAmount,jdbcType=DECIMAL},
-      i_state = #{record.iState,jdbcType=CHAR}
+      i_state = #{record.iState,jdbcType=CHAR},
+      i_interest = #{record.iInterest,jdbcType=VARCHAR},
+      i_message = #{record.iMessage,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -213,6 +240,12 @@
       <if test="iState != null" >
         i_state = #{iState,jdbcType=CHAR},
       </if>
+      <if test="iInterest != null" >
+        i_interest = #{iInterest,jdbcType=VARCHAR},
+      </if>
+      <if test="iMessage != null" >
+        i_message = #{iMessage,jdbcType=VARCHAR},
+      </if>
     </set>
     where i_id = #{iId,jdbcType=INTEGER}
   </update>
@@ -222,7 +255,9 @@
       i_projectid = #{iProjectid,jdbcType=INTEGER},
       i_datetime = #{iDatetime,jdbcType=TIMESTAMP},
       i_amount = #{iAmount,jdbcType=DECIMAL},
-      i_state = #{iState,jdbcType=CHAR}
+      i_state = #{iState,jdbcType=CHAR},
+      i_interest = #{iInterest,jdbcType=VARCHAR},
+      i_message = #{iMessage,jdbcType=VARCHAR}
     where i_id = #{iId,jdbcType=INTEGER}
   </update>
 </mapper>

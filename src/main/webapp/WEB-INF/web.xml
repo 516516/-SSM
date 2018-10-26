@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
             http://java.sun.com/xml/ns/javaee
-            http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
+            http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
 	<!-- 项目名 -->
 	<display-name>HDB2</display-name>
 
@@ -14,9 +17,15 @@
 	<!-- Spring和mybatis的配置文件 -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:config/spring-mybatis.xml</param-value>
+		<param-value>classpath:config/spring-mybatis.xml,classpath:config/applicationContext*.xml</param-value>
 	</context-param>
 
+<!-- 	加载spring的配置文件，例如hibernate、jms等集成 -->
+<!-- 	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:applicationContext*.xml</param-value>
+	</context-param> -->
+	
 	<!-- 编码过滤器 -->
 	<filter>
 		<filter-name>encodingFilter</filter-name>
@@ -27,7 +36,7 @@
 			<param-value>UTF-8</param-value>
 		</init-param>
 	</filter>
-	
+
 	<filter-mapping>
 		<filter-name>encodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -54,11 +63,11 @@
 		<load-on-startup>1</load-on-startup>
 		<async-supported>true</async-supported>
 	</servlet>
-		
+	
 	<servlet-mapping>
 		<servlet-name>SpringMVC</servlet-name>
 		<!-- 此处可以可以配置成*.do，对应struts的后缀习惯 -->
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-	
+
 </web-app>

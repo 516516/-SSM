@@ -484,6 +484,196 @@ public class ArticleExample {
             addCriterion("atc_name not between", value1, value2, "atcName");
             return (Criteria) this;
         }
+
+        public Criteria andAtcAuthoridIsNull() {
+            addCriterion("atc_authorid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcAuthoridIsNotNull() {
+            addCriterion("atc_authorid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcAuthoridEqualTo(Integer value) {
+            addCriterion("atc_authorid =", value, "atcAuthorid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcAuthoridNotEqualTo(Integer value) {
+            addCriterion("atc_authorid <>", value, "atcAuthorid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcAuthoridGreaterThan(Integer value) {
+            addCriterion("atc_authorid >", value, "atcAuthorid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcAuthoridGreaterThanOrEqualTo(Integer value) {
+            addCriterion("atc_authorid >=", value, "atcAuthorid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcAuthoridLessThan(Integer value) {
+            addCriterion("atc_authorid <", value, "atcAuthorid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcAuthoridLessThanOrEqualTo(Integer value) {
+            addCriterion("atc_authorid <=", value, "atcAuthorid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcAuthoridIn(List<Integer> values) {
+            addCriterion("atc_authorid in", values, "atcAuthorid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcAuthoridNotIn(List<Integer> values) {
+            addCriterion("atc_authorid not in", values, "atcAuthorid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcAuthoridBetween(Integer value1, Integer value2) {
+            addCriterion("atc_authorid between", value1, value2, "atcAuthorid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcAuthoridNotBetween(Integer value1, Integer value2) {
+            addCriterion("atc_authorid not between", value1, value2, "atcAuthorid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcScrutidIsNull() {
+            addCriterion("atc_scrutid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcScrutidIsNotNull() {
+            addCriterion("atc_scrutid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcScrutidEqualTo(Integer value) {
+            addCriterion("atc_scrutid =", value, "atcScrutid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcScrutidNotEqualTo(Integer value) {
+            addCriterion("atc_scrutid <>", value, "atcScrutid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcScrutidGreaterThan(Integer value) {
+            addCriterion("atc_scrutid >", value, "atcScrutid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcScrutidGreaterThanOrEqualTo(Integer value) {
+            addCriterion("atc_scrutid >=", value, "atcScrutid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcScrutidLessThan(Integer value) {
+            addCriterion("atc_scrutid <", value, "atcScrutid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcScrutidLessThanOrEqualTo(Integer value) {
+            addCriterion("atc_scrutid <=", value, "atcScrutid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcScrutidIn(List<Integer> values) {
+            addCriterion("atc_scrutid in", values, "atcScrutid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcScrutidNotIn(List<Integer> values) {
+            addCriterion("atc_scrutid not in", values, "atcScrutid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcScrutidBetween(Integer value1, Integer value2) {
+            addCriterion("atc_scrutid between", value1, value2, "atcScrutid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcScrutidNotBetween(Integer value1, Integer value2) {
+            addCriterion("atc_scrutid not between", value1, value2, "atcScrutid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcStateIsNull() {
+            addCriterion("atc_state is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcStateIsNotNull() {
+            addCriterion("atc_state is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcStateEqualTo(String value) {
+            addCriterion("atc_state =", value, "atcState");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcStateNotEqualTo(String value) {
+            addCriterion("atc_state <>", value, "atcState");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcStateGreaterThan(String value) {
+            addCriterion("atc_state >", value, "atcState");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcStateGreaterThanOrEqualTo(String value) {
+            addCriterion("atc_state >=", value, "atcState");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcStateLessThan(String value) {
+            addCriterion("atc_state <", value, "atcState");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcStateLessThanOrEqualTo(String value) {
+            addCriterion("atc_state <=", value, "atcState");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcStateLike(String value) {
+            addCriterion("atc_state like", value, "atcState");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcStateNotLike(String value) {
+            addCriterion("atc_state not like", value, "atcState");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcStateIn(List<String> values) {
+            addCriterion("atc_state in", values, "atcState");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcStateNotIn(List<String> values) {
+            addCriterion("atc_state not in", values, "atcState");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcStateBetween(String value1, String value2) {
+            addCriterion("atc_state between", value1, value2, "atcState");
+            return (Criteria) this;
+        }
+
+        public Criteria andAtcStateNotBetween(String value1, String value2) {
+            addCriterion("atc_state not between", value1, value2, "atcState");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

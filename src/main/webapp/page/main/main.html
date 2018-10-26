@@ -8,7 +8,8 @@
 
 <script type="text/javascript">
 
-	$(document).ready(function(){
+	$(document).ready(function(){	
+		$("#investdiv").hide();
 		getAllProject();
 		getsession();
 		var itemvalue=sessionStorage.getItem("userId1");
@@ -48,8 +49,9 @@
 					    "<td>"+getFormatDate(item.pAddtime)+"</td>"+
 					    "<td>"+item.pAuditorId+"</td>"+
 					    "<td>"+getFormatDate(item.pExamineDate)+"</td>"+
-					    "<td>"+item.pRate+"</td>";
-					    /* "<td>"+item.pState+"</td>"+ */
+					    "<td>"+item.pRate+"</td>"+
+					    "<td>"+item.pAmount+"</td>"+
+					    "<td>"+item.pInvestAmount+"</td>";					    /* "<td>"+item.pState+"</td>"+ */
 					    if(item.pState=="0"){
 					    	td+="<td>筹资</td>";
 					    }else if(item.pState=="1"){
@@ -65,12 +67,62 @@
 					    }else{
 					    	td+="<td>"+" "+"</td>";
 					    }
-					    td+="<td>"+item.pIntroduction+"</td>"; 
+					    var exam="<a href='javascript:void(0)'  onclick=\"exam('"+item.pId+"')\">【投资】</a>";
+						td+="<td>"+exam+"</td>";
 					td+="</tr>";
 				})
 				$("#tablelist").html('');
 				$("#tablelist").append(td);
 				td="";
+			},
+			error:function(data){// 如果请求失败要运行的函数。
+				layer.msg("请求失败",{
+					icon:1
+				});
+			}
+		});
+	}
+	var projectid=0;
+	function exam(pId){
+		projectid=pId;
+		$("#investdiv").show();
+	}
+	function sendMessage(){
+		$.ajax({
+			url:"/HDB2/invest/procuctAcount",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+			type:"post",//规定请求的类型（GET 或 POST）。
+			data:{
+				"projectid":projectid,
+				"userid":sessionStorage.getItem("userId1"),
+				"interst":$("#interst").val(),
+				"amount":$("#amount").val()
+			},//规定要发送到服务器的数据。
+			async:false,//是否异步处理。
+			cache:false,//浏览器是否缓存被请求页面
+			dataType:"json",//预期的服务器响应的数据类型。
+			success:function(data){//当请求成功时运行的函数。
+				if(data.result==1){
+					layer.msg("投资失败,项目所需的金额小于所投资金额,请调整金额后投资",{
+						icon:1
+					});
+				}
+				if(data.result==0){
+					layer.msg("投资失败,个人余额不足,请充值后投资",{
+						icon:1
+					});
+				}
+				if(data.result==2){
+					layer.msg("投资成功",{
+						icon:1
+					});
+				}
+				if(data.result==3){
+					layer.msg("投资失败,投资金额需要大于0",{
+						icon:1
+					});
+				}
+				$("#amount").val('');
+				$("#investdiv").hide();
 			},
 			error:function(data){// 如果请求失败要运行的函数。
 				layer.msg("请求失败",{
@@ -134,6 +186,8 @@
 				<td>项目风险审核人员ID</td>
 				<td>项目风险审核时间</td>
 				<td>利率</td>
+				<td>项目所需金额</td>
+				<td>项目已投金额</td>
 				<td>状态</td>
 				<td>操作</td>
 			</tr>
@@ -142,5 +196,12 @@
 		</tbody>
 	</table>
 </div>
+
+<div id="investdiv">
+	利率：<input type="text" id="interst" value="0.3" readonly="readonly"><br>
+	投资金额：<input type="text" id="amount"><br>
+	<button type="button" onclick="sendMessage();">投资</button>
+</div>
+
 </body>
 </html>

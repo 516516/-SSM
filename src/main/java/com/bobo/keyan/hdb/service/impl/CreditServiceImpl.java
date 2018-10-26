@@ -75,24 +75,59 @@ public class CreditServiceImpl implements CreditService{
 	@Override
 	public Map<String, Object> selectAllCount_svc(Map<String, Object> map) throws Exception {
 		Map<String , Object> resultmap=new ConcurrentHashMap<>();
+		String bankName=(String) map.get("bankName");
 		Integer userid=Integer.parseInt((String) map.get("userid"));
+		int pageSize=Integer.parseInt((String) map.get("pageSize"));
+		int startRow=Integer.parseInt((String) map.get("startRow"));
+		int start=(startRow-1)*pageSize;
 		CreditExample example=new CreditExample();
 		example.setOrderByClause("c_id desc");
+		example.setPageSize(pageSize);
+		example.setStartRow(start);
+		Criteria criteria=example.createCriteria();
+		criteria.andCUseridEqualTo(userid);
+		if(bankName!=null&&bankName!=""&&bankName.equals("")==false) {
+			 criteria.andCBanknameEqualTo(bankName);
+		 }
+		
 		List<Credit> credits=creditMapper.selectByExample(example);
 		resultmap.put("result", credits);
+		
+		CreditExample example1=new CreditExample();
+		Criteria criteria1=example1.createCriteria();
+		criteria1.andCUseridEqualTo(userid);
+		if(bankName!=null&&bankName!=""&&bankName.equals("")==false) {
+			criteria.andCBanknameEqualTo(bankName);
+		}
+		int total=creditMapper.countByExample(example1);
+		resultmap.put("total", total);
 		return resultmap;
 	}
-
+	
 	@Override
 	public Map<String, Object> delectAcount_svc(Map<String, Object> map) throws Exception {
 		Map<String , Object> resultmap=new ConcurrentHashMap<>();
 		Integer cid=Integer.parseInt((String) map.get("cid"));
-		try {
-			creditMapper.deleteByPrimaryKey(cid);
-			resultmap.put("result", 1);//解绑成功
-		} catch (Exception e) {
-			// TODO: handle exception
-			resultmap.put("result", 0);//解绑失败
+		String c_paypassword=(String) map.get("c_paypassword");
+		
+		CreditExample creditExample=new CreditExample();
+		Criteria criteria=creditExample.createCriteria();
+		criteria.andCIdEqualTo(cid);
+		
+		System.out.println("cid:"+cid);
+		Credit credit=creditMapper.selectByPrimaryKey(cid);
+		System.out.println("getcPaypassword:"+credit.getcPaypassword());
+		System.out.println("c_paypassword:"+c_paypassword);	
+		if(credit.getcPaypassword().equals(c_paypassword)) {
+			try {
+				creditMapper.deleteByPrimaryKey(cid);
+				resultmap.put("result", 1);//解绑成功
+			} catch (Exception e) {
+				// TODO: handle exception
+				resultmap.put("result", 0);//解绑失败
+			}
+		}else {
+			resultmap.put("result", 2);//密码错误
 		}
 		return resultmap;
 	}

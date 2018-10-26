@@ -1,10 +1,31 @@
 package com.bobo.keyan.hdb.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class InvestExample {
+    //添加分页开始 胡波 2018-10-05
+    protected int startRow;//开始页
+    protected int pageSize;//每页的大小
+
+    public int getStartRow() {
+		return startRow;
+	}
+
+	public void setStartRow(int startRow) {
+		this.startRow = startRow;
+	}
+
+	public int getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
+	//添加分页结束 胡波 2018-10-05
     protected String orderByClause;
 
     protected boolean distinct;
@@ -355,52 +376,52 @@ public class InvestExample {
             return (Criteria) this;
         }
 
-        public Criteria andIAmountEqualTo(Long value) {
+        public Criteria andIAmountEqualTo(BigDecimal value) {
             addCriterion("i_amount =", value, "iAmount");
             return (Criteria) this;
         }
 
-        public Criteria andIAmountNotEqualTo(Long value) {
+        public Criteria andIAmountNotEqualTo(BigDecimal value) {
             addCriterion("i_amount <>", value, "iAmount");
             return (Criteria) this;
         }
 
-        public Criteria andIAmountGreaterThan(Long value) {
+        public Criteria andIAmountGreaterThan(BigDecimal value) {
             addCriterion("i_amount >", value, "iAmount");
             return (Criteria) this;
         }
 
-        public Criteria andIAmountGreaterThanOrEqualTo(Long value) {
+        public Criteria andIAmountGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("i_amount >=", value, "iAmount");
             return (Criteria) this;
         }
 
-        public Criteria andIAmountLessThan(Long value) {
+        public Criteria andIAmountLessThan(BigDecimal value) {
             addCriterion("i_amount <", value, "iAmount");
             return (Criteria) this;
         }
 
-        public Criteria andIAmountLessThanOrEqualTo(Long value) {
+        public Criteria andIAmountLessThanOrEqualTo(BigDecimal value) {
             addCriterion("i_amount <=", value, "iAmount");
             return (Criteria) this;
         }
 
-        public Criteria andIAmountIn(List<Long> values) {
+        public Criteria andIAmountIn(List<BigDecimal> values) {
             addCriterion("i_amount in", values, "iAmount");
             return (Criteria) this;
         }
 
-        public Criteria andIAmountNotIn(List<Long> values) {
+        public Criteria andIAmountNotIn(List<BigDecimal> values) {
             addCriterion("i_amount not in", values, "iAmount");
             return (Criteria) this;
         }
 
-        public Criteria andIAmountBetween(Long value1, Long value2) {
+        public Criteria andIAmountBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("i_amount between", value1, value2, "iAmount");
             return (Criteria) this;
         }
 
-        public Criteria andIAmountNotBetween(Long value1, Long value2) {
+        public Criteria andIAmountNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("i_amount not between", value1, value2, "iAmount");
             return (Criteria) this;
         }
@@ -472,6 +493,146 @@ public class InvestExample {
 
         public Criteria andIStateNotBetween(String value1, String value2) {
             addCriterion("i_state not between", value1, value2, "iState");
+            return (Criteria) this;
+        }
+
+        public Criteria andIInterestIsNull() {
+            addCriterion("i_interest is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIInterestIsNotNull() {
+            addCriterion("i_interest is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIInterestEqualTo(String value) {
+            addCriterion("i_interest =", value, "iInterest");
+            return (Criteria) this;
+        }
+
+        public Criteria andIInterestNotEqualTo(String value) {
+            addCriterion("i_interest <>", value, "iInterest");
+            return (Criteria) this;
+        }
+
+        public Criteria andIInterestGreaterThan(String value) {
+            addCriterion("i_interest >", value, "iInterest");
+            return (Criteria) this;
+        }
+
+        public Criteria andIInterestGreaterThanOrEqualTo(String value) {
+            addCriterion("i_interest >=", value, "iInterest");
+            return (Criteria) this;
+        }
+
+        public Criteria andIInterestLessThan(String value) {
+            addCriterion("i_interest <", value, "iInterest");
+            return (Criteria) this;
+        }
+
+        public Criteria andIInterestLessThanOrEqualTo(String value) {
+            addCriterion("i_interest <=", value, "iInterest");
+            return (Criteria) this;
+        }
+
+        public Criteria andIInterestLike(String value) {
+            addCriterion("i_interest like", value, "iInterest");
+            return (Criteria) this;
+        }
+
+        public Criteria andIInterestNotLike(String value) {
+            addCriterion("i_interest not like", value, "iInterest");
+            return (Criteria) this;
+        }
+
+        public Criteria andIInterestIn(List<String> values) {
+            addCriterion("i_interest in", values, "iInterest");
+            return (Criteria) this;
+        }
+
+        public Criteria andIInterestNotIn(List<String> values) {
+            addCriterion("i_interest not in", values, "iInterest");
+            return (Criteria) this;
+        }
+
+        public Criteria andIInterestBetween(String value1, String value2) {
+            addCriterion("i_interest between", value1, value2, "iInterest");
+            return (Criteria) this;
+        }
+
+        public Criteria andIInterestNotBetween(String value1, String value2) {
+            addCriterion("i_interest not between", value1, value2, "iInterest");
+            return (Criteria) this;
+        }
+
+        public Criteria andIMessageIsNull() {
+            addCriterion("i_message is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIMessageIsNotNull() {
+            addCriterion("i_message is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIMessageEqualTo(String value) {
+            addCriterion("i_message =", value, "iMessage");
+            return (Criteria) this;
+        }
+
+        public Criteria andIMessageNotEqualTo(String value) {
+            addCriterion("i_message <>", value, "iMessage");
+            return (Criteria) this;
+        }
+
+        public Criteria andIMessageGreaterThan(String value) {
+            addCriterion("i_message >", value, "iMessage");
+            return (Criteria) this;
+        }
+
+        public Criteria andIMessageGreaterThanOrEqualTo(String value) {
+            addCriterion("i_message >=", value, "iMessage");
+            return (Criteria) this;
+        }
+
+        public Criteria andIMessageLessThan(String value) {
+            addCriterion("i_message <", value, "iMessage");
+            return (Criteria) this;
+        }
+
+        public Criteria andIMessageLessThanOrEqualTo(String value) {
+            addCriterion("i_message <=", value, "iMessage");
+            return (Criteria) this;
+        }
+
+        public Criteria andIMessageLike(String value) {
+            addCriterion("i_message like", value, "iMessage");
+            return (Criteria) this;
+        }
+
+        public Criteria andIMessageNotLike(String value) {
+            addCriterion("i_message not like", value, "iMessage");
+            return (Criteria) this;
+        }
+
+        public Criteria andIMessageIn(List<String> values) {
+            addCriterion("i_message in", values, "iMessage");
+            return (Criteria) this;
+        }
+
+        public Criteria andIMessageNotIn(List<String> values) {
+            addCriterion("i_message not in", values, "iMessage");
+            return (Criteria) this;
+        }
+
+        public Criteria andIMessageBetween(String value1, String value2) {
+            addCriterion("i_message between", value1, value2, "iMessage");
+            return (Criteria) this;
+        }
+
+        public Criteria andIMessageNotBetween(String value1, String value2) {
+            addCriterion("i_message not between", value1, value2, "iMessage");
             return (Criteria) this;
         }
     }

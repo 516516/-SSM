@@ -15,6 +15,12 @@ public class Article {
 
     private String atcName;
 
+    private Integer atcAuthorid;
+
+    private Integer atcScrutid;
+
+    private String atcState;
+
     public Integer getAtcId() {
         return atcId;
     }
@@ -61,5 +67,29 @@ public class Article {
 
     public void setAtcName(String atcName) {
         this.atcName = atcName == null ? null : atcName.trim();
+    }
+
+    public Integer getAtcAuthorid() {
+        return atcAuthorid;
+    }
+
+    public void setAtcAuthorid(Integer atcAuthorid) {
+        this.atcAuthorid = atcAuthorid;
+    }
+
+    public Integer getAtcScrutid() {
+        return atcScrutid;
+    }
+
+    public void setAtcScrutid(Integer atcScrutid) {
+        this.atcScrutid = atcScrutid;
+    }
+
+    public String getAtcState() {
+        return atcState;
+    }
+
+    public void setAtcState(String atcState) {
+        this.atcState = atcState == null ? null : atcState.trim();
     }
 }

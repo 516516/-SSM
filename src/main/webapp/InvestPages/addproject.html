@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="layer/layer.js"></script>
+<script type="text/javascript">
+	function login() {
+		alert("登录");
+	}
+	function register() {
+		alert("注册");
+	}
+	function logout() {
+		alert("退出");
+	}
+	function shouye() {
+		location.href="articleplus.html";
+	}
+	function prosonalproject() {
+		alert("个人项目");
+	}
+	function prosonalProject() {
+		//alert("个人项目");
+		location.href="exampersonalproject.html";
+	}
+	function companyProject() {
+		//alert("公司项目");
+		location.href="examineproject.html";
+	}
+	function borrow() {
+		alert("我要借款");
+	}
+	function help() {
+		alert("帮助中心");
+	}
+	
+	function lookusers() {
+		location.href = "alluser.html";
+	}
+	
+	function addproject() {
+		location.href = "addproject.html";
+	}
+	function qiantai(){
+		location.href="main.html";
+	}
+</script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		queryData(1);
+	});	
+	function addproject(){
+	    var itemvalue=sessionStorage.getItem("userId1");
+		console.log("session:"+itemvalue);
+		
+		var datelineList=document.getElementById("dateline1");
+		var dateline=0;
+		console.log("datelineList:"+datelineList);
+		for(var i=0;i<datelineList.length;i++){
+			if(datelineList[i].selected){
+				dateline=datelineList[i].value;
+			}
+		}
+		console.log("dateline:"+dateline);
+		
+		
+		var ratelist=document.getElementById("rates1");
+		var rate=0;
+		console.log("ratelist:"+ratelist);
+		for(var i=0;i<ratelist.length;i++){
+			if(ratelist[i].selected){
+				rate=ratelist[i].value;
+			}
+		}
+		console.log(rate);
+		
+		var projectname1=$("#projectname1").val();
+		var projectamount1=$("#projectamount1").val();
+		var projectintroduct1=$("#projectintroduct1").val();
+		
+		if(projectname1==""||projectname1==null){
+			$("#projectname1Info").html("项目名不能为空");
+			return;
+		}else{
+			$("#projectname1Info").html("");
+		}
+		
+		if(projectamount1==""||projectamount1==null){
+			$("#projectamount1Info").html("项目金额不能为空");
+			return;
+		}else{
+			$("#projectamount1Info").html("");
+		}
+		
+		if(projectintroduct1==""||projectintroduct1==null){
+			$("#projectintroduct1Info").html("项目简介不能为空");
+			return;
+		}else{
+			$("#projectintroduct1Info").html("");
+		}
+		
+		$.ajax({
+			url:"/HDB2/project/addproject",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+			type:"post",//规定请求的类型（GET 或 POST）。
+			data:{
+				
+				"projectname":$("#projectname1").val(),
+				"projectamount":$("#projectamount1").val(),
+				"projectintroduct":$("#projectintroduct1").val(),
+				"projectrate":rate,
+				"dateline":dateline,
+				"userId":itemvalue
+				
+			},//规定要发送到服务器的数据。
+			async:false,//是否异步处理
+			cache:false,//浏览器是否缓存被请求页面
+			dataType:"json",//预期的服务器响应的数据类型。
+			success:function(data){//当请求成功时运行的函数。
+				if(data.result==1){
+					layer.msg("添加成功",{
+						icon:1
+					});
+					
+					$("#projectname1").val(""),
+					$("#projectamount1").val(""),
+					$("#projectintroduct1").val(""),
+					
+					$("#projectname1Info").html(""),
+					$("#projectamount1Info").html(""),
+					$("#projectintroduct1Info").html(""),
+					
+					$("#unBindModal").modal('hide');
+					queryData(1);
+				}else{
+					layer.msg("添加失败",{
+						icon:1
+					});
+				}
+
+			},
+			error:function(data){// 如果请求失败要运行的函数。
+				layer.msg("请求失败",{
+					icon:1
+				});
+			}
+		});
+	}
+	
+	
+	function test(){
+		alert($("#projectfirstdate").val());
+	}
+	
+	function returnMain(){
+		location.href="main.html";
+	}
+	
+</script>
+
+<script type="text/javascript">
+function getFormatDate(mills){
+	var d=new Date(mills);
+	var year=d.getFullYear();
+	var day=d.getDate();
+	var month=+d.getMonth()+1;
+	var hour=d.getHours();
+	var minute=d.getMinutes();
+	var second=d.getSeconds();
+	var misec=d.getMilliseconds();
+	var f=year+"-"+formate(month)+"-"+formate(day)+" "+formate(hour)+":"+formate(minute)+":"+formate(second);
+	return f;
+	}
+	function formate(d){
+	return d>9?d:'0'+d;
+}
+function amountNum(num1,num2){
+	var amount1=parseInt(num1);
+	var amount2=parseInt(num2);
+	return amount1-amount2;
+}
+function getRate(rate1){
+	var rate=parseFloat(rate1);
+	return rate+"%";
+}
+function getDate(date){
+	var date1=parseInt(date);
+	return 30*date1;
+}
+
+//分页开始
+function createPagination(pageIndex,pageSize,totalCount){		
+	var totalPage = Math.ceil(totalCount / pageSize);//总页数
+	var showPageNum = 5;//页面显示页码的数量,即角标分页显示多少个页码
+	var pageNumString = '';
+	var realPageIndex = pageIndex;
+    //只显示showPageNum 个页码-------------------------------
+    if (totalPage <= showPageNum) {
+        pageIndex = 1;
+    } else if ((totalPage - pageIndex) < (showPageNum - 1)) {
+        pageIndex = (totalPage - showPageNum + 1);
+    }
+    
+    //只显示showPageNum 个页码-------------------------------
+    for (var i = 0; i < totalPage; i++) {
+        if ((pageIndex + i) > totalPage) {
+            break;
+        }
+        if (i >= showPageNum) {
+            break;
+        }
+
+        if ((pageIndex + i) == realPageIndex) {
+            pageNumString += '<li class="active"><a href="javascript:void(0);"onclick="queryData('
+                + (pageIndex + i)
+                + ')">'
+                + (pageIndex + i)
+                + '</a></li>';
+        } else {
+            pageNumString += '<li><a href="javascript:void(0);"onclick="queryData('
+                + (pageIndex + i)
+                + ')">'
+                + (pageIndex + i)
+                + '</a></li>';
+        }
+    }
+    var pageIndexPre = (realPageIndex - 1) <= 0 ? 1 : (realPageIndex - 1);//前一页
+    var pageIndexNext = (realPageIndex + 1) >= totalPage ? totalPage: (realPageIndex + 1);//后一页
+    var page = "<nav>"
+        + '<ul class="pagination"> '
+        + '<li><a><span aria-hidden="true">共 '
+        + totalCount
+        + ' 条</span></a></li>'
+        + '<li><a href="javascript:void(0);" onclick="queryData(0);" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>'
+        + '<li><a href="javascript:void(0);" onclick="queryData('
+        + pageIndexPre
+        + ');" aria-label="Previous">'
+        + '<span aria-hidden="true">&lsaquo;</span></a></li>'
+        + pageNumString
+        + '<li><a href="javascript:void(0);" onclick="queryData('
+        + pageIndexNext
+        + ');" aria-label="Next"> '
+        + '<span aria-hidden="true">&rsaquo;</span></a></li>'
+        + '<li><a href="javascript:void(0);" onclick="queryData('
+        + totalPage
+        + ');" aria-label="Previous"><span aria-hidden="true">&raquo;</span></a></li>'
+        + '</ul>' + '</nav>';
+    $('#page').empty();
+    $('#page').append(page);           		                 
+}
+//分页结束
+
+function queryData(pageIndex){
+	
+	var _pageSize = new Number(10); //分页数量
+    if (pageIndex == null || pageIndex == "" || pageIndex <= 1) {
+        pageIndex = new Number(1);
+    } 
+	
+	var ratelist=document.getElementById("rates");
+	var rate=0;
+	console.log("ratelist:"+ratelist);
+	for(var i=0;i<ratelist.length;i++){
+		if(ratelist[i].selected){
+			rate=ratelist[i].value;
+		}
+	}
+	console.log(rate);
+	
+	var datelineList=document.getElementById("dateline");
+	var dateline=0;
+	console.log("datelineList:"+datelineList);
+	for(var i=0;i<datelineList.length;i++){
+		if(datelineList[i].selected){
+			dateline=datelineList[i].value;
+		}
+	}
+	console.log("dateline:"+dateline);
+	
+	$.ajax({
+		url:"/HDB2/project/getAllporjectseExcept",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+		type:"post",//规定请求的类型（GET 或 POST）。
+		data:{
+			startRow:pageIndex,
+			pageSize:_pageSize,
+			projectName:$("#name").val(),
+			projectRate:rate,
+			projectDateline:dateline
+		},//规定要发送到服务器的数据。
+		async:false,//是否异步处理。
+		cache:false,//浏览器是否缓存被请求页面
+		dataType:"json",//预期的服务器响应的数据类型。
+		success:function(data){//当请求成功时运行的函数。
+			layer.msg("请求成功",{
+				icon:1
+			});
+		    console.info(data);
+		    var totalCount=data.total;
+		    var td="";
+		    if(data.result.length==0){
+		    	$("#tablelist").html('');
+		    	td="";
+		    	$('#page').empty();
+                createPagination(1, _pageSize, 0);
+		    	return;
+		    }
+			$.each(data.result,function(index,item){
+				
+				td+="<div class=\"col-md-12 column\">"+
+							"<div class=\"panel panel-default\">"+
+								"<div class=\"row clearfix\" style=\"margin-left: 2px; margin-right: 3px;\">";
+									
+				td+="<div class=\"col-md-3 column\">"+
+				       "<div style=\"text-align: center;\">"+
+							"<h4>"+item.pName+"</h4>"+
+							"<h6>上线时间"+getFormatDate(item.pExamineDate)+"</h6>"+
+					    "</div>"+ 
+					 "</div>"; 
+					 
+				td+="<div class=\"col-md-2 column\">"+
+				       "<div style=\"text-align: center;\">"+
+							"<h4>"+item.pAmount+"</h4>"+
+							"<h6>借款金额</h6>"+
+					    "</div>"+ 
+					 "</div>"; 
+					 
+				td+="<div class=\"col-md-3 column\">"+
+				       "<div style=\"text-align: center;\">"+
+							"<h4>"+getDate(item.pDateline)+"天</h4>"+
+							"<h6>借款期限</h6>"+
+					    "</div>"+ 
+					 "</div>"; 
+					 
+				td+="<div class=\"col-md-2 column\">"+
+				       "<div style=\"text-align: center;\">"+
+							"<h4>"+getRate(item.pRate)+"</h4>"+
+							"<h6>年化利率</h6>"+
+					    "</div>"+ 
+					 "</div>"; 
+					 
+				td+="<div class=\"col-md-2 column\">"+
+						"<div style=\"text-align: center;\">"+
+						    "<h5>剩余可投"+amountNum(item.pAmount,item.pInvestAmount)+"</h5>";
+// 							"<button type=\"button\" class=\"btn btn-default btn-xs btn-block\" onclick=\"invest("+item.pId+")\">查看详情</button>"+
+							
+							if(item.pState=="0"){
+								td+="<h6 >项目状态：筹款</h6>";
+							}else if(item.pState=="4"){
+								td+="<h6 >项目状态：待风审</h6>";
+							}else if(item.pState=="5"){
+								td+="<h6 >项目状态：风审不通过</h6>";
+							}else if(item.pState=="1"){
+								td+="<h6 >项目状态：满标</h6>";
+							}
+							else{
+								td+="<h6 >项目状态</h6>";
+							}
+							
+						td+="</div>"+
+					"</div>";
+				
+			   td+="</div></div></div>";
+			})
+			$("#tablelist").html('');
+			$("#tablelist").append(td);
+			td="";
+			createPagination(pageIndex, _pageSize, totalCount);
+		},
+		error:function(data){// 如果请求失败要运行的函数。
+			layer.msg("请求失败",{
+				icon:1
+			});
+		}
+	});
+}
+function delect(){
+	console.log(1);
+	$("#name").val('');
+	$("#rates").val("");
+	$("#dateline").val("");
+	queryData(1);
+}
+function addprojectModel(){
+	$("#unBindModal").modal('show');
+}
+function reset(){
+	$("#projectname1").val(""),
+	$("#projectamount1").val(""),
+	$("#projectintroduct1").val(""),
+	
+	$("#projectname1Info").html(""),
+	$("#projectamount1Info").html(""),
+	$("#projectintroduct1Info").html(""),
+	
+	$("#unBindModal").modal('hide');
+}
+</script>
+</head>
+
+<body>
+	<div class="container">
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<nav class="navbar navbar-default navbar-fixed-top"
+					role="navigation">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse"
+							data-target="#bs-example-navbar-collapse-1">
+							<span class="sr-only">Toggle navigation</span> <span
+								class="icon-bar"></span> <span class="icon-bar"></span> <span
+								class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="#">HDB互联网金融平台</a>
+					</div>
+
+					<div class="collapse navbar-collapse"
+						id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav " style="margin-left: 20%;">
+							<li class=""><a href="javascript:void(0)"
+								onclick="shouye();">文章管理</a></li>
+							<li><a href="javascript:void(0)" onclick="lookusers();">用户管理</a></li>
+							<li><a href="javascript:void(0)" onclick="addproject();">添加项目</a></li>
+							<li class="dropdown"><a href="#" class="dropdown-toggle"
+								data-toggle="dropdown">项目审核<strong class="caret"></strong></a>
+								<ul class="dropdown-menu">
+									<li><a href="javascript:void(0)"
+										onclick="prosonalProject();">个人项目</a></li>
+									<li><a href="javascript:void(0)"
+										onclick="companyProject();">公司项目</a></li>
+								</ul></li>
+							<li><a href="javascript:void(0)" onclick="qiantai();">前台</a></li>
+						</ul>
+
+						<ul class="nav navbar-nav navbar-right" style="margin-right: 1%;">
+							<li><a href="javascript:void(0)" onclick="logout();">退出</a></li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+		</div>
+		<div class="row clearfix" style="margin-top: 5%;">
+			<div class="col-md-12 column">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">搜索条件</h3>
+					</div>
+					<div class="panel-body">
+						<form class="form-inline" role="form">
+							<div class="form-group">
+								<label class="" for="name">项目名称</label> <input type="text"
+									class="form-control" id="name" placeholder="请输入项目名称">
+							</div>
+							<div class="form-group">
+								<label for="name">年化利率(%)</label> <select id="rates"
+									class="form-control" style="width: 200px;">
+									<option></option>
+									<option>2</option>
+									<option>4</option>
+									<option>6</option>
+									<option>8</option>
+									<option>12</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label for="name">借款期限(月)</label> <select id="dateline"
+									class="form-control" style="width: 200px;">
+									<option></option>
+									<option>1</option>
+									<option>2</option>
+									<option>3</option>
+									<option>4</option>
+									<option>6</option>
+									<option>8</option>
+									<option>10</option>
+									<option>12</option>
+									<option>14</option>
+									<option>16</option>
+									<option>18</option>
+									<option>24</option>
+								</select>
+							</div>
+							<button type="button" class="btn btn-default"
+								onclick="queryData(1)" style="margin-left: 2%;">查询</button>
+							<button type="button" class="btn btn-default" onclick="delect()"
+								style="margin-left: 2%;">取消</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							 <button type="button" class="btn btn-default" onclick="addprojectModel()">添加项目</button>
+						</h3>
+					</div>
+					<div class="panel-body" id="panelbody">
+						<div class="row clearfix" id="tablelist"></div>
+						<div id="page" style="text-align: right;"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 模态框（Modal） -->
+	<div class="modal fade" id="unBindModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">填写项目信息</h4>
+				</div>
+				<div class="modal-body">
+					<form action="" class="form-horizontal" role="form">
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="projectname1">项目名：</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" id="projectname1" style="width: 200px;">
+								<span id="projectname1Info" style="color: red;"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="projectamount1">项目所需金额：</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" id="projectamount1" style="width: 200px;">
+								<span id="projectamount1Info" style="color: red;"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="control-label col-sm-3">借款期限(月)</label>
+							<div class="col-sm-4">
+								<select id="dateline1" class="form-control" style="width: 200px;">
+									<option>1</option>
+									<option>2</option>
+									<option>3</option>
+									<option>4</option>
+									<option>6</option>
+									<option>8</option>
+									<option>10</option>
+									<option>12</option>
+									<option>14</option>
+									<option>16</option>
+									<option>18</option>
+									<option>24</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="control-label col-sm-3">年化利率(%)</label>
+							<div class="col-sm-4">
+								<select id="rates1" class="form-control" style="width: 200px;">
+									<option>2</option>
+									<option>4</option>
+									<option>6</option>
+									<option>8</option>
+									<option>12</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="projectintroduct1">项目简介：</label>
+							<div class="col-sm-4">
+								<textarea class="form-control" id="projectintroduct1" style="width: 300px;height: 200px;"></textarea>
+								<span id="projectintroduct1Info" style="color: red;"></span>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" onclick="addproject()">添加项目</button>
+					<button type="button" class="btn btn-default" onclick="reset()">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

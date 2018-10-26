@@ -75,7 +75,7 @@ public class InvestServiceImpl implements InvestService{
 		// TODO Auto-generated method stub
 		return investMapper.updateByPrimaryKeySelective(record);
 	}
-
+	
 	@Override
 	public int updateByPrimaryKey(Invest record) {
 		// TODO Auto-generated method stub

@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="layer/layer.js"></script>
+<!-- <script type="text/javascript">
+
+	function login() {
+		//alert("登录");
+		location.href="login.html";
+	}
+	
+	function register() {
+		//alert("注册");
+		location.href="register.html";
+	}
+	
+	function logout() {
+		location.href="manger.html";
+	}
+	
+	function shouye() {
+		location.href="main.html";
+	}
+	
+	function bindorunbind() {
+		//alert("绑卡解绑");
+		location.href="myaccount.html";
+	}
+	
+	function personalAcount() {
+		//alert("个人账户");
+		location.href="personalAccount.html";
+	}
+	
+    function investproject2(){
+    	//location.href="invest.html";
+    	location.href="invest.html";
+    }
+    
+	function borrow() {
+		//alert("我要借款");
+		location.href="borrow.html";
+	}
+	
+	function help() {
+		alert("帮助中心");
+	}
+	
+	function share() {
+		location.href="allarticle.html";
+	}
+	
+	function companyProject(){
+		alert("进行投资");
+	}
+	
+	function lookusers() {
+		location.href = "../page/user/alluser.html";
+	}
+	
+	function realmessage() {
+		location.href = "realmessages.html";
+	}
+	
+</script> -->
+<script type="text/javascript">
+	$(document).ready(function(){
+		checkLogin();
+	})
+</script>
+<script type="text/javascript">
+
+	function login() {
+		$("#unBindModal").modal('show');
+	}
+	
+	function register() {
+		$("#registModal").modal('show');
+// 		location.href="register.html";
+	}
+	
+	function logout() {
+		//location.href="manger.html";
+		sessionStorage.setItem("userId1",null);
+		location.href="main.html";
+	}
+	
+	function shouye() {
+		location.href="main.html";
+	}
+	
+	function bindorunbind() {
+		//alert("绑卡解绑");
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+			location.href="myaccount.html";
+		}
+	}
+	
+	function personalAcount() {
+		//alert("个人账户");
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+			location.href="personalAccount.html";
+		}
+	}
+	
+    function investproject2(){
+    	//location.href="invest.html";
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+    		location.href="invest.html";
+		}
+    }
+    
+	function borrow() {
+		//alert("我要借款");
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+			location.href="borrow.html";
+		}
+	}
+	
+	function help() {
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+			alert("帮助中心");
+		}
+	}
+	
+	function share() {
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+			location.href="allarticle.html";
+		}
+	}
+	
+	function companyProject(){
+		alert("进行投资");
+	}
+	
+	function lookusers() {
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+		location.href = "../page/user/alluser.html";
+		}
+	}
+	
+	function realmessage() {
+		if(checkLogin()==0){
+			layer.msg("请先登录",{
+				icon:1
+			})
+		}else{
+			location.href = "realmessages.html";
+		}
+	}
+	function checkLogin(){
+		
+		var userid=JSON.parse(sessionStorage.getItem("userId1"));
+		console.log(typeof(userid));
+		console.log(typeof(null));
+		console.log("userid:"+userid);	
+		if(!userid && typeof(userid)!="undefined" && userid!=0){
+			$("#loginButton").show();
+			$("#registButton").show();
+			$("#unameSpan").hide();
+			return 0;
+		}else{
+			console.log("执行此处");
+			$("#loginButton").hide();
+			$("#registButton").hide();
+			$("#unameSpan").show();
+			
+			$.ajax({
+				url:"/HDB2/user/getOneUser",
+				type:"post",
+				data:{
+					"userid":sessionStorage.getItem("userId1")
+				},
+				cache:false,
+				asyc:false,
+				dataType:"json",
+				success:successfunction,
+				error:errorfunction
+			});
+			function successfunction(data){
+				layer.msg("请求数据成功",{
+					icon:1
+				});	
+				console.log(data);
+				if(data.result.uSex=='0'){
+					console.log(0);
+					var username="欢迎您："+data.result.uName+"先生";
+				}else{
+					var username="欢迎您："+data.result.uName+"女士";
+				}
+					$("#usernameSpan").html(username);
+			}
+			function errorfunction(){
+				console.log("请求失败",{
+					icon:1
+				});
+			}
+			return 1;
+		}
+	}
+</script>
+<script type="text/javascript">
+	
+	$(document).ready(function(){
+		queryData(1);
+		getUser();
+	});
+	
+	function getUser() {
+		$.ajax({
+			url : "/HDB2/user/getOneUser",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+			type : "post",//规定请求的类型（GET 或 POST）。
+			data : {
+				"userid" : sessionStorage.getItem("userId1")
+			},//规定要发送到服务器的数据。
+			async : false,//是否异步处理
+			cache : false,//浏览器是否缓存被请求页面
+			dataType : "json",//预期的服务器响应的数据类型。
+			success : function(data) {//当请求成功时运行的函数。
+				layer.msg("请求成功", {
+					icon : 1
+				});
+				console.info(data);
+				console.log("data.result.uBalance"+data.result.uBalance);
+				if(data.result.uBalance==null){
+					$("#u_Account").html("");
+					$("#u_Account").html(0);
+				}else{
+					$("#u_Account").html("");
+					$("#u_Account").html(data.result.uBalance);
+				}
+			},
+
+			error : function(data) {// 如果请求失败要运行的函数。
+				layer.msg("请求失败", {
+					icon : 1
+				});
+			}
+		});
+	}
+	
+	//分页开始
+	function createPagination(pageIndex,pageSize,totalCount){		
+		var totalPage = Math.ceil(totalCount / pageSize);//总页数
+		var showPageNum = 5;//页面显示页码的数量,即角标分页显示多少个页码
+		var pageNumString = '';
+		var realPageIndex = pageIndex;
+        //只显示showPageNum 个页码-------------------------------
+        if (totalPage <= showPageNum) {
+            pageIndex = 1;
+        } else if ((totalPage - pageIndex) < (showPageNum - 1)) {
+            pageIndex = (totalPage - showPageNum + 1);
+        }
+        
+        //只显示showPageNum 个页码-------------------------------
+        for (var i = 0; i < totalPage; i++) {
+            if ((pageIndex + i) > totalPage) {
+                break;
+            }
+            if (i >= showPageNum) {
+                break;
+            }
+
+            if ((pageIndex + i) == realPageIndex) {
+                pageNumString += '<li class="active"><a href="javascript:void(0);"onclick="queryData('
+                    + (pageIndex + i)
+                    + ')">'
+                    + (pageIndex + i)
+                    + '</a></li>';
+            } else {
+                pageNumString += '<li><a href="javascript:void(0);"onclick="queryData('
+                    + (pageIndex + i)
+                    + ')">'
+                    + (pageIndex + i)
+                    + '</a></li>';
+            }
+        }
+        var pageIndexPre = (realPageIndex - 1) <= 0 ? 1 : (realPageIndex - 1);//前一页
+        var pageIndexNext = (realPageIndex + 1) >= totalPage ? totalPage: (realPageIndex + 1);//后一页
+        var page = "<nav>"
+            + '<ul class="pagination"> '
+            + '<li><a><span aria-hidden="true">共 '
+            + totalCount
+            + ' 条</span></a></li>'
+            + '<li><a href="javascript:void(0);" onclick="queryData(0);" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>'
+            + '<li><a href="javascript:void(0);" onclick="queryData('
+            + pageIndexPre
+            + ');" aria-label="Previous">'
+            + '<span aria-hidden="true">&lsaquo;</span></a></li>'
+            + pageNumString
+            + '<li><a href="javascript:void(0);" onclick="queryData('
+            + pageIndexNext
+            + ');" aria-label="Next"> '
+            + '<span aria-hidden="true">&rsaquo;</span></a></li>'
+            + '<li><a href="javascript:void(0);" onclick="queryData('
+            + totalPage
+            + ');" aria-label="Previous"><span aria-hidden="true">&raquo;</span></a></li>'
+            + '</ul>' + '</nav>';
+        $('#page').empty();
+        $('#page').append(page);           		                 
+	}
+	//分页结束
+	function getFormatDate(mills){
+		var d=new Date(mills);
+		var year=d.getFullYear();
+		var day=d.getDate();
+		var month=+d.getMonth()+1;
+		var hour=d.getHours();
+		var minute=d.getMinutes();
+		var second=d.getSeconds();
+		var misec=d.getMilliseconds();
+		var f=year+"-"+formate(month)+"-"+formate(day)+" "+formate(hour)+":"+formate(minute)+":"+formate(second);
+		return f;
+		}
+		function formate(d){
+		return d>9?d:'0'+d;
+	}
+		
+	function getRate(rate1){
+			var rate=parseFloat(rate1);
+			return rate+"%";
+	}
+	function getNum(data){
+		var num=parseInt(data);
+		return num;
+	}
+//分页结束
+function queryData(pageIndex){
+	
+	var _pageSize = new Number(10); //分页数量
+    if (pageIndex == null || pageIndex == "" || pageIndex <= 1) {
+        pageIndex = new Number(1);
+    } 
+	
+	$.ajax({
+		url:"/HDB2/invest/getAllinvestByUserId",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+		type:"post",//规定请求的类型（GET 或 POST）。
+		data:{
+			userid:sessionStorage.getItem("userId1"),
+			startRow:pageIndex,
+			pageSize:_pageSize
+		},//规定要发送到服务器的数据。
+		async:false,//是否异步处理。
+		cache:false,//浏览器是否缓存被请求页面
+		dataType:"json",//预期的服务器响应的数据类型。
+		success:function(data){//当请求成功时运行的函数。
+			layer.msg("请求成功",{
+				icon:1
+			});
+		    console.log("invest:");
+			console.info(data);
+			var totalCount=data.total;
+			var invextNum=data.investNum;
+			var interstNum=data.interstNum;
+			$("#invextNum").html("");
+			$("#invextNum").html(invextNum);
+			$("#interstNum").html("");
+			$("#interstNum").html(interstNum);
+			
+			if(data.result.length==0){
+				$("#tablelist1").html('');
+				td="";
+				$('#page').empty();
+                createPagination(1, _pageSize, 0);
+                return;
+			}
+			td="";
+
+			$.each(data.result,function(index,item){
+				
+				td+="<tr>";
+				td+="<td>"+(index+1)+"</td>";
+				td+="<td>"+item.iProjectid+"</td>";
+				td+="<td>"+item.iAmount+"</td>";
+				td+="<td>"+getRate(item.iInterest)+"</td>";
+				if(item.iState=="1"){
+					td+="<td>"+"投资成功,等待收益"+"</td>";
+				}else{
+					td+="<td>"+"支付中"+"</td>";
+				}
+				td+="<td>"+getFormatDate(item.iDatetime)+"</td>";
+				
+				td+="</tr>";
+			})
+			$("#tablelist1").html('');
+			$("#tablelist1").html(td);
+
+			td="";
+			createPagination(pageIndex, _pageSize, totalCount);
+		},
+		error:function(data){// 如果请求失败要运行的函数。
+			layer.msg("请求失败",{
+				icon:1
+			});
+		}
+	});
+}
+</script>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+	queryData2(1);
+	queryData3(1);
+})
+
+function createPagination2(pageIndex,pageSize,totalCount){		
+	var totalPage = Math.ceil(totalCount / pageSize);//总页数
+	var showPageNum = 5;//页面显示页码的数量,即角标分页显示多少个页码
+	var pageNumString = '';
+	var realPageIndex = pageIndex;
+    //只显示showPageNum 个页码-------------------------------
+    if (totalPage <= showPageNum) {
+        pageIndex = 1;
+    } else if ((totalPage - pageIndex) < (showPageNum - 1)) {
+        pageIndex = (totalPage - showPageNum + 1);
+    }
+    
+    //只显示showPageNum 个页码-------------------------------
+    for (var i = 0; i < totalPage; i++) {
+        if ((pageIndex + i) > totalPage) {
+            break;
+        }
+        if (i >= showPageNum) {
+            break;
+        }
+
+        if ((pageIndex + i) == realPageIndex) {
+            pageNumString += '<li class="active"><a href="javascript:void(0);"onclick="queryData2('
+                + (pageIndex + i)
+                + ')">'
+                + (pageIndex + i)
+                + '</a></li>';
+        } else {
+            pageNumString += '<li><a href="javascript:void(0);"onclick="queryData2('
+                + (pageIndex + i)
+                + ')">'
+                + (pageIndex + i)
+                + '</a></li>';
+        }
+    }
+    var pageIndexPre = (realPageIndex - 1) <= 0 ? 1 : (realPageIndex - 1);//前一页
+    var pageIndexNext = (realPageIndex + 1) >= totalPage ? totalPage: (realPageIndex + 1);//后一页
+    var page = "<nav>"
+        + '<ul class="pagination"> '
+        + '<li><a><span aria-hidden="true">共 '
+        + totalCount
+        + ' 条</span></a></li>'
+        + '<li><a href="javascript:void(0);" onclick="queryData2(0);" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>'
+        + '<li><a href="javascript:void(0);" onclick="queryData2('
+        + pageIndexPre
+        + ');" aria-label="Previous">'
+        + '<span aria-hidden="true">&lsaquo;</span></a></li>'
+        + pageNumString
+        + '<li><a href="javascript:void(0);" onclick="queryData2('
+        + pageIndexNext
+        + ');" aria-label="Next"> '
+        + '<span aria-hidden="true">&rsaquo;</span></a></li>'
+        + '<li><a href="javascript:void(0);" onclick="queryData2('
+        + totalPage
+        + ');" aria-label="Previous"><span aria-hidden="true">&raquo;</span></a></li>'
+        + '</ul>' + '</nav>';
+    $('#page2').empty();
+    $('#page2').append(page);           		                 
+}
+function getDates(date){
+	var date1=parseInt(date);
+	return 30*date1;
+}
+function getRate(rate1){
+	var rate=parseFloat(rate1);
+	return rate+"%";
+}
+function queryData2(pageIndex){
+	var _pageSize = new Number(10); //分页数量
+    if (pageIndex == null || pageIndex == "" || pageIndex <= 1) {
+        pageIndex = new Number(1);
+    } 
+	$.ajax({
+		url:"/HDB2/audite/getMyselfAudite",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+		type:"post",//规定请求的类型（GET 或 POST）。
+		data:{
+			startRow:pageIndex,
+			pageSize:_pageSize,
+			"userId":sessionStorage.getItem("userId1"),
+			projectRate:null,
+			projectDateline:null
+		},//规定要发送到服务器的数据。
+		async:false,//是否异步处理
+		cache:false,//浏览器是否缓存被请求页面
+		dataType:"json",//预期的服务器响应的数据类型。
+		success:function(data){//当请求成功时运行的函数。
+			console.info(data);
+			if(0==data.result){
+				layer.msg("请求成功",{
+					icon:1
+				});
+			}
+			var td="";
+			var totalCount=data.total;
+		    if(0==data.result.length){
+		    	$("#tablelist2").html('');
+		    	td="";
+		    	$('#page2').empty();
+                createPagination2(1, _pageSize, 0);
+		    	return ;
+		    }
+		      
+		    $.each(data.result,function(index,item){
+		    	td+="<tr>";
+		    	td+="<td>"+(index+1)+"</td>";
+		    	td+="<td>"+item.aAmount+"</td>";
+		    	td+="<td>"+getDates(item.aDateline)+"</td>";
+		    	td+="<td>"+getRate(item.aInterest)+"</td>";
+		    	td+="<td>"+getFormatDate(item.aApplytime)+"</td>";
+		    	if("0"===item.aState){
+		    		td+="<td>"+"待审核"+"</td>";
+		    	}else if("1"===item.aState){
+		    		td+="<td>"+"筹款"+"</td>";
+		    	}else if("2"===item.aState){
+		    		td+="<td>"+"还款"+"</td>";
+		    	}else if("3"===item.aState){
+		    		td+="<td>"+"完成"+"</td>";
+		    	}else if("4"===item.aState){
+		    		td+="<td>"+"审核未通过"+"</td>";
+		    	}
+		    	var exam = "<a href='javascript:void(0)'  onclick=\"exam('"
+					+ item.aId
+					+ "')\">【还款】</a>";
+					
+		    	var exam1 = "<a href='javascript:void(0)'  onclick=\"exam1('"
+					+ item.aId
+					+ "')\">【查看】</a>";
+					
+		    	if("0"===item.aState){
+		    		td+="<td>"+exam1+"</td>";
+		    	}else if("1"===item.aState){
+		    		td+="<td>"+exam1+"</td>";
+		    	}else if("2"===item.aState){
+		    		td+="<td>"+exam+"</td>";
+		    	}else if("3"===item.aState){
+		    		td+="<td>"+exam1+"</td>";
+		    	}else if("4"===item.aState){
+		    		td+="<td>"+exam1+"</td>";
+		    	}
+		    	td+="</tr>";
+		    });
+	    	$("#tablelist2").html('');
+	    	$("#tablelist2").append(td);
+	    	td="";
+	    	createPagination2(pageIndex, _pageSize, totalCount);
+		},
+		error:function(data){// 如果请求失败要运行的函数。
+			layer.msg("请求失败",{
+				icon:1
+			});
+		}
+	});
+}
+
+function queryData3(pageIndex){
+	var _pageSize = new Number(10); //分页数量
+    if (pageIndex == null || pageIndex == "" || pageIndex <= 1) {
+        pageIndex = new Number(1);
+    } 
+	$.ajax({
+		url:"/HDB2/audite/getMyselfAudite",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+		type:"post",//规定请求的类型（GET 或 POST）。
+		data:{
+			startRow:pageIndex,
+			pageSize:_pageSize,
+			"userId":sessionStorage.getItem("userId1"),
+			projectRate:null,
+			projectDateline:null
+		},//规定要发送到服务器的数据。
+		async:false,//是否异步处理
+		cache:false,//浏览器是否缓存被请求页面
+		dataType:"json",//预期的服务器响应的数据类型。
+		success:function(data){//当请求成功时运行的函数。
+			console.info(data.result);
+			layer.msg("请求成功",{
+				icon:1
+			})
+			console.log("auditeAmount:"+data.auditeAmount);
+			$("#auditeAmount").html("");
+			$("#auditeAmount").html(data.auditeAmount);
+			$("#interestAmount1").html("");
+			$("#interestAmount1").html("待还利息："+data.interestAmount1);
+		},
+		error:function(data){// 如果请求失败要运行的函数。
+			layer.msg("请求失败",{
+				icon:1
+			});
+		}
+	});
+}
+function revise(){
+	$("#myModal").modal('show');
+}
+function getDate(){
+	
+	var u_nowpassword=$("#u_nowpassword").val();
+	var u_nowpassword1=$("#u_nowpassword1").val();
+	var u_prepassword=$("#u_prepassword").val();
+	
+	if(u_prepassword==""||u_prepassword==null){
+		$("#u_prepasswordInfo").html("密码不能为空");
+		return;
+	}else{
+		$("#u_prepasswordInfo").html("");
+	}
+	
+	if(u_nowpassword==""||u_nowpassword==null){
+		$("#u_nowpasswordInfo").html("密码不能为空");
+		return;
+	}else{
+		$("#u_nowpasswordInfo").html("");
+	}
+	
+	if(u_nowpassword1==""||u_nowpassword1==null){
+		$("#u_nowpassword1Info").html("密码不能为空");
+		return;
+	}else{
+		$("#u_nowpassword1Info").html("");
+	}
+	
+	if(u_nowpassword1!=u_nowpassword){
+		$("#u_nowpassword1Info").html("两次密码不一致");
+		return ;
+	}
+	
+	$.ajax({
+		url:"/HDB2/user/updateUser",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+		type:"post",//规定请求的类型（GET 或 POST）。
+		data:{
+			"userId":sessionStorage.getItem("userId1"),
+			"prepassword":$("#u_prepassword").val(),
+			"nowpassword":$("#u_nowpassword").val()
+		},//规定要发送到服务器的数据。
+		async:false,//是否异步处理
+		cache:false,//浏览器是否缓存被请求页面
+		dataType:"json",//预期的服务器响应的数据类型。
+		success:function(data){//当请求成功时运行的函数。
+			console.info(data.result);
+			if(data.result==1){
+				layer.msg("修改成功",{
+					icon:1
+				})
+				$("#myModal").modal('hide');
+			}else{
+				layer.msg("修改失败，原密码错误",{
+					icon:1
+				})
+			}
+		},
+		error:function(data){// 如果请求失败要运行的函数。
+			layer.msg("请求失败",{
+				icon:1
+			});
+		}
+	});
+}
+function delect(){
+	
+	$("#u_nowpassword").html("");
+	$("#u_nowpassword1").html("");
+	$("#u_prepassword").html("");
+	$("#u_nowpasswordInfo").html("");
+	$("#u_nowpassword1Info").html("");
+	$("#u_prepasswordInfo").html("");
+	
+	$("#myModal").modal('hide');
+}
+
+
+
+function revise1(){
+	$("#rechargemyModal").modal('show');
+	queryData5();
+}
+function queryData5() {
+	$.ajax({
+				url : "/HDB2/credit/selectAllCounts",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+				type : "post",//规定请求的类型（GET 或 POST）。
+				data : {
+					startRow:1,
+					pageSize:1000,
+					bankName:null,
+					"userid" : sessionStorage.getItem("userId1")
+				},//规定要发送到服务器的数据。
+				async : false,//是否异步处理。
+				cache : false,//浏览器是否缓存被请求页面
+				dataType : "json",//预期的服务器响应的数据类型。
+				success : function(data) {//当请求成功时运行的函数。
+					console.info("data:");
+					console.info(data);
+					if (data.result == 1) {
+						layer.msg("请求成功", {
+							icon : 1
+						});
+					}
+					var td = "";
+					var totalCount=data.total;
+					if (0 == data.result.length) {
+						td = "";
+						$("#cardlist").html("");
+						return;
+					}
+					$.each(data.result,function(index, item) {
+										td += "<option>";
+										td+=item.cCardnum;
+										td += "</option>";
+									})
+					$("#cardlist").html("");
+					$("#cardlist").append(td);
+				},
+				error : function(data) {// 如果请求失败要运行的函数。
+					layer.msg("请求失败", {
+						icon : 1
+					});
+				}
+			});
+}
+
+function chongzhi(){
+	
+	var banlance=$("#moneyamount").val();
+	var cardPassword=$("#cardpassword").val();
+	
+	if(banlance==""||banlance==null){
+		$("#moneyamountInfo").html("金额不能为空");
+		return;
+	}else{
+		$("#moneyamountInfo").html("");
+	}
+	
+	if(cardPassword==""||cardPassword==null){
+		$("#cardPasswordInfo").html("银行卡密码不能为空");
+		return ;
+	}else{
+		$("#cardPasswordInfo").html("");
+	}
+	
+	$.ajax({
+		url:"/HDB2/user/updateUserBalance",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+		type:"post",//规定请求的类型（GET 或 POST）。
+		data:{
+			"userId":sessionStorage.getItem("userId1"),
+			"moneyamount":banlance,
+			"cardPassword":cardPassword
+		},//规定要发送到服务器的数据。
+		async:false,//是否异步处理
+		cache:false,//浏览器是否缓存被请求页面
+		dataType:"json",//预期的服务器响应的数据类型。
+		success:function(data){//当请求成功时运行的函数。
+			console.info(data.result);
+			if(data.result==1){
+				layer.msg("充值成功",{
+					icon:1
+				})
+				getUser();
+				$("#moneyamount").val("");
+				$("#cardpassword").val("");
+				$("#cardPasswordInfo").html("");
+				$("#moneyamountInfo").html("");
+				$("#rechargemyModal").modal('hide');
+			}else{
+				layer.msg("充值失败，银行卡密码错误",{
+					icon:1
+				})
+			}
+		},
+		error:function(data){// 如果请求失败要运行的函数。
+			layer.msg("请求失败",{
+				icon:1
+			});
+		}
+	});
+}
+function quxiao(){
+	$("#moneyamount").val("");
+	$("#cardpassword").val("");
+	$("#cardPasswordInfo").html("");
+	$("#moneyamountInfo").html("");
+	$("#rechargemyModal").modal('hide');
+}
+
+
+function revise2(){
+	$("#tixianmyModal").modal('show');
+	queryData6();
+}
+
+function queryData6() {
+	$.ajax({
+				url : "/HDB2/credit/selectAllCounts",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+				type : "post",//规定请求的类型（GET 或 POST）。
+				data : {
+					startRow:1,
+					pageSize:1000,
+					bankName:null,
+					"userid" : sessionStorage.getItem("userId1")
+				},//规定要发送到服务器的数据。
+				async : false,//是否异步处理。
+				cache : false,//浏览器是否缓存被请求页面
+				dataType : "json",//预期的服务器响应的数据类型。
+				success : function(data) {//当请求成功时运行的函数。
+					console.info("data:");
+					console.info(data);
+					if (data.result == 1) {
+						layer.msg("请求成功", {
+							icon : 1
+						});
+					}
+					var td = "";
+					var totalCount=data.total;
+					if (0 == data.result.length) {
+						td = "";
+						$("#cardlist2").html("");
+						return;
+					}
+					$.each(data.result,function(index, item) {
+										td += "<option>";
+										td+=item.cCardnum;
+										td += "</option>";
+									})
+					$("#cardlist2").html("");
+					$("#cardlist2").append(td);
+				},
+				error : function(data) {// 如果请求失败要运行的函数。
+					layer.msg("请求失败", {
+						icon : 1
+					});
+				}
+			});
+}
+
+function tixian(){
+	
+	var banlance=$("#moneyamountX").val();
+	var cardPassword=$("#cardpasswordX").val();
+	
+	if(banlance==""||banlance==null){
+		$("#moneyamountXInfo").html("金额不能为空");
+		return;
+	}else{
+		$("#moneyamountXInfo").html("");
+	}
+	
+	if(cardPassword==""||cardPassword==null){
+		$("#cardPasswordXInfo").html("银行卡密码不能为空");
+		return ;
+	}else{
+		$("#cardPasswordXInfo").html("");
+	}
+	
+	$.ajax({
+		url:"/HDB2/user/updateUserBalancedesc",//请求路径,项目前面千万别少了/，少了的话会自动加上HDB2/到该文件的目录位置
+		type:"post",//规定请求的类型（GET 或 POST）。
+		data:{
+			"userId":sessionStorage.getItem("userId1"),
+			"moneyamount":banlance,
+			"cardPassword":cardPassword
+		},//规定要发送到服务器的数据。
+		async:false,//是否异步处理
+		cache:false,//浏览器是否缓存被请求页面
+		dataType:"json",//预期的服务器响应的数据类型。
+		success:function(data){//当请求成功时运行的函数。
+			console.info(data.result);
+			if(data.result==1){
+				layer.msg("提现成功,预计半小时到账",{
+					icon:1
+				})
+				getUser();
+				$("#moneyamountX").val("");
+				$("#cardpasswordX").val("");
+				$("#tixianmyModal").modal('hide');
+			}else{
+				layer.msg("提现失败，银行卡密码错误",{
+					icon:1
+				})
+			}
+		},
+		error:function(data){// 如果请求失败要运行的函数。
+			layer.msg("请求失败",{
+				icon:1
+			});
+		}
+	});
+}
+function quxiao2(){
+	$("#moneyamountX").val("");
+	$("#cardpasswordX").val("");
+	$("#cardPasswordXInfo").html("");
+	$("#moneyamountXInfo").html("");
+	$("#tixianmyModal").modal('hide');
+}
+
+</script>
+
+</head>
+<body>
+	<div class="container">
+	<!-- 	<div class="row clearfix">
+			<div class="col-md-12 column">
+				<nav class="navbar navbar-default navbar-fixed-top"
+					role="navigation">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse"
+							data-target="#bs-example-navbar-collapse-1">
+							<span class="sr-only">Toggle navigation</span> <span
+								class="icon-bar"></span> <span class="icon-bar"></span> <span
+								class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="#">HDB互联网金融平台</a>
+					</div>
+
+					<div class="collapse navbar-collapse"
+						id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav " style="margin-left: 20%;">
+							<li class=""><a href="javascript:void(0)"
+								onclick="shouye();">首页</a></li>
+							<li><a href="javascript:void(0)" onclick="lookusers();">查看用户</a></li>
+							<li class="dropdown"><a href="#" class="dropdown-toggle"
+								data-toggle="dropdown">个人中心<strong class="caret"></strong></a>
+								<ul class="dropdown-menu">
+									<li><a href="javascript:void(0)" onclick="bindorunbind();">绑卡/解绑</a></li>
+									<li><a href="javascript:void(0)"
+										onclick="personalAcount();">个人账户</a></li>
+									<li><a href="javascript:void(0)" onclick="realmessage();">实名认证</a></li>
+								</ul></li>
+							<li><a href="javascript:void(0)" onclick="investproject2();">我要投资</a></li>
+							<li><a href="javascript:void(0)" onclick="borrow();">我要借款</a></li>
+							<li><a href="javascript:void(0)" onclick="help();">帮助中心</a></li>
+							<li><a href="javascript:void(0)" onclick="share();">经验分享</a></li>
+						</ul>
+
+						<ul class="nav navbar-nav navbar-right" style="margin-right: 1%;">
+							<li><a href="javascript:void(0)" onclick="login();">登录</a></li>
+							<li><a href="javascript:void(0)" onclick="register();">注册</a></li>
+							<li><a href="javascript:void(0)" onclick="logout();">退出</a></li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+		</div> -->
+		
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<nav class="navbar navbar-default navbar-fixed-top"
+					role="navigation">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse"
+							data-target="#bs-example-navbar-collapse-1">
+							<span class="sr-only">Toggle navigation</span> <span
+								class="icon-bar"></span> <span class="icon-bar"></span> <span
+								class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="#">HDB互联网金融平台</a>
+					</div>
+					
+					<div class="collapse navbar-collapse"
+						id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav " style="margin-left: 20%;">
+							<li class=""><a href="javascript:void(0)"
+								onclick="shouye();">首页</a></li>
+<!-- 							<li><a href="javascript:void(0)" onclick="lookusers();">查看用户</a></li> -->
+							<li class="dropdown"><a href="#" class="dropdown-toggle"
+								data-toggle="dropdown">个人中心<strong class="caret"></strong></a>
+								<ul class="dropdown-menu">
+									<li><a href="javascript:void(0)"onclick="realmessage();">实名认证</a></li>
+									<li><a href="javascript:void(0)" onclick="bindorunbind();">绑卡/解绑</a></li>
+									<li><a href="javascript:void(0)"onclick="personalAcount();">个人账户</a></li>
+								</ul></li>
+							<li><a href="javascript:void(0)" onclick="investproject2();">我要投资</a></li>
+							<li><a href="javascript:void(0)" onclick="borrow();">我要借款</a></li>
+							<li><a href="javascript:void(0)" onclick="help();">帮助中心</a></li>
+							<li><a href="javascript:void(0)" onclick="share();">经验分享</a></li>
+						</ul>
+
+						<ul class="nav navbar-nav navbar-right" style="margin-right: 1%;">
+							<li id="loginButton"><a href="javascript:void(0)" onclick="login();">登录</a></li>
+							<li id="registButton"><a href="javascript:void(0)" onclick="register();">注册</a></li>
+							<li id="unameSpan" style="margin-top: 15px;"><span id="usernameSpan" ></span></li>
+							<li><a href="javascript:void(0)" onclick="logout();">退出</a></li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+		</div>
+		<div class="row clearfix" style="margin-top: 5%;">
+			<div class="col-md-3 column">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							账户余额(元)
+						 <button type="button" class="btn btn-default  btn-xs btn-warning" style="float:right; margin-left: 2%" onclick="revise1()">充值</button> 
+						 <button type="button" class="btn btn-default  btn-xs btn-success" style="float:right; margin-left: 2%"onclick="revise2()">提现</button>
+						 <button type="button" class="btn btn-default  btn-xs " style="float:right;" onclick="revise()">改密</button>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div style="text-align:	 center;">
+							<div>
+								<span id="u_Account" style="font-size: 40px;font-family:Arial;font-weight:bold;margin-left: 4%">400 </span>
+							</div>
+							<div>
+								<span id="" style="font-size: 15px;font-family:微软雅黑  ;margin-left: 4%">账户余额</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3 column">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">我的投资(元)</h3>
+					</div>
+					<div class="panel-body">
+						<div style="text-align: center;">
+							<div>
+								<span id="invextNum" style="font-size: 40px;font-family:Arial;font-weight:bold;margin-left: 4%">400 </span>
+							</div>
+							<div>
+								<span id="" style="font-size: 15px;font-family:微软雅黑  ;margin-left: 4%">投资总额</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3 column">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">待收利息(元)</h3>
+					</div>
+					<div class="panel-body">
+						<div style="text-align: center;">
+							<div>
+								<span id="interstNum" style="font-size: 40px;font-family:Arial;font-weight:bold;margin-left: 4%">400 </span>
+							</div>
+							<div>
+								<span id="" style="font-size: 15px;font-family:微软雅黑  ;margin-left: 4%">待收利息</span>
+							</div>
+						</div>						
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3 column">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">待还本金及利息(元)</h3>
+					</div>
+					<div class="panel-body">
+						<div style="text-align: center;">
+							<div>
+								<span id="auditeAmount" style="font-size: 40px;font-family:Arial;font-weight:bold;margin-left: 4%">400 </span>
+							</div>
+							<div>
+								<span id="interestAmount1" style="font-size: 15px;font-family:微软雅黑  ;margin-left: 4%">待还利息：3.0</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row clearfix" style="margin-top: 1%;">
+			<div class="col-md-12 column">
+				<ul class="nav nav-tabs nav-justified">
+					<li class=""><a data-toggle="tab" href="#table_pal1"><h4>投资详情</h4></a></li>
+					<li><a data-toggle="tab" href="#table_pal2"><h4>待还款项</h4></a></li>
+					<li><a data-toggle="tab" href="#table_pal3"><h4>银行卡充值提现记录</h4></a></li>
+				</ul>
+				<div id="tabs" class="tab-content" style="padding-top: 5px">
+					<div id="table_pal1" class="tab-pane active">
+						<div id="">
+							<div class="row clearfix">
+								<div class="col-md-12 column">
+									<div class="panel panel-default">
+									<table class="table table-bordered table-hover">
+										<thead>
+											<tr>
+												<th>序号</th>
+												<th>项目id</th>
+												<th>投资金额</th>
+												<th>投资利息</th>
+												<th>投资状态</th>
+												<th>投资日期</th>
+											</tr>
+										</thead>
+										<tbody id="tablelist1">
+										</tbody>
+									</table>
+									</div>
+									<div id="page" style="text-align: right;"></div>
+								</div>
+							</div>
+						</div>
+					</div> 
+					
+					<div id="table_pal2" class="tab-pane ">
+						<div id="">
+							<div class="row clearfix">
+								<div class="col-md-12 column">
+									<div class="panel panel-default">
+									<table class="table table-bordered table-hover">
+										<thead>
+											<tr>
+												<th>序号</th>
+												<th>借款金额</th>
+												<th>借款期限</th>
+												<th>借款利息</th>
+												<th>申请时间</th>
+												<th>项目状态</th>
+												<th>操作</th>
+											</tr>
+										</thead>
+										<tbody id="tablelist2">
+										</tbody>
+									</table>
+									</div>
+									<div id="page2" style="text-align: right;"></div>
+								</div>
+							</div>
+						</div>
+					</div> 
+					<div id="table_pal3" class="tab-pane ">
+						<div id="">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 改密模态框（Modal） -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">填写必要信息</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form">
+						<div class="form-group">
+							<label for="moneyamount" class="col-sm-3 control-label">原密码</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="u_prepassword" placeholder="原密码" style="width: 200px;">
+								<span id="u_prepasswordInfo" style="color: red"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="moneyamount" class="col-sm-3 control-label">新密码</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="u_nowpassword" placeholder="新密码" style="width: 200px;">
+								<span id="u_nowpasswordInfo" style="color: red"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="moneyamount" class="col-sm-3 control-label">重复新密码</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="u_nowpassword1" placeholder="重复新密码" style="width: 200px;">
+								<span id="u_nowpassword1Info" style="color: red"></span>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" onclick="getDate()">修改</button>
+					<button type="button" class="btn btn-default" onclick="delect()">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 充值模态框（Modal） -->
+	<div class="modal fade" id="rechargemyModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">填写必要信息</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form">
+						<div class="form-group">
+							<label for="moneyamount" class="col-sm-3 control-label">充值金额</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="moneyamount" placeholder="请输金额" style="width: 200px;">
+								<span id="moneyamountInfo" style="color: red;"></span>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="dateline1" class="col-sm-3 control-label">选择银行卡</label>
+							<div class="col-sm-9">
+								<select id="cardlist" class="form-control" style="width: 200px;">
+									<option></option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="cardpassword" class="col-sm-3 control-label">输入密码</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="cardpassword" placeholder="请输密码" style="width: 200px;">
+								<span id="cardPasswordInfo" style="color: red;"></span>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" onclick="chongzhi()">充值</button>
+					<button type="button" class="btn btn-default" onclick="quxiao()">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 提现模态框（Modal） -->
+	<div class="modal fade" id="tixianmyModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">填写必要信息</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form">
+						<div class="form-group">
+							<label for="moneyamountX" class="col-sm-3 control-label">提现金额</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="moneyamountX" placeholder="请输金额" style="width: 200px;">
+								<span id="moneyamountXInfo" style="color: red;"></span>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="dateline1" class="col-sm-3 control-label">选择银行卡</label>
+							<div class="col-sm-9">
+								<select id="cardlist2" class="form-control" style="width: 200px;">
+									<option></option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="cardpasswordX" class="col-sm-3 control-label">输入密码</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="cardpasswordX" placeholder="请输密码" style="width: 200px;">
+								<span id="cardPasswordXInfo" style="color: red;"></span>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" onclick="tixian()">提现</button>
+					<button type="button" class="btn btn-default" onclick="quxiao2()">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,9 +1,12 @@
 package test;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.apache.taglibs.standard.lang.jstl.test.Bean1;
 
 public class Test {
 
@@ -28,7 +31,11 @@ public class Test {
 	   System.out.println(dateNowStr);
 	   
 		System.out.println(100);
+		System.out.println("____________________________________________________________-");
 		
+		BigDecimal b1=new BigDecimal("1.2");
+		BigDecimal b2=new BigDecimal("1.3");
+		System.out.println(b1.compareTo(b2));
 	}
 
 }

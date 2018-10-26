@@ -10,80 +10,40 @@ import com.bobo.keyan.hdb.model.Article;
 import com.bobo.keyan.hdb.model.ArticleExample;
 import com.bobo.keyan.hdb.model.ArticleWithBLOBs;
 import com.bobo.keyan.hdb.service.api.ArticleService;
-
 @Service
 public class ArticleServiceImpl implements ArticleService {
-	
 	@Autowired
 	private ArticleMapper articleMapper;
 	@Override
-	public int countByExample(ArticleExample example) {
-		return articleMapper.countByExample(example);
-	}
-	
-	@Override
-	public int deleteByExample(ArticleExample example) {
-		return articleMapper.deleteByExample(example);
-	}
-
-	@Override
-	public int deleteByPrimaryKey(Integer atcId) {
-		return articleMapper.deleteByPrimaryKey(atcId);
-	}
-
-	@Override
-	public int insert(ArticleWithBLOBs record) {
-		return articleMapper.insert(record);
-	}
-
-	@Override
-	public int insertSelective(ArticleWithBLOBs record) {
-		return articleMapper.insertSelective(record);
-	}
-
-	@Override
-	public List<ArticleWithBLOBs> selectByExampleWithBLOBs(ArticleExample example) {
-		return articleMapper.selectByExampleWithBLOBs(example);
-	}
-
-	@Override
 	public List<Article> selectByExample(ArticleExample example) {
+		// TODO Auto-generated method stub
 		return articleMapper.selectByExample(example);
 	}
-
 	@Override
-	public ArticleWithBLOBs selectByPrimaryKey(Integer atcId) {
-		return articleMapper.selectByPrimaryKey(atcId);
+	public List<ArticleWithBLOBs> selectByExampleWithBLOBs(ArticleExample example) {
+		// TODO Auto-generated method stub
+		return articleMapper.selectByExampleWithBLOBs(example);
 	}
-
 	@Override
-	public int updateByExampleSelective(ArticleWithBLOBs record, ArticleExample example) {
-		return articleMapper.updateByExampleSelective(record, example);
+	public int insertSelective(ArticleWithBLOBs record) {
+		// TODO Auto-generated method stub
+		return articleMapper.insertSelective(record);
 	}
-
 	@Override
-	public int updateByExampleWithBLOBs(ArticleWithBLOBs record, ArticleExample example) {
-		return articleMapper.updateByExampleWithBLOBs(record, example);
+	public int deletearticle(int articleId) {
+		// TODO Auto-generated method stub
+		return articleMapper.deleteByPrimaryKey(articleId);
 	}
-
 	@Override
-	public int updateByExample(Article record, ArticleExample example) {
-		return articleMapper.updateByExample(record, example);
+	public int scruArticle(ArticleWithBLOBs record) {
+		// TODO Auto-generated method stub
+		
+		return articleMapper.updateByPrimaryKeySelective(record);
 	}
-
 	@Override
-	public int updateByPrimaryKeySelective(ArticleWithBLOBs record) {
+	public int pcArticle(ArticleWithBLOBs record) {
+		// TODO Auto-generated method stub
 		return articleMapper.updateByPrimaryKeySelective(record);
 	}
 
-	@Override
-	public int updateByPrimaryKeyWithBLOBs(ArticleWithBLOBs record) {
-		return articleMapper.updateByPrimaryKeyWithBLOBs(record);
-	}
-
-	@Override
-	public int updateByPrimaryKey(Article record) {
-		return articleMapper.updateByPrimaryKey(record);
-	}
-	
 }

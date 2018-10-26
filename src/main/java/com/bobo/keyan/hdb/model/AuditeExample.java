@@ -6,6 +6,26 @@ import java.util.Date;
 import java.util.List;
 
 public class AuditeExample {
+    //添加分页开始 胡波 2018-10-05
+    protected int startRow;//开始页
+    protected int pageSize;//每页的大小
+
+    public int getStartRow() {
+		return startRow;
+	}
+
+	public void setStartRow(int startRow) {
+		this.startRow = startRow;
+	}
+
+	public int getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
+	//添加分页结束 胡波 2018-10-05
     protected String orderByClause;
 
     protected boolean distinct;
